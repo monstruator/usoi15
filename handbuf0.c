@@ -66,6 +66,7 @@ void HandlerInPack0( void )
       outpack0.ended_loop = 0;
       outpack0.krk = 0;
       outpack0.link = 0;
+	  stat.link=mode.scan1=mode.scan2=0; //отключение сканирование с приходом новой команды	
 
       ResetBuffers();
       ControlLed5( 0 );
@@ -859,7 +860,7 @@ int SendOutPack0( void )
    static short link = 0;
    static unsigned char count = 0;
    unsigned int p;
-   unsigned int i;
+   unsigned int i,i1;
    struct header0 *h;
    unsigned int j;
    unsigned int n;
@@ -894,6 +895,16 @@ int SendOutPack0( void )
       outbuf0.buf[j].size = sizeof(struct header0) + n;
       outbuf0.nsave ++;
    }
+	
+	if (mode.rli1)
+	{
+	   printf("word=%d num=%d\n",outpack0.svch1_rli.nword,outpack0.svch1_rli.num);
+	   outpack0.svch1_rli.nword=outpack0.svch1_rli.num=0;
+	}
+
+   printf("sach18.cr=%d nf=%x\n",outpack0.svch1.cr,outpack0.svch1.sach18[0]);
+   printf("sach18.nword=%d \n",outpack0.svch1.nword);
+   for(i1=0;i1<outpack0.svch1.nword;i1++) printf("%04x ",outpack0.svch1.word[i1]);printf("\n");
 
    if( ( outpack0.cr_com != cr_com ) || ( outpack0.krk != krk ) || 
          ( outpack0.link != link ) ) {

@@ -170,11 +170,18 @@ int HandlerCmdScan1( void )
    int i;
    struct header12 *h12;
    struct form11 *f11;
+	static short n_scan1; //кол-во повторов скана
 
    if( verbose > 0 ) {
-      printf( "HandlerCmdScan1: no param\n" );
+      printf( "HandlerCmdScan1: %d\n",n_scan1 );
    }
-
+	n_scan1++;
+	if (n_scan1>80)//80 
+		{
+			n_scan1=mode.scan1=0;
+			printf("mode.scan1=0\n");
+			return(0);
+		} //завершение после 80 опросов
    ControlLed1( 1 );
 
    i = outpack1.nsave;
@@ -182,7 +189,7 @@ int HandlerCmdScan1( void )
    SetHeader12( h12 );
    h12->kss = 0;
    h12->kvi = 0;
-   h12->ps = 0;
+   h12->ps = 1;
    h12->kzo = 1;
    outpack1.buf[i].size = sizeof(struct header12);
    outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
@@ -193,7 +200,7 @@ int HandlerCmdScan1( void )
    SetHeader12( h12 );
    h12->kss = 0;
    h12->kvi = 0;
-   h12->ps = 0;
+   h12->ps = 1;
    h12->kzo = 3;
    outpack1.buf[i].size = sizeof(struct header12);
    outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
@@ -206,7 +213,7 @@ int HandlerCmdScan1( void )
    h12->nspol = 1;  
    h12->kss = sizeof(struct form11) / 2;
    h12->kvi = 1;
-   h12->ps = 0;
+   h12->ps = 1;
    h12->kzo = 5;
    f11 = (struct form11 *)(outpack1.buf[i].data + sizeof(struct header12));
    memcpy( (char *)f11, (char *)&form11k1, sizeof(struct form11) );
@@ -221,8 +228,54 @@ int HandlerCmdScan1( void )
    f11->ku9z8 = 1;
    f11->ku9z9 = 1;
    f11->ku9z10 = 1;
+   f11->ku10 = 1;
    memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
    outpack1.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
+   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
+   outpack1.nsave++;
+
+/*
+   i = outpack1.nsave;
+   h12 = (struct header12 *)outpack1.buf[i].data;
+   SetHeader12( h12 );
+   h12->kss = 0;
+   h12->kvi = 0;
+   h12->ps = 1;
+   h12->kzo = 7;
+   outpack1.buf[i].size = sizeof(struct header12);
+   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
+   outpack1.nsave++;
+*/
+   return( 0 );
+}
+
+int HandlerCmdRli1( void )
+{
+   int i;
+   struct header12 *h12;
+   struct form11 *f11;
+	static short n_rli1; //кол-во повторов скана
+
+   if( verbose > 0 ) {
+      printf( "HandlerCmdRli1: %d \n",n_rli1 );
+   }
+	n_rli1++;
+	if (n_rli1>30) 
+		{
+			n_rli1=mode.rli1=0; //завершение после 25 опросов
+			printf("mode.rli1=0\n");
+			return(0);
+		}
+   ControlLed1( 1 );
+
+   i = outpack1.nsave;
+   h12 = (struct header12 *)outpack1.buf[i].data;
+   SetHeader12( h12 );
+   h12->kss = 0;
+   h12->kvi = 0;
+   h12->ps = 1;
+   h12->kzo = 1;
+   outpack1.buf[i].size = sizeof(struct header12);
    outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
    outpack1.nsave++;
 
@@ -231,9 +284,39 @@ int HandlerCmdScan1( void )
    SetHeader12( h12 );
    h12->kss = 0;
    h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 7;
+   h12->ps = 1;
+   h12->kzo = 3;
    outpack1.buf[i].size = sizeof(struct header12);
+   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
+   outpack1.nsave++;
+
+   i = outpack1.nsave;
+   h12 = (struct header12 *)outpack1.buf[i].data;
+   SetHeader12( h12 );
+   h12->npol = 1;
+   h12->nspol = 1;  
+   h12->kss = sizeof(struct form11) / 2;
+   h12->kvi = 1;
+   h12->ps = 1;
+   h12->kzo = 5;
+   f11 = (struct form11 *)(outpack1.buf[i].data + sizeof(struct header12));
+   memcpy( (char *)f11, (char *)&form11k1, sizeof(struct form11) );
+   f11->ku9z0 = 1;
+   f11->ku9z1 = 1;
+   f11->ku9z2 = 1;
+   f11->ku9z3 = 1;
+   f11->ku9z4 = 1;
+   f11->ku9z5 = 1;
+   f11->ku9z6 = 1;
+   f11->ku9z7 = 1;
+   f11->ku9z8 = 1;
+   f11->ku9z9 = 1;
+   f11->ku9z10 = 1;
+   f11->ku10 = 1;
+   f11->ku3 = 1;
+
+   memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
+   outpack1.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
    outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
    outpack1.nsave++;
 

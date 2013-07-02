@@ -4,6 +4,129 @@
 
 extern int verbose;
 
+BLKT(int N_Chan)
+{
+	int i;
+	switch(N_Chan)
+	{
+		case 1: i = outpack1.nsave;
+			    outpack1.buf[i].size = 0;
+			    outpack1.buf[i].cmd = BUF3KIT_CMD_BLKT;
+			    outpack1.nsave++;
+				break;
+		case 2: i = outpack2.nsave;
+			    outpack2.buf[i].size = 0;
+			    outpack2.buf[i].cmd = BUF3KIT_CMD_BLKT;
+			    outpack2.nsave++;
+				break;
+		case 3: i = outpack3.nsave;
+			    outpack3.buf[i].size = 0;
+			    outpack3.buf[i].cmd = BUF3KIT_CMD_BLKT;
+			    outpack3.nsave++;
+				break;
+		case 4: i = outpack4.nsave;
+			    outpack4.buf[i].size = 0;
+			    outpack4.buf[i].cmd = BUF3KIT_CMD_BLKT;
+			    outpack4.nsave++;
+				break;
+		case 5: i = outpack5.nsave;
+			    outpack5.buf[i].size = 0;
+			    outpack5.buf[i].cmd = BUF3KIT_CMD_BLKT;
+			    outpack5.nsave++;
+				break;
+		case 6: i = outpack6.nsave;
+			    outpack6.buf[i].size = 0;
+			    outpack6.buf[i].cmd = BUF3KIT_CMD_BLKT;
+			    outpack6.nsave++;
+				break;
+	}
+}
+
+kzo7_1()
+{
+	int i;
+   struct header12 *h12;
+   struct form11 *f11;
+   struct packet34 *p34;
+   struct packet56 *p56;
+
+   i = outpack1.nsave;
+   h12 = (struct header12 *)outpack1.buf[i].data;
+   SetHeader12( h12 );
+   h12->kss =   h12->kvi =   h12->ps = 0;
+   h12->kzo = 7;
+   outpack1.buf[i].size = sizeof(struct header12);
+   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
+   outpack1.nsave++;
+}
+
+kzo7_2()
+{
+	int i;
+   struct header12 *h12;
+   struct form11 *f11;
+   struct packet34 *p34;
+   struct packet56 *p56;
+   i = outpack2.nsave;
+   h12 = (struct header12 *)outpack2.buf[i].data;
+   SetHeader12( h12 );
+   h12->kss =  h12->kvi = h12->ps = 0;
+   h12->kzo = 7;
+   outpack2.buf[i].size = sizeof(struct header12);
+   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
+   outpack2.nsave++;
+}
+
+kzo13_1()
+{
+   struct header12 *h12;
+
+	int i;
+   i = outpack1.nsave;
+   h12 = (struct header12 *)outpack1.buf[i].data;
+   SetHeader12( h12 );
+   h12->kss =  h12->kvi = h12->ps = 0;
+   h12->kzo = 1;
+   outpack1.buf[i].size = sizeof(struct header12);
+   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
+   outpack1.nsave++;
+
+   i = outpack1.nsave;
+   h12 = (struct header12 *)outpack1.buf[i].data;
+   SetHeader12( h12 );
+   h12->kss =  h12->kvi = h12->ps = 0;
+   h12->kzo = 3;
+   outpack1.buf[i].size = sizeof(struct header12);
+   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
+   outpack1.nsave++;
+}
+
+
+kzo13_2()
+{
+   struct header12 *h12;
+
+	int i;
+
+   i = outpack2.nsave;
+   h12 = (struct header12 *)outpack2.buf[i].data;
+   SetHeader12( h12 );
+   h12->kss =  h12->kvi = h12->ps = 0;
+   h12->kzo = 1;
+   outpack2.buf[i].size = sizeof(struct header12);
+   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
+   outpack2.nsave++;
+
+   i = outpack2.nsave;
+   h12 = (struct header12 *)outpack2.buf[i].data;
+   SetHeader12( h12 );
+   h12->kss =  h12->kvi = h12->ps = 0;
+   h12->kzo = 3;
+   outpack2.buf[i].size = sizeof(struct header12);
+   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
+   outpack2.nsave++;
+}
+
 //******************** Handler Command 1 ********************
 
 int HandlerCmd1mo3a( int param )
@@ -20,27 +143,7 @@ int HandlerCmd1mo3a( int param )
 
 //---------- Outpack1 (cmd1) ----------
 
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 1;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
-
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 3;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
+   kzo13_1();
 
    i = outpack1.nsave;
    h12 = (struct header12 *)outpack1.buf[i].data;
@@ -49,66 +152,29 @@ int HandlerCmd1mo3a( int param )
    h12->nspol = 1;  
    h12->kss = sizeof(struct form11) / 2;
    h12->kvi = 1;
-   h12->ps = 0;
+   h12->ps = 1;	//0
    h12->kzo = 5;
    f11 = (struct form11 *)(outpack1.buf[i].data + sizeof(struct header12));
    memcpy( (char *)f11, (char *)&form11k1, sizeof(struct form11) );
-   if( param ) {
-      f11->ku0 = 0; //RAB
-      f11->ku1 = 0; //PRD-OFF
-      f11->ku2 = 1; //PRM-ON
-      f11->ku3 = 0; //TKI
-      f11->ku4 = 1; //FM1
-      f11->ku5 = 1; //PRD-M1
-      f11->ku6 = 7; //PRM-M7
-      f11->ku7 = 0; //PRD-0dB
-      f11->ku8 = 0; //FK-OFF
-      f11->ku9z0 = 1; //ZAPROS-0
-   } else {
-      f11->ku0 = 0; //RAB
-      f11->ku1 = 0; //PRD-OFF
-      f11->ku2 = 0; //PRM-OFF
-      f11->ku8 = 0; //FK-OFF
-      f11->ku9z0 = 0; //ZAPROS-NONE
-   }
+   f11->ku0 = 0; //RAB
+   f11->ku1 = 0; //PRD-OFF
+   f11->ku2 = 1; //PRM-ON
+   f11->ku3 = 0; //TKI
+   f11->ku4 = 1; //FM1
+   f11->ku5 = 1; //PRD-M1
+   f11->ku6 = 7; //PRM-M7
+   f11->ku7 = 0; //PRD-0dB
+   f11->ku8 = 0; //FK-OFF
+   f11->ku9z0 = 1; //ZAPROS-0
    memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
    outpack1.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
    outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
    outpack1.nsave++;
 
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 7;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
+	kzo7_1();
 
    stat.out |= FLAG_BUF1;
    ControlLed1( 1 );
-
-//---------- Outpack3 (cmd1) ----------
-
-   i = outpack3.nsave;
-   p34 = (struct packet34 *)outpack3.buf[i].data;
-   p34->head.pream = 0x3231;
-   p34->head.code = 0x72;
-   p34->data[0] = 0xff;
-   if( param ) {
-      p34->data[1] = 0x00;
-   } else {
-      p34->data[1] = 0; //0x1b;
-   }
-   p34->data[2] = Sum2( (unsigned char *)p34, sizeof(struct header34) + 2 );
-   outpack3.buf[i].size = sizeof(struct header34) + 3;
-   outpack3.buf[i].cmd = BUF3KIT_CMD_BLK3;
-   outpack3.nsave++;
-
-   stat.out |= FLAG_BUF3;
-   ControlLed3( 1 );
 
 //---------- Outpack4 (cmd1) ----------
 
@@ -219,27 +285,7 @@ int HandlerCmd2mo3a( int param )
 
 //---------- Outpack2 (cmd2) ----------
 
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 1;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
-
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 3;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
+ kzo13_2();
 
    i = outpack2.nsave;
    h12 = (struct header12 *)outpack2.buf[i].data;
@@ -248,7 +294,7 @@ int HandlerCmd2mo3a( int param )
    h12->nspol = 1;  
    h12->kss = sizeof(struct form11) / 2;
    h12->kvi = 1;
-   h12->ps = 0;
+   h12->ps = 1;
    h12->kzo = 5;
    f11 = (struct form11 *)(outpack2.buf[i].data + sizeof(struct header12));
    memcpy( (char *)f11, (char *)&form11k2, sizeof(struct form11) );
@@ -275,16 +321,7 @@ int HandlerCmd2mo3a( int param )
    outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
    outpack2.nsave++;
 
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 7;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
+	kzo7_2();
 
    stat.out |= FLAG_BUF2;
    ControlLed2( 1 );
@@ -425,29 +462,14 @@ int HandlerCmd3mo3a( int param )
    p34->head.code = 0x74;
    p34->data[0] = 0xff;
 /*   switch( param ) {
-   case 1:
-      p34->data[1] = 0x02;
-      break;
-   case 2:
-      p34->data[1] = 0x04;
-      break;
-   case 3:
-      p34->data[1] = 0x08;
-      break;
-   case 4:
-      p34->data[1] = 0x10;
-      break;
-   case 5:
-      p34->data[1] = 0x20;
-      break;
-   case 6:
-      p34->data[1] = 0x40;
-      break;
-   default:
-      p34->data[1] = 0x01;
-      break;
-   }
-*/
+   case 1:      p34->data[1] = 0x02;      break;
+   case 2:      p34->data[1] = 0x04;      break;
+   case 3:      p34->data[1] = 0x08;      break;
+   case 4:      p34->data[1] = 0x10;      break;
+   case 5:      p34->data[1] = 0x20;      break;
+   case 6:      p34->data[1] = 0x40;      break;
+   default:      p34->data[1] = 0x01;      break;
+   }*/
 	p34->data[1]=param;
 
    p34->data[2] = Sum2( (unsigned char *)p34, sizeof(struct header34) + 2 );
@@ -475,27 +497,7 @@ int HandlerCmd5mo3a( int param )
 
 //---------- Outpack1 (cmd5) ----------
 
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 1;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
-
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 3;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
+ kzo13_1();
 
    i = outpack1.nsave;
    h12 = (struct header12 *)outpack1.buf[i].data;
@@ -504,7 +506,7 @@ int HandlerCmd5mo3a( int param )
    h12->nspol = 1;  
    h12->kss = sizeof(struct form11) / 2;
    h12->kvi = 1;
-   h12->ps = 0;
+   h12->ps = 1;
    h12->kzo = 5;
    f11 = (struct form11 *)(outpack1.buf[i].data + sizeof(struct header12));
    memcpy( (char *)f11, (char *)&form11k1, sizeof(struct form11) );
@@ -517,20 +519,10 @@ int HandlerCmd5mo3a( int param )
    outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
    outpack1.nsave++;
 
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 7;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
+	kzo7_1();
 
    stat.out |= FLAG_BUF1;
    ControlLed1( 1 );
-
    return( 0 );
 }
 
@@ -548,27 +540,7 @@ int HandlerCmd6mo3a( int param )
 
 //---------- Outpack2 (cmd6) ----------
 
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 1;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
-
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 3;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
+  kzo13_2();
 
    i = outpack2.nsave;
    h12 = (struct header12 *)outpack2.buf[i].data;
@@ -577,7 +549,7 @@ int HandlerCmd6mo3a( int param )
    h12->nspol = 1;  
    h12->kss = sizeof(struct form11) / 2;
    h12->kvi = 1;
-   h12->ps = 0;
+   h12->ps = 1;
    h12->kzo = 5;
    f11 = (struct form11 *)(outpack2.buf[i].data + sizeof(struct header12));
    memcpy( (char *)f11, (char *)&form11k2, sizeof(struct form11) );
@@ -590,19 +562,11 @@ int HandlerCmd6mo3a( int param )
    outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
    outpack2.nsave++;
 
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 7;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
+	kzo7_2();
 
    stat.out |= FLAG_BUF2;
    ControlLed2( 1 );
+
 
    return( 0 );
 }
@@ -621,27 +585,7 @@ int HandlerCmd7mo3a( int param )
 
 //---------- Outpack1 (cmd7) ----------
 
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 1;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
-
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 3;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
+ kzo13_1();
 
    i = outpack1.nsave;
    h12 = (struct header12 *)outpack1.buf[i].data;
@@ -650,7 +594,7 @@ int HandlerCmd7mo3a( int param )
    h12->nspol = 1;  
    h12->kss = sizeof(struct form11) / 2;
    h12->kvi = 1;
-   h12->ps = 0;
+   h12->ps = 1;
    h12->kzo = 5;
    f11 = (struct form11 *)(outpack1.buf[i].data + sizeof(struct header12));
    memcpy( (char *)f11, (char *)&form11k1, sizeof(struct form11) );
@@ -664,16 +608,7 @@ int HandlerCmd7mo3a( int param )
    outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
    outpack1.nsave++;
 
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 7;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
+	kzo7_1();
 
    stat.out |= FLAG_BUF1;
    ControlLed1( 1 );
@@ -695,27 +630,7 @@ int HandlerCmd8mo3a( int param )
 
 //---------- Outpack2 (cmd8) ----------
 
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 1;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
-
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 3;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
+   kzo13_2();
 
    i = outpack2.nsave;
    h12 = (struct header12 *)outpack2.buf[i].data;
@@ -724,7 +639,7 @@ int HandlerCmd8mo3a( int param )
    h12->nspol = 1;  
    h12->kss = sizeof(struct form11) / 2;
    h12->kvi = 1;
-   h12->ps = 0;
+   h12->ps = 1;
    h12->kzo = 5;
    f11 = (struct form11 *)(outpack2.buf[i].data + sizeof(struct header12));
    memcpy( (char *)f11, (char *)&form11k2, sizeof(struct form11) );
@@ -738,16 +653,7 @@ int HandlerCmd8mo3a( int param )
    outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
    outpack2.nsave++;
 
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 7;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
+	kzo7_2();
 
    stat.out |= FLAG_BUF2;
    ControlLed2( 1 );
@@ -978,27 +884,7 @@ int HandlerCmd12mo3a( int param )
 
 //---------- Outpack1 (cmd12) ----------
 
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 1;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
-
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 3;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
+  kzo13_1();
 
    i = outpack1.nsave;
    h12 = (struct header12 *)outpack1.buf[i].data;
@@ -1007,7 +893,7 @@ int HandlerCmd12mo3a( int param )
    h12->nspol = 1;  
    h12->kss = sizeof(struct form11) / 2;
    h12->kvi = 1;
-   h12->ps = 0;
+   h12->ps = 1;
    h12->kzo = 5;
    f11 = (struct form11 *)(outpack1.buf[i].data + sizeof(struct header12));
    memcpy( (char *)f11, (char *)&form11k1, sizeof(struct form11) );
@@ -1022,16 +908,7 @@ int HandlerCmd12mo3a( int param )
    outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
    outpack1.nsave++;
 
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 7;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
+	kzo7_1();
 
    stat.out |= FLAG_BUF1;
    ControlLed1( 1 );
@@ -1053,27 +930,7 @@ int HandlerCmd13mo3a( int param )
 
 //---------- Outpack2 (cmd13) ----------
 
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 1;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
-
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 3;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
+   kzo13_2();
 
    i = outpack2.nsave;
    h12 = (struct header12 *)outpack2.buf[i].data;
@@ -1082,7 +939,7 @@ int HandlerCmd13mo3a( int param )
    h12->nspol = 1;  
    h12->kss = sizeof(struct form11) / 2;
    h12->kvi = 1;
-   h12->ps = 0;
+   h12->ps = 1;
    h12->kzo = 5;
    f11 = (struct form11 *)(outpack2.buf[i].data + sizeof(struct header12));
    memcpy( (char *)f11, (char *)&form11k2, sizeof(struct form11) );
@@ -1097,19 +954,11 @@ int HandlerCmd13mo3a( int param )
    outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
    outpack2.nsave++;
 
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 7;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
+	kzo7_2();
 
    stat.out |= FLAG_BUF2;
    ControlLed2( 1 );
+
 
    return( 0 );
 }
@@ -1129,29 +978,9 @@ int HandlerCmd14mo3a( int param )
 
 //---------- Outpack1 (cmd14) ----------
 
-   ControlLed1( 1 );
+  ControlLed1( 1 );
 
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 1;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
-
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 3;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
+	kzo13_1();
 
    i = outpack1.nsave;
    h12 = (struct header12 *)outpack1.buf[i].data;
@@ -1160,7 +989,7 @@ int HandlerCmd14mo3a( int param )
    h12->nspol = 1;  
    h12->kss = sizeof(struct form11) / 2;
    h12->kvi = 1;
-   h12->ps = 0;
+   h12->ps = 1;
    h12->kzo = 5;
    f11 = (struct form11 *)(outpack1.buf[i].data + sizeof(struct header12));
    memcpy( (char *)f11, (char *)&form11k1, sizeof(struct form11) );
@@ -1203,18 +1032,10 @@ int HandlerCmd14mo3a( int param )
    outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
    outpack1.nsave++;
 
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 7;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
+	kzo7_1();
 
    stat.out |= FLAG_BUF1;
+
 
 //---------- Outpack4 (cmd14) ----------
 
@@ -1263,29 +1084,9 @@ int HandlerCmd15mo3a( int param )
 
 //---------- Outpack2 (cmd15) ----------
 
-   ControlLed2( 1 );
+ControlLed2( 1 );
 
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 1;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
-
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 3;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
+	kzo13_2();
 
    i = outpack2.nsave;
    h12 = (struct header12 *)outpack2.buf[i].data;
@@ -1294,7 +1095,7 @@ int HandlerCmd15mo3a( int param )
    h12->nspol = 1;  
    h12->kss = sizeof(struct form11) / 2;
    h12->kvi = 1;
-   h12->ps = 0;
+   h12->ps = 1;
    h12->kzo = 5;
    f11 = (struct form11 *)(outpack2.buf[i].data + sizeof(struct header12));
    memcpy( (char *)f11, (char *)&form11k2, sizeof(struct form11) );
@@ -1338,16 +1139,7 @@ int HandlerCmd15mo3a( int param )
    outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
    outpack2.nsave++;
 
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 7;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
+	kzo7_2();
 
    stat.out |= FLAG_BUF2;
 
@@ -1715,27 +1507,7 @@ int HandlerCmd30mo3a( int param )
 
 //---------- Outpack1 (cmd30) ----------
 
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 1;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
-
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 3;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
+  kzo13_1();
 
    i = outpack1.nsave;
    h12 = (struct header12 *)outpack1.buf[i].data;
@@ -1744,7 +1516,7 @@ int HandlerCmd30mo3a( int param )
    h12->nspol = 1;  
    h12->kss = sizeof(struct form11) / 2;
    h12->kvi = 1;
-   h12->ps = 0;
+   h12->ps = 1;
    h12->kzo = 5;
    f11 = (struct form11 *)(outpack1.buf[i].data + sizeof(struct header12));
    memcpy( (char *)f11, (char *)&form11k1, sizeof(struct form11) );
@@ -1757,16 +1529,7 @@ int HandlerCmd30mo3a( int param )
    outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
    outpack1.nsave++;
 
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 7;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
+	kzo7_1();
 
    stat.out |= FLAG_BUF1;
    ControlLed1( 1 );
@@ -1788,27 +1551,8 @@ int HandlerCmd31mo3a( int param )
 
 //---------- Outpack1 (cmd31) ----------
 
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 1;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
-
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 3;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
+   
+	kzo13_1();
 
    i = outpack1.nsave;
    h12 = (struct header12 *)outpack1.buf[i].data;
@@ -1817,7 +1561,7 @@ int HandlerCmd31mo3a( int param )
    h12->nspol = 1;  
    h12->kss = sizeof(struct form11) / 2;
    h12->kvi = 1;
-   h12->ps = 0;
+   h12->ps = 1;
    h12->kzo = 5;
    f11 = (struct form11 *)(outpack1.buf[i].data + sizeof(struct header12));
    memcpy( (char *)f11, (char *)&form11k1, sizeof(struct form11) );
@@ -1832,16 +1576,7 @@ int HandlerCmd31mo3a( int param )
    outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
    outpack1.nsave++;
 
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 7;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
+	kzo7_1();
 
    stat.out |= FLAG_BUF1;
    ControlLed1( 1 );
@@ -1863,27 +1598,7 @@ int HandlerCmd32mo3a( int param )
 
 //---------- Outpack1 (cmd32) ----------
 
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 1;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
-
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 3;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
+	kzo13_1();
 
    i = outpack1.nsave;
    h12 = (struct header12 *)outpack1.buf[i].data;
@@ -1892,7 +1607,7 @@ int HandlerCmd32mo3a( int param )
    h12->nspol = 1;  
    h12->kss = sizeof(struct form11) / 2;
    h12->kvi = 1;
-   h12->ps = 0;
+   h12->ps = 1;
    h12->kzo = 5;
    f11 = (struct form11 *)(outpack1.buf[i].data + sizeof(struct header12));
    memcpy( (char *)f11, (char *)&form11k1, sizeof(struct form11) );
@@ -1907,20 +1622,10 @@ int HandlerCmd32mo3a( int param )
    outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
    outpack1.nsave++;
 
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 7;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
+	kzo7_1();
 
    stat.out |= FLAG_BUF1;
    ControlLed1( 1 );
-
    return( 0 );
 }
 
@@ -1938,27 +1643,7 @@ int HandlerCmd33mo3a( int param )
 
 //---------- Outpack1 (cmd33) ----------
 
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 1;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
-
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 3;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
+  kzo13_1();
 
    i = outpack1.nsave;
    h12 = (struct header12 *)outpack1.buf[i].data;
@@ -1967,7 +1652,7 @@ int HandlerCmd33mo3a( int param )
    h12->nspol = 1;  
    h12->kss = sizeof(struct form11) / 2;
    h12->kvi = 1;
-   h12->ps = 0;
+   h12->ps = 1;
    h12->kzo = 5;
    f11 = (struct form11 *)(outpack1.buf[i].data + sizeof(struct header12));
    memcpy( (char *)f11, (char *)&form11k1, sizeof(struct form11) );
@@ -1982,16 +1667,7 @@ int HandlerCmd33mo3a( int param )
    outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
    outpack1.nsave++;
 
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 7;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
+	kzo7_1();
 
    stat.out |= FLAG_BUF1;
    ControlLed1( 1 );
@@ -2013,27 +1689,7 @@ int HandlerCmd40mo3a( int param )
 
 //---------- Outpack2 (cmd40) ----------
 
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 1;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
-
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 3;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
+	kzo13_2();
 
    i = outpack2.nsave;
    h12 = (struct header12 *)outpack2.buf[i].data;
@@ -2042,7 +1698,7 @@ int HandlerCmd40mo3a( int param )
    h12->nspol = 1;  
    h12->kss = sizeof(struct form11) / 2;
    h12->kvi = 1;
-   h12->ps = 0;
+   h12->ps = 1;
    h12->kzo = 5;
    f11 = (struct form11 *)(outpack2.buf[i].data + sizeof(struct header12));
    memcpy( (char *)f11, (char *)&form11k2, sizeof(struct form11) );
@@ -2055,16 +1711,7 @@ int HandlerCmd40mo3a( int param )
    outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
    outpack2.nsave++;
 
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 7;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
+	kzo7_2();
 
    stat.out |= FLAG_BUF2;
    ControlLed2( 1 );
@@ -2086,27 +1733,7 @@ int HandlerCmd41mo3a( int param )
 
 //---------- Outpack2 (cmd41) ----------
 
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 1;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
-
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 3;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
+  kzo13_2();
 
    i = outpack2.nsave;
    h12 = (struct header12 *)outpack2.buf[i].data;
@@ -2115,7 +1742,7 @@ int HandlerCmd41mo3a( int param )
    h12->nspol = 1;  
    h12->kss = sizeof(struct form11) / 2;
    h12->kvi = 1;
-   h12->ps = 0;
+   h12->ps = 1;
    h12->kzo = 5;
    f11 = (struct form11 *)(outpack2.buf[i].data + sizeof(struct header12));
    memcpy( (char *)f11, (char *)&form11k2, sizeof(struct form11) );
@@ -2130,16 +1757,7 @@ int HandlerCmd41mo3a( int param )
    outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
    outpack2.nsave++;
 
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 7;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
+	kzo7_2();
 
    stat.out |= FLAG_BUF2;
    ControlLed2( 1 );
@@ -2161,27 +1779,7 @@ int HandlerCmd42mo3a( int param )
 
 //---------- Outpack2 (cmd42) ----------
 
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 1;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
-
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 3;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
+ kzo13_2();
 
    i = outpack2.nsave;
    h12 = (struct header12 *)outpack2.buf[i].data;
@@ -2190,7 +1788,7 @@ int HandlerCmd42mo3a( int param )
    h12->nspol = 1;  
    h12->kss = sizeof(struct form11) / 2;
    h12->kvi = 1;
-   h12->ps = 0;
+   h12->ps = 1;
    h12->kzo = 5;
    f11 = (struct form11 *)(outpack2.buf[i].data + sizeof(struct header12));
    memcpy( (char *)f11, (char *)&form11k2, sizeof(struct form11) );
@@ -2205,16 +1803,7 @@ int HandlerCmd42mo3a( int param )
    outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
    outpack2.nsave++;
 
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 7;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
+	kzo7_2();
 
    stat.out |= FLAG_BUF2;
    ControlLed2( 1 );
@@ -2236,27 +1825,7 @@ int HandlerCmd43mo3a( int param )
 
 //---------- Outpack2 (cmd43) ----------
 
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 1;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
-
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 3;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
+  kzo13_2();
 
    i = outpack2.nsave;
    h12 = (struct header12 *)outpack2.buf[i].data;
@@ -2265,7 +1834,7 @@ int HandlerCmd43mo3a( int param )
    h12->nspol = 1;  
    h12->kss = sizeof(struct form11) / 2;
    h12->kvi = 1;
-   h12->ps = 0;
+   h12->ps = 1;
    h12->kzo = 5;
    f11 = (struct form11 *)(outpack2.buf[i].data + sizeof(struct header12));
    memcpy( (char *)f11, (char *)&form11k2, sizeof(struct form11) );
@@ -2280,16 +1849,7 @@ int HandlerCmd43mo3a( int param )
    outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
    outpack2.nsave++;
 
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 7;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
+	kzo7_2();
 
    stat.out |= FLAG_BUF2;
    ControlLed2( 1 );
@@ -2364,28 +1924,7 @@ int HandlerCmd60mo3a( void )
    }
 
 //---------- Outpack1 (cmd60) ----------
-
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 1;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
-
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 3;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
+	kzo13_1();
 
    i = outpack1.nsave;
    h12 = (struct header12 *)outpack1.buf[i].data;
@@ -2394,7 +1933,7 @@ int HandlerCmd60mo3a( void )
    h12->nspol = 1;  
    h12->kss = sizeof(struct form11) / 2;
    h12->kvi = 1;
-   h12->ps = 0;
+   h12->ps = 1;
    h12->kzo = 5;
    f11 = (struct form11 *)(outpack1.buf[i].data + sizeof(struct header12));
    memcpy( (char *)f11, (char *)&form11k1, sizeof(struct form11) );
@@ -2413,20 +1952,10 @@ int HandlerCmd60mo3a( void )
    outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
    outpack1.nsave++;
 
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 7;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
+	kzo7_1();
 
    stat.out |= FLAG_BUF1;
    ControlLed1( 1 );
-
 //---------- Outpack4 (cmd60) ----------
 
    i = outpack4.nsave;
@@ -2485,27 +2014,7 @@ int HandlerCmd61mo3a( void )
 
 //---------- Outpack1 (cmd61) ----------
 
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 1;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
-
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 3;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
+ kzo13_1();
 
    i = outpack1.nsave;
    h12 = (struct header12 *)outpack1.buf[i].data;
@@ -2514,7 +2023,7 @@ int HandlerCmd61mo3a( void )
    h12->nspol = 1;  
    h12->kss = sizeof(struct form11) / 2;
    h12->kvi = 1;
-   h12->ps = 0;
+   h12->ps = 1;
    h12->kzo = 5;
    f11 = (struct form11 *)(outpack1.buf[i].data + sizeof(struct header12));
    memcpy( (char *)f11, (char *)&form11k1, sizeof(struct form11) );
@@ -2534,20 +2043,10 @@ int HandlerCmd61mo3a( void )
    outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
    outpack1.nsave++;
 
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 7;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
+	kzo7_1();
 
    stat.out |= FLAG_BUF1;
    ControlLed1( 1 );
-
    return( 0 );
 }
 
@@ -2566,27 +2065,7 @@ int HandlerCmd63mo3a( void )
 
 //---------- Outpack1 (cmd63) ----------
 
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 1;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
-
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 3;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
+   kzo13_1();
 
    i = outpack1.nsave;
    h12 = (struct header12 *)outpack1.buf[i].data;
@@ -2595,7 +2074,7 @@ int HandlerCmd63mo3a( void )
    h12->nspol = 1;  
    h12->kss = sizeof(struct form11) / 2;
    h12->kvi = 1;
-   h12->ps = 0;
+   h12->ps = 1;
    h12->kzo = 5;
    f11 = (struct form11 *)(outpack1.buf[i].data + sizeof(struct header12));
    memcpy( (char *)f11, (char *)&form11k1, sizeof(struct form11) );
@@ -2614,20 +2093,11 @@ int HandlerCmd63mo3a( void )
    outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
    outpack1.nsave++;
 
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 7;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
+	kzo7_1();
 
    stat.out |= FLAG_BUF1;
    ControlLed1( 1 );
-
+   
    return( 0 );
 }
 
@@ -2646,27 +2116,7 @@ int HandlerCmd64mo3a( void )
 
 //---------- Outpack1 (cmd64) ----------
 
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 1;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
-
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 3;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
+	kzo13_1();
 
    i = outpack1.nsave;
    h12 = (struct header12 *)outpack1.buf[i].data;
@@ -2675,7 +2125,7 @@ int HandlerCmd64mo3a( void )
    h12->nspol = 1;  
    h12->kss = sizeof(struct form11) / 2;
    h12->kvi = 1;
-   h12->ps = 0;
+   h12->ps = 1;
    h12->kzo = 5;
    f11 = (struct form11 *)(outpack1.buf[i].data + sizeof(struct header12));
    memcpy( (char *)f11, (char *)&form11k1, sizeof(struct form11) );
@@ -2694,20 +2144,11 @@ int HandlerCmd64mo3a( void )
    outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
    outpack1.nsave++;
 
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 7;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
+	kzo7_1();
 
    stat.out |= FLAG_BUF1;
    ControlLed1( 1 );
-
+  
 //---------- Outpack4 (cmd64) ----------
 
    i = outpack4.nsave;
@@ -2753,27 +2194,7 @@ int HandlerCmd65mo3a( int param )
 
 //---------- Outpack1 (cmd65) ----------
 
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 1;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
-
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 3;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
+  kzo13_1();
 
    i = outpack1.nsave;
    h12 = (struct header12 *)outpack1.buf[i].data;
@@ -2782,65 +2203,61 @@ int HandlerCmd65mo3a( int param )
    h12->nspol = 1;  
    h12->kss = sizeof(struct form11) / 2;
    h12->kvi = 1;
-   h12->ps = 0;
+   h12->ps = 1;
    h12->kzo = 5;
    f11 = (struct form11 *)(outpack1.buf[i].data + sizeof(struct header12));
    memcpy( (char *)f11, (char *)&form11k1, sizeof(struct form11) );
-   if( param == 2 ) {
+   if( param1 == 2 ) {
       f11->ku0 = 1; //FK
       f11->ku1 = 1; //PRD-ON
       f11->ku2 = 0; //PRM-OFF
       f11->ku3 = 0; //TKI
       f11->ku4 = 1; //FM1
 //      f11->ku7 = 0; //PRD-0dB
-      f11->ku8 = param; //FK-2
+      f11->ku8 = param1; //FK-2
       f11->ku9z0 = 1; //ZAPROS-0
       f11->x0 = 1;
       f11->x1 = 0;
    }
-   if( param == 3 ) {
+   if( param1 == 3 ) {
       f11->ku0 = 1; //FK
       f11->ku1 = 1; //PRD-ON
       f11->ku2 = 0; //PRM-OFF
       f11->ku3 = 0; //TKI
       f11->ku4 = 1; //FM1
 //      f11->ku7 = 0; //PRD-0dB
-      f11->ku8 = param; //FK-3
+      f11->ku8 = param1; //FK-3
       f11->ku9z0 = 1; //ZAPROS-0
       f11->x0 = 0;
       f11->x1 = 1;
    }
-   if( ( param >= 4 ) && (param <= 9 ) ) {
+   if( ( param1 >= 4 ) && (param1 <= 9 ) ) {
       f11->ku0 = 1; //FK
       f11->ku1 = 0; //PRD-OFF
       f11->ku2 = 1; //PRM-ON
       f11->ku3 = 0; //TKI
       f11->ku4 = 1; //FM1
 //      f11->ku7 = 0; //PRD-0dB
-      f11->ku8 = param; //FK-4...8
+      f11->ku8 = param1; //FK-4...8
       f11->ku9z0 = 1; //ZAPROS-0
       f11->x0 = 0;
       f11->x1 = 0;
    }
+
+   if( param1 ==5 ) {
+	    f11->ku8 = 4; //¤«п ”Љ5 ЇҐаҐ¤ Ґ¬ 4
+   }
+
    memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
    outpack1.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
    outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
    outpack1.nsave++;
 
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 7;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
+	kzo7_1();
 
    stat.out |= FLAG_BUF1;
    ControlLed1( 1 );
-
+   
 //---------- Outpack4 (cmd65) ----------
 
    if( ( param >= 2 ) && (param <= 3 ) ) {
@@ -2960,27 +2377,7 @@ int HandlerCmd70mo3a( void )
 
 //---------- Outpack2 (cmd70) ----------
 
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 1;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
-
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 3;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
+kzo13_2();
 
    i = outpack2.nsave;
    h12 = (struct header12 *)outpack2.buf[i].data;
@@ -2989,7 +2386,7 @@ int HandlerCmd70mo3a( void )
    h12->nspol = 1;  
    h12->kss = sizeof(struct form11) / 2;
    h12->kvi = 1;
-   h12->ps = 0;
+   h12->ps = 1;
    h12->kzo = 5;
    f11 = (struct form11 *)(outpack2.buf[i].data + sizeof(struct header12));
    memcpy( (char *)f11, (char *)&form11k2, sizeof(struct form11) );
@@ -3008,20 +2405,11 @@ int HandlerCmd70mo3a( void )
    outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
    outpack2.nsave++;
 
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 7;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
+	kzo7_2();
 
    stat.out |= FLAG_BUF2;
    ControlLed2( 1 );
-
+   
 //---------- Outpack3 (cmd70) ----------
 
    i = outpack3.nsave;
@@ -3080,27 +2468,7 @@ int HandlerCmd71mo3a( void )
 
 //---------- Outpack2 (cmd71) ----------
 
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 1;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
-
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 3;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
+   kzo13_2();
 
    i = outpack2.nsave;
    h12 = (struct header12 *)outpack2.buf[i].data;
@@ -3109,7 +2477,7 @@ int HandlerCmd71mo3a( void )
    h12->nspol = 1;  
    h12->kss = sizeof(struct form11) / 2;
    h12->kvi = 1;
-   h12->ps = 0;
+   h12->ps = 1;
    h12->kzo = 5;
    f11 = (struct form11 *)(outpack2.buf[i].data + sizeof(struct header12));
    memcpy( (char *)f11, (char *)&form11k2, sizeof(struct form11) );
@@ -3129,20 +2497,11 @@ int HandlerCmd71mo3a( void )
    outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
    outpack2.nsave++;
 
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 7;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
+	kzo7_2();
 
    stat.out |= FLAG_BUF2;
    ControlLed2( 1 );
-
+   
    return( 0 );
 }
 
@@ -3160,27 +2519,7 @@ int HandlerCmd73mo3a( void )
 
 //---------- Outpack2 (cmd73) ----------
 
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 1;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
-
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 3;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
+   kzo13_2();
 
    i = outpack2.nsave;
    h12 = (struct header12 *)outpack2.buf[i].data;
@@ -3189,7 +2528,7 @@ int HandlerCmd73mo3a( void )
    h12->nspol = 1;  
    h12->kss = sizeof(struct form11) / 2;
    h12->kvi = 1;
-   h12->ps = 0;
+   h12->ps = 1;
    h12->kzo = 5;
    f11 = (struct form11 *)(outpack2.buf[i].data + sizeof(struct header12));
    memcpy( (char *)f11, (char *)&form11k2, sizeof(struct form11) );
@@ -3208,16 +2547,7 @@ int HandlerCmd73mo3a( void )
    outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
    outpack2.nsave++;
 
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 7;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
+	kzo7_2();
 
    stat.out |= FLAG_BUF2;
    ControlLed2( 1 );
@@ -3240,27 +2570,7 @@ int HandlerCmd74mo3a( void )
 
 //---------- Outpack2 (cmd74) ----------
 
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 1;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
-
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 3;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
+   kzo13_2();
 
    i = outpack2.nsave;
    h12 = (struct header12 *)outpack2.buf[i].data;
@@ -3269,7 +2579,7 @@ int HandlerCmd74mo3a( void )
    h12->nspol = 1;  
    h12->kss = sizeof(struct form11) / 2;
    h12->kvi = 1;
-   h12->ps = 0;
+   h12->ps = 1;
    h12->kzo = 5;
    f11 = (struct form11 *)(outpack2.buf[i].data + sizeof(struct header12));
    memcpy( (char *)f11, (char *)&form11k2, sizeof(struct form11) );
@@ -3288,20 +2598,11 @@ int HandlerCmd74mo3a( void )
    outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
    outpack2.nsave++;
 
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 7;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
+	kzo7_2();
 
    stat.out |= FLAG_BUF2;
    ControlLed2( 1 );
-
+   
 //---------- Outpack3 (cmd74) ----------
 
    i = outpack3.nsave;
@@ -3347,27 +2648,7 @@ int HandlerCmd75mo3a( int param )
 
 //---------- Outpack2 (cmd75) ----------
 
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 1;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
-
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 3;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
+ kzo13_2();
 
    i = outpack2.nsave;
    h12 = (struct header12 *)outpack2.buf[i].data;
@@ -3376,7 +2657,7 @@ int HandlerCmd75mo3a( int param )
    h12->nspol = 1;  
    h12->kss = sizeof(struct form11) / 2;
    h12->kvi = 1;
-   h12->ps = 0;
+   h12->ps = 1;
    h12->kzo = 5;
    f11 = (struct form11 *)(outpack2.buf[i].data + sizeof(struct header12));
    memcpy( (char *)f11, (char *)&form11k2, sizeof(struct form11) );
@@ -3421,20 +2702,11 @@ int HandlerCmd75mo3a( int param )
    outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
    outpack2.nsave++;
 
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 7;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
+	kzo7_2();
 
    stat.out |= FLAG_BUF2;
    ControlLed2( 1 );
-
+   
 //---------- Outpack3 (cmd75) ----------
 
    if( ( param >= 2 ) && (param <= 3 ) ) {
@@ -3702,27 +2974,7 @@ int HandlerCmd90mo3a( void )
 
 //---------- Outpack1 (cmd90) ----------
 
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 1;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
-
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 3;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
+ kzo13_1();
 
    i = outpack1.nsave;
    h12 = (struct header12 *)outpack1.buf[i].data;
@@ -3731,7 +2983,7 @@ int HandlerCmd90mo3a( void )
    h12->nspol = 1;  
    h12->kss = sizeof(struct form11) / 2;
    h12->kvi = 1;
-   h12->ps = 0;
+   h12->ps = 1;
    h12->kzo = 5;
    f11 = (struct form11 *)(outpack1.buf[i].data + sizeof(struct header12));
    memcpy( (char *)f11, (char *)&form11k1, sizeof(struct form11) );
@@ -3750,43 +3002,14 @@ int HandlerCmd90mo3a( void )
    outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
    outpack1.nsave++;
 
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 7;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
+	kzo7_1();
 
    stat.out |= FLAG_BUF1;
    ControlLed1( 1 );
 
 //---------- Outpack2 (cmd90) ----------
 
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 1;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
-
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 3;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
+	kzo13_2();
 
    i = outpack2.nsave;
    h12 = (struct header12 *)outpack2.buf[i].data;
@@ -3795,7 +3018,7 @@ int HandlerCmd90mo3a( void )
    h12->nspol = 1;  
    h12->kss = sizeof(struct form11) / 2;
    h12->kvi = 1;
-   h12->ps = 0;
+   h12->ps = 1;
    h12->kzo = 5;
    f11 = (struct form11 *)(outpack2.buf[i].data + sizeof(struct header12));
    memcpy( (char *)f11, (char *)&form11k2, sizeof(struct form11) );
@@ -3807,21 +3030,15 @@ int HandlerCmd90mo3a( void )
 //   f11->ku7 = 0; //PRD-0dB
    f11->ku8 = 0; //FK-OFF
    f11->ku9z0 = 1; //ZAPROS-0
+   f11->x0 = 0;
+   f11->x1 = 0;
+
    memcpy( (char *)&form11k2, (char *)f11, sizeof(struct form11) );
    outpack2.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
    outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
    outpack2.nsave++;
 
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 7;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
+	kzo7_2();
 
    stat.out |= FLAG_BUF2;
    ControlLed2( 1 );
@@ -3949,27 +3166,7 @@ int HandlerCmd91mo3a( void )
 
 //---------- Outpack1 (cmd91) ----------
 
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 1;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
-
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 3;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
+   kzo13_1();
 
    i = outpack1.nsave;
    h12 = (struct header12 *)outpack1.buf[i].data;
@@ -3978,7 +3175,7 @@ int HandlerCmd91mo3a( void )
    h12->nspol = 1;  
    h12->kss = sizeof(struct form11) / 2;
    h12->kvi = 1;
-   h12->ps = 0;
+   h12->ps = 1;
    h12->kzo = 5;
    f11 = (struct form11 *)(outpack1.buf[i].data + sizeof(struct header12));
    memcpy( (char *)f11, (char *)&form11k1, sizeof(struct form11) );
@@ -3998,43 +3195,14 @@ int HandlerCmd91mo3a( void )
    outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
    outpack1.nsave++;
 
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 7;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
+	kzo7_1();
 
    stat.out |= FLAG_BUF1;
    ControlLed1( 1 );
 
 //---------- Outpack2 (cmd91) ----------
 
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 1;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
-
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 3;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
+	kzo13_2();
 
    i = outpack2.nsave;
    h12 = (struct header12 *)outpack2.buf[i].data;
@@ -4043,7 +3211,7 @@ int HandlerCmd91mo3a( void )
    h12->nspol = 1;  
    h12->kss = sizeof(struct form11) / 2;
    h12->kvi = 1;
-   h12->ps = 0;
+   h12->ps = 1;
    h12->kzo = 5;
    f11 = (struct form11 *)(outpack2.buf[i].data + sizeof(struct header12));
    memcpy( (char *)f11, (char *)&form11k2, sizeof(struct form11) );
@@ -4063,16 +3231,7 @@ int HandlerCmd91mo3a( void )
    outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
    outpack2.nsave++;
 
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 7;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
+	kzo7_2();
 
    stat.out |= FLAG_BUF2;
    ControlLed2( 1 );
@@ -4118,28 +3277,9 @@ int HandlerCmd92mo3a( int param )
 
 //---------- Outpack1 (cmd92) ----------
 
-   if( ( param == 1 ) || ( param == 3 ) || ( param == 5 ) || ( param == 9 ) ) {
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 1;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 3;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
+    if( ( param1 == 1 ) || ( param1 == 3 ) || ( param1 == 5 ) || ( param1 == 9 ) ) {
+	
+		kzo13_1();
 
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
@@ -4148,11 +3288,11 @@ int HandlerCmd92mo3a( int param )
       h12->nspol = 1;  
       h12->kss = sizeof(struct form11) / 2;
       h12->kvi = 1;
-      h12->ps = 0;
+      h12->ps = 1;
       h12->kzo = 5;
       f11 = (struct form11 *)(outpack1.buf[i].data + sizeof(struct header12));
       memcpy( (char *)f11, (char *)&form11k1, sizeof(struct form11) );
-      if ( param == 9 ) {
+      if ( param1 == 9 ) {
          f11->ku9z0 = 1; //ZAPROS-0
          f11->ku9z1 = 1; //ZAPROS-1
          f11->ku9z2 = 1; //ZAPROS-2
@@ -4167,7 +3307,7 @@ int HandlerCmd92mo3a( int param )
          f11->x0 = 0;
          f11->x1 = 0;
       } else {
-         switch( param ) {
+         switch( param1 ) {
          case 1:
          case 3:
             f11->ku0 = 1; //FK
@@ -4189,18 +3329,14 @@ int HandlerCmd92mo3a( int param )
          f11->ku3 = 0; //TKI
          f11->ku4 = 1; //FM1
 //         f11->ku7 = 0; //PRD-0dB
-         switch( param ) {
-         case 1:
-            f11->ku8 = 0; //FK-0
+         switch( param1 ) {
+         case 1:   f11->ku8 = 0; //FK-0
             break;
-         case 3:
-            f11->ku8 = 1; //FK-1
+         case 3:   f11->ku8 = 1; //FK-1
             break;
-         case 5:
-            f11->ku8 = 3; //FK-3
+         case 5:   f11->ku8 = 3; //FK-3
             break;
-         default:
-            break;
+         default:   break;
          }
          f11->ku9z0 = 1; //ZAPROS-0
       }
@@ -4209,16 +3345,7 @@ int HandlerCmd92mo3a( int param )
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
       outpack1.nsave++;
 
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 7;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
+	kzo7_1();
 
       stat.out |= FLAG_BUF1;
       ControlLed1( 1 );
@@ -4226,28 +3353,9 @@ int HandlerCmd92mo3a( int param )
 
 //---------- Outpack2 (cmd92) ----------
 
-   if( ( param == 2 ) || ( param == 4 ) || ( param == 6 ) || ( param == 10 ) ) {
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 1;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 3;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
+   if( ( param1 == 2 ) || ( param1 == 4 ) || ( param1 == 6 ) || ( param1 == 10 ) ) {
+	
+		kzo13_2();
 
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
@@ -4256,11 +3364,11 @@ int HandlerCmd92mo3a( int param )
       h12->nspol = 1;  
       h12->kss = sizeof(struct form11) / 2;
       h12->kvi = 1;
-      h12->ps = 0;
+      h12->ps = 1;
       h12->kzo = 5;
       f11 = (struct form11 *)(outpack2.buf[i].data + sizeof(struct header12));
       memcpy( (char *)f11, (char *)&form11k2, sizeof(struct form11) );
-      if ( param == 10 ) {
+      if ( param1 == 10 ) {
          f11->ku9z0 = 1; //ZAPROS-0
          f11->ku9z1 = 1; //ZAPROS-1
          f11->ku9z2 = 1; //ZAPROS-2
@@ -4275,7 +3383,7 @@ int HandlerCmd92mo3a( int param )
          f11->x0 = 0;
          f11->x1 = 0;
       } else {
-         switch( param ) {
+         switch( param1 ) {
          case 2:
          case 4:
             f11->ku0 = 1; //FK
@@ -4291,24 +3399,19 @@ int HandlerCmd92mo3a( int param )
             f11->x0 = 0;
             f11->x1 = 1;
             break;
-         default:
-            break;
+         default:            break;
          }
          f11->ku3 = 0; //TKI
          f11->ku4 = 1; //FM1
          f11->ku7 = 0; //PRD-0dB
-         switch( param ) {
-         case 2:
-            f11->ku8 = 0; //FK-0
-            break;
-         case 4:
-            f11->ku8 = 1; //FK-1
-            break;
-         case 6:
-            f11->ku8 = 3; //FK-3
-            break;
-         default:
-            break;
+         switch( param1 ) {
+         case 2:            f11->ku8 = 0; //FK-0
+							break;
+         case 4:            f11->ku8 = 1; //FK-1
+							break;
+         case 6:            f11->ku8 = 3; //FK-3
+							break;
+         default:           break;
          }
          f11->ku9z0 = 1; //ZAPROS-0
       }
@@ -4317,16 +3420,7 @@ int HandlerCmd92mo3a( int param )
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
       outpack2.nsave++;
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 7;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
+	kzo7_2();
 
       stat.out |= FLAG_BUF2;
       ControlLed2( 1 );
@@ -4575,30 +3669,9 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
 //---------- Outpack1 (cmd93mo3a) ----------
 
    if( param0 == 0 ) { //SVC-1
+     //SVC-1 -> Step 1
 
-   //SVC-1 -> Step 1
-
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 1;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 3;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
+		kzo13_1();
 
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
@@ -4676,45 +3749,12 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
       outpack1.nsave++;
 
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 7;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      outpack1.buf[i].size = 0;
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack1.nsave++;
+		kzo7_1();
+		BLKT(1);
 
    //SVC-1 -> Step 2
 
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 1;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 3;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
+		kzo13_1();
 
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
@@ -4747,55 +3787,20 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
       f11->ku9z8 = 1; //ZAPROS-8
       f11->ku9z9 = 1; //ZAPROS-9
       f11->ku9z10 = 1; //ZAPROS-10
+      f11->ku10 = 1; 
+
       memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
       outpack1.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
       outpack1.nsave++;
 
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 7;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      outpack1.buf[i].size = 0;
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      outpack1.buf[i].size = 0;
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack1.nsave++;
+		kzo7_1();
+		BLKT(1);
+		BLKT(1);
 
    //SVC-1 -> Step 3
 
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 1;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 3;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
+		kzo13_1();
 
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
@@ -4826,52 +3831,25 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
       f11->ku9z8 = 1; //ZAPROS-8
       f11->ku9z9 = 1; //ZAPROS-9
       f11->ku9z10 = 1; //ZAPROS-10
+
       memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
       outpack1.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
+	  if (param0==3)
+	  {			
+      	outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1 | BUF3KIT_CMD_KRK;
+      	outpack1.buf[i].param = KRK_SWITCH_RECV;
+	  }
       outpack1.nsave++;
 
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 7;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      outpack1.buf[i].size = 0;
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack1.nsave++;
+		kzo7_1();
+		BLKT(1);
 
    //SVC-1 -> Step 4
 
-      for( j = 0; j < 14; j++ ) {
+      for( j = 0; j < 14; j++ ) { //14
  
-         i = outpack1.nsave;
-         h12 = (struct header12 *)outpack1.buf[i].data;
-         SetHeader12( h12 );
-         h12->kss = 0;
-         h12->kvi = 0;
-         h12->ps = 0;
-         h12->kzo = 1;
-         outpack1.buf[i].size = sizeof(struct header12);
-         outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-         outpack1.nsave++;
-
-         i = outpack1.nsave;
-         h12 = (struct header12 *)outpack1.buf[i].data;
-         SetHeader12( h12 );
-         h12->kss = 0;
-         h12->kvi = 0;
-         h12->ps = 0;
-         h12->kzo = 3;
-         outpack1.buf[i].size = sizeof(struct header12);
-         outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-         outpack1.nsave++;
+			kzo13_1();
 
          i = outpack1.nsave;
          h12 = (struct header12 *)outpack1.buf[i].data;
@@ -4895,61 +3873,37 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
          f11->ku9z8 = 1; //ZAPROS-8
          f11->ku9z9 = 1; //ZAPROS-9
          f11->ku9z10 = 1; //ZAPROS-10
+	      f11->ku10 = 1; 
+
          memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
          outpack1.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
          outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
          outpack1.nsave++;
 
-         i = outpack1.nsave;
-         h12 = (struct header12 *)outpack1.buf[i].data;
-         SetHeader12( h12 );
-         h12->kss = 0;
-         h12->kvi = 0;
-         h12->ps = 0;
-         h12->kzo = 7;
-         outpack1.buf[i].size = sizeof(struct header12);
-         outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-         outpack1.nsave++;
-
-         i = outpack1.nsave;
-         outpack1.buf[i].size = 0;
-         outpack1.buf[i].cmd = BUF3KIT_CMD_BLKT;
-         outpack1.nsave++;
+		kzo7_1();
+		BLKT(1);
 
       } //for(j)
 
+      i = outpack1.nsave;
+      outpack1.buf[i].size = 0;
+      outpack1.buf[i].cmd = BUF3KIT_CMD_END;
+      outpack1.nsave++;
+	
       stat.out |= FLAG_BUF1;
       stat.link |= FLAG_BUF1;
       ControlLed1( 1 );
+
    }
 
 //---------- Outpack2 (cmd93mo3a) ----------
 
    if( param0 == 1 ) { //SVC-2
 
-   //SVC-2 -> Step 1
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 1;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
+     //SVC-2 -> Step 1
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 3;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
+		kzo13_2();
 
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
@@ -4958,7 +3912,7 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
       h12->nspol = 1;  
       h12->kss = sizeof(struct sac) / 2;
       h12->kvi = 2;
-      h12->ps = 0;
+      h12->ps = 1;
       h12->kzo = 5;
       f26 = (struct sac *)(outpack2.buf[i].data + sizeof(struct header12));
       memcpy( (char *)f26, (char *)&form26k2, sizeof(struct sac) );
@@ -5027,45 +3981,12 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
       outpack2.nsave++;
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 7;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      outpack2.buf[i].size = 0;
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack2.nsave++;
+		kzo7_2();
+		BLKT(2);
 
    //SVC-2 -> Step 2
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 1;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 3;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
+		kzo13_2();
 
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
@@ -5103,51 +4024,14 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
       outpack2.nsave++;
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 7;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      outpack2.buf[i].size = 0;
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      outpack2.buf[i].size = 0;
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack2.nsave++;
+		kzo7_2();
+		BLKT(2);
+		BLKT(2);
 
    //SVC-2 -> Step 3
-
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 1;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 3;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
+	
+		kzo13_2();
+	
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
       SetHeader12( h12 );
@@ -5182,48 +4066,15 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
       outpack2.nsave++;
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 7;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      outpack2.buf[i].size = 0;
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack2.nsave++;
+		kzo7_2();
+		BLKT(2);
 
    //SVC-2 -> Step 4
 
       for( j = 0; j < 14; j++ ) {
- 
-         i = outpack2.nsave;
-         h12 = (struct header12 *)outpack2.buf[i].data;
-         SetHeader12( h12 );
-         h12->kss = 0;
-         h12->kvi = 0;
-         h12->ps = 0;
-         h12->kzo = 1;
-         outpack2.buf[i].size = sizeof(struct header12);
-         outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-         outpack2.nsave++;
 
-         i = outpack2.nsave;
-         h12 = (struct header12 *)outpack2.buf[i].data;
-         SetHeader12( h12 );
-         h12->kss = 0;
-         h12->kvi = 0;
-         h12->ps = 0;
-         h12->kzo = 3;
-         outpack2.buf[i].size = sizeof(struct header12);
-         outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-         outpack2.nsave++;
-
+			kzo13_2();
+		
          i = outpack2.nsave;
          h12 = (struct header12 *)outpack2.buf[i].data;
          SetHeader12( h12 );
@@ -5246,28 +4097,21 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
          f11->ku9z8 = 1; //ZAPROS-8
          f11->ku9z9 = 1; //ZAPROS-9
          f11->ku9z10 = 1; //ZAPROS-10
+	      f11->ku10 = 1; 
          memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
          outpack2.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
          outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
          outpack2.nsave++;
 
-         i = outpack2.nsave;
-         h12 = (struct header12 *)outpack2.buf[i].data;
-         SetHeader12( h12 );
-         h12->kss = 0;
-         h12->kvi = 0;
-         h12->ps = 0;
-         h12->kzo = 7;
-         outpack2.buf[i].size = sizeof(struct header12);
-         outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-         outpack2.nsave++;
-
-         i = outpack2.nsave;
-         outpack2.buf[i].size = 0;
-         outpack2.buf[i].cmd = BUF3KIT_CMD_BLKT;
-         outpack2.nsave++;
+		kzo7_2();
+		BLKT(2);
 
       } //for(j)
+
+      i = outpack2.nsave;
+      outpack2.buf[i].size = 0;
+      outpack2.buf[i].cmd = BUF3KIT_CMD_END;
+      outpack2.nsave++;
 
       stat.out |= FLAG_BUF2;
       stat.link |= FLAG_BUF2;
@@ -5625,22 +4469,25 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
    switch( param0 ) {
    case 0:
       mode.addr1 = param3;
-      mode.scan1 = 1;
+     // mode.scan1 = 1;
       break;
    case 1:
-//      mode.addr2 = param3;
+      mode.addr2 = param3;
   //    mode.scan2 = 1;
       break;
    case 2:
       mode.addr3 = param3;
       mode.recv3 = 1;
       break;
+   case 3:
+      mode.addr3 = param3;
+//    mode.recv3 = 1;
+      break;
    default:
       outpack0.cr_com++;
       outpack0.kzv = 1;
       stat.out = stat.in = stat.link = 0;
    }
-
    return( 0 );
 }
 
@@ -5667,27 +4514,7 @@ int HandlerCmd94mo3a( int param0, int param1 )
 
    //SVC-1 -> Step 1
 
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 1;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 3;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
+  kzo13_1();
 
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
@@ -5752,45 +4579,12 @@ int HandlerCmd94mo3a( int param0, int param1 )
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
       outpack1.nsave++;
 
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 7;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      outpack1.buf[i].size = 0;
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack1.nsave++;
+		kzo7_1();
+		BLKT(1);
 
    //SVC-1 -> Step 2
 
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 1;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 3;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
+		kzo13_1();
 
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
@@ -5828,50 +4622,13 @@ int HandlerCmd94mo3a( int param0, int param1 )
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
       outpack1.nsave++;
 
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 7;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      outpack1.buf[i].size = 0;
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      outpack1.buf[i].size = 0;
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack1.nsave++;
+		kzo7_1();
+		BLKT(1);
+		BLKT(1);
 
    //SVC-1 -> Step 3
 
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 1;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 3;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
+		kzo13_1();
 
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
@@ -5905,49 +4662,21 @@ int HandlerCmd94mo3a( int param0, int param1 )
       memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
       outpack1.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
+	  if (param0==3)
+	  {			
+      	outpack1.buf[i].cmd   = BUF3KIT_CMD_BLK1 | BUF3KIT_CMD_KRK;
+      	outpack1.buf[i].param = KRK_SWITCH_RECV;
+	  }
       outpack1.nsave++;
 
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 7;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      outpack1.buf[i].size = 0;
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack1.nsave++;
+		kzo7_1();
+		BLKT(1);
 
    //SVC-1 -> Step 4
 
       for( j = 0; j < 14; j++ ) {
  
-         i = outpack1.nsave;
-         h12 = (struct header12 *)outpack1.buf[i].data;
-         SetHeader12( h12 );
-         h12->kss = 0;
-         h12->kvi = 0;
-         h12->ps = 0;
-         h12->kzo = 1;
-         outpack1.buf[i].size = sizeof(struct header12);
-         outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-         outpack1.nsave++;
-
-         i = outpack1.nsave;
-         h12 = (struct header12 *)outpack1.buf[i].data;
-         SetHeader12( h12 );
-         h12->kss = 0;
-         h12->kvi = 0;
-         h12->ps = 0;
-         h12->kzo = 3;
-         outpack1.buf[i].size = sizeof(struct header12);
-         outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-         outpack1.nsave++;
+			kzo13_1();
 
          i = outpack1.nsave;
          h12 = (struct header12 *)outpack1.buf[i].data;
@@ -5970,29 +4699,22 @@ int HandlerCmd94mo3a( int param0, int param1 )
          f11->ku9z7 = 1; //ZAPROS-7
          f11->ku9z8 = 1; //ZAPROS-8
          f11->ku9z9 = 1; //ZAPROS-9
-         f11->ku9z10 = 1; //ZAPROS-10
+         f11->ku9z10 = 1;//ZAPROS-10
+         f11->ku10 = 1;  //ZAPROS-10
          memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
          outpack1.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
          outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
          outpack1.nsave++;
 
-         i = outpack1.nsave;
-         h12 = (struct header12 *)outpack1.buf[i].data;
-         SetHeader12( h12 );
-         h12->kss = 0;
-         h12->kvi = 0;
-         h12->ps = 0;
-         h12->kzo = 7;
-         outpack1.buf[i].size = sizeof(struct header12);
-         outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-         outpack1.nsave++;
-
-         i = outpack1.nsave;
-         outpack1.buf[i].size = 0;
-         outpack1.buf[i].cmd = BUF3KIT_CMD_BLKT;
-         outpack1.nsave++;
+			kzo7_1();
+			BLKT(1);
 
       } //for(j)
+
+      i = outpack1.nsave;
+      outpack1.buf[i].size = 0;
+      outpack1.buf[i].cmd = BUF3KIT_CMD_END;
+      outpack1.nsave++;
 
       stat.out |= FLAG_BUF1;
       stat.link |= FLAG_BUF1;
@@ -6005,27 +4727,7 @@ int HandlerCmd94mo3a( int param0, int param1 )
 
    //SVC-2 -> Step 1
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 1;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 3;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
+		kzo13_2();
 
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
@@ -6034,7 +4736,7 @@ int HandlerCmd94mo3a( int param0, int param1 )
       h12->nspol = 1;  
       h12->kss = sizeof(struct sac) / 2;
       h12->kvi = 2;
-      h12->ps = 0;
+      h12->ps = 1;
       h12->kzo = 5;
       f203 = (struct sac *)(outpack2.buf[i].data + sizeof(struct header12));
       memcpy( (char *)f203, (char *)&form26k2, sizeof(struct sac) );
@@ -6090,45 +4792,12 @@ int HandlerCmd94mo3a( int param0, int param1 )
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
       outpack2.nsave++;
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 7;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      outpack2.buf[i].size = 0;
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack2.nsave++;
+		kzo7_2();
+		BLKT(2);
 
    //SVC-2 -> Step 2
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 1;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 3;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
+		kzo13_2();
 
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
@@ -6166,50 +4835,13 @@ int HandlerCmd94mo3a( int param0, int param1 )
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
       outpack2.nsave++;
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 7;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      outpack2.buf[i].size = 0;
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      outpack2.buf[i].size = 0;
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack2.nsave++;
+		kzo7_2();
+		BLKT(2);
+		BLKT(2);
 
    //SVC-2 -> Step 3
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 1;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 3;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
+		kzo13_2();
 
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
@@ -6242,50 +4874,18 @@ int HandlerCmd94mo3a( int param0, int param1 )
       f11->ku9z10 = 1; //ZAPROS-10
       memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
       outpack2.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
+      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2 | BUF3KIT_CMD_KRK;
+      outpack2.buf[i].param = KRK_SWITCH_RECV;
       outpack2.nsave++;
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 7;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      outpack2.buf[i].size = 0;
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack2.nsave++;
+		kzo7_2();
+		BLKT(2);
 
    //SVC-2 -> Step 4
 
       for( j = 0; j < 14; j++ ) {
  
-         i = outpack2.nsave;
-         h12 = (struct header12 *)outpack2.buf[i].data;
-         SetHeader12( h12 );
-         h12->kss = 0;
-         h12->kvi = 0;
-         h12->ps = 0;
-         h12->kzo = 1;
-         outpack2.buf[i].size = sizeof(struct header12);
-         outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-         outpack2.nsave++;
-
-         i = outpack2.nsave;
-         h12 = (struct header12 *)outpack2.buf[i].data;
-         SetHeader12( h12 );
-         h12->kss = 0;
-         h12->kvi = 0;
-         h12->ps = 0;
-         h12->kzo = 3;
-         outpack2.buf[i].size = sizeof(struct header12);
-         outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-         outpack2.nsave++;
+			kzo13_2();
 
          i = outpack2.nsave;
          h12 = (struct header12 *)outpack2.buf[i].data;
@@ -6309,34 +4909,26 @@ int HandlerCmd94mo3a( int param0, int param1 )
          f11->ku9z8 = 1; //ZAPROS-8
          f11->ku9z9 = 1; //ZAPROS-9
          f11->ku9z10 = 1; //ZAPROS-10
+         f11->ku10 = 1; //ZAPROS-10
          memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
          outpack2.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
          outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
          outpack2.nsave++;
 
-         i = outpack2.nsave;
-         h12 = (struct header12 *)outpack2.buf[i].data;
-         SetHeader12( h12 );
-         h12->kss = 0;
-         h12->kvi = 0;
-         h12->ps = 0;
-         h12->kzo = 7;
-         outpack2.buf[i].size = sizeof(struct header12);
-         outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-         outpack2.nsave++;
-
-         i = outpack2.nsave;
-         outpack2.buf[i].size = 0;
-         outpack2.buf[i].cmd = BUF3KIT_CMD_BLKT;
-         outpack2.nsave++;
+			kzo7_2();
+			BLKT(2);
 
       } //for(j)
+
+      i = outpack2.nsave;
+      outpack2.buf[i].size = 0;
+      outpack2.buf[i].cmd = BUF3KIT_CMD_END;
+      outpack2.nsave++;
 
       stat.out |= FLAG_BUF2;
       stat.link |= FLAG_BUF2;
       ControlLed2( 1 );
    }
-
 //---------- Outpack3 (cmd94mo3a) ----------
 
    if( param0 == 1 ) { //SVC-2
@@ -6638,16 +5230,13 @@ int HandlerCmd94mo3a( int param0, int param1 )
 
 //---------- Other (cmd94mo3a) ----------
 
-   switch( param0 ) {
-   case 0:
-      mode.scan1 = 1;
-      break;
-   case 1:
-      mode.scan2 = 1;
-      break;
-   case 2:
-      mode.recv3 = 1;
-      break;
+    switch( param0 ) {
+    case 0:   		//   mode.scan1 = 1;
+					break;
+	case 1:   		//   mode.scan2 = 1;
+					break;
+	case 2:   		//   mode.recv3 = 1;
+					break;
    default:
       outpack0.cr_com++;
       outpack0.kzv = 1;
@@ -6678,29 +5267,11 @@ int HandlerCmd95mo3a( int param0, int param1 )
 
    if( param0 == 0 ) { //SVC-1
 
+  if( param0 == 0 ) { //SVC-1
+
    //SVC-1 -> Step 1
 
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 1;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 3;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
+		kzo13_1();
 
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
@@ -6711,7 +5282,7 @@ int HandlerCmd95mo3a( int param0, int param1 )
       h12->kss = ( sizeof(struct form193) / 2 ) & 0xf; //Temp!!!
       h12->kss2 = ( sizeof(struct form193) / 2 ) >> 4; //Temp!!!
       h12->kvi = 2;
-      h12->ps = 0;
+      h12->ps = 1;
       h12->kzo = 5;
       f193 = (struct form193 *)(outpack1.buf[i].data + 
          sizeof(struct header12));
@@ -6772,45 +5343,12 @@ int HandlerCmd95mo3a( int param0, int param1 )
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
       outpack1.nsave++;
 
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 7;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      outpack1.buf[i].size = 0;
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack1.nsave++;
+		kzo7_1();
+		BLKT(1);
 
    //SVC-1 -> Step 2
 
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 1;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 3;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
+		kzo13_1();
 
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
@@ -6848,50 +5386,13 @@ int HandlerCmd95mo3a( int param0, int param1 )
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
       outpack1.nsave++;
 
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 7;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      outpack1.buf[i].size = 0;
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      outpack1.buf[i].size = 0;
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack1.nsave++;
+		kzo7_1();
+		BLKT(1);
+		BLKT(1);
 
    //SVC-1 -> Step 3
 
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 1;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 3;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
+		kzo13_1();
 
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
@@ -6927,47 +5428,14 @@ int HandlerCmd95mo3a( int param0, int param1 )
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
       outpack1.nsave++;
 
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 7;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      outpack1.buf[i].size = 0;
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack1.nsave++;
+		kzo7_1();
+		BLKT(1);
 
    //SVC-1 -> Step 4
 
       for( j = 0; j < 14; j++ ) {
  
-         i = outpack1.nsave;
-         h12 = (struct header12 *)outpack1.buf[i].data;
-         SetHeader12( h12 );
-         h12->kss = 0;
-         h12->kvi = 0;
-         h12->ps = 0;
-         h12->kzo = 1;
-         outpack1.buf[i].size = sizeof(struct header12);
-         outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-         outpack1.nsave++;
-
-         i = outpack1.nsave;
-         h12 = (struct header12 *)outpack1.buf[i].data;
-         SetHeader12( h12 );
-         h12->kss = 0;
-         h12->kvi = 0;
-         h12->ps = 0;
-         h12->kzo = 3;
-         outpack1.buf[i].size = sizeof(struct header12);
-         outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-         outpack1.nsave++;
+			kzo13_1();
 
          i = outpack1.nsave;
          h12 = (struct header12 *)outpack1.buf[i].data;
@@ -6996,21 +5464,8 @@ int HandlerCmd95mo3a( int param0, int param1 )
          outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
          outpack1.nsave++;
 
-         i = outpack1.nsave;
-         h12 = (struct header12 *)outpack1.buf[i].data;
-         SetHeader12( h12 );
-         h12->kss = 0;
-         h12->kvi = 0;
-         h12->ps = 0;
-         h12->kzo = 7;
-         outpack1.buf[i].size = sizeof(struct header12);
-         outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-         outpack1.nsave++;
-
-         i = outpack1.nsave;
-         outpack1.buf[i].size = 0;
-         outpack1.buf[i].cmd = BUF3KIT_CMD_BLKT;
-         outpack1.nsave++;
+			kzo7_1();
+			BLKT(1);
 
       } //for(j)
 
@@ -7025,27 +5480,7 @@ int HandlerCmd95mo3a( int param0, int param1 )
 
    //SVC-2 -> Step 1
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 1;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 3;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
+		kzo13_2();
 
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
@@ -7056,7 +5491,7 @@ int HandlerCmd95mo3a( int param0, int param1 )
       h12->kss = ( sizeof(struct form193) / 2 ) & 0xf; //Temp!!!
       h12->kss2 = ( sizeof(struct form193) / 2 ) >> 4; //Temp!!!
       h12->kvi = 2;
-      h12->ps = 0;
+      h12->ps = 1;
       h12->kzo = 5;
       f193 = (struct form193 *)(outpack2.buf[i].data + 
          sizeof(struct header12));
@@ -7117,45 +5552,12 @@ int HandlerCmd95mo3a( int param0, int param1 )
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
       outpack2.nsave++;
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 7;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      outpack2.buf[i].size = 0;
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack2.nsave++;
+		kzo7_2();
+		BLKT(2);
 
    //SVC-2 -> Step 2
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 1;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 3;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
+		kzo13_2();
 
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
@@ -7193,50 +5595,13 @@ int HandlerCmd95mo3a( int param0, int param1 )
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
       outpack2.nsave++;
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 7;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      outpack2.buf[i].size = 0;
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      outpack2.buf[i].size = 0;
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack2.nsave++;
+		kzo7_2();
+		BLKT(2);
+		BLKT(2);
 
    //SVC-2 -> Step 3
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 1;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 3;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
+		kzo13_2();
 
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
@@ -7272,47 +5637,14 @@ int HandlerCmd95mo3a( int param0, int param1 )
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
       outpack2.nsave++;
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 7;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      outpack2.buf[i].size = 0;
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack2.nsave++;
+		kzo7_2();
+		BLKT(2);
 
    //SVC-2 -> Step 4
 
       for( j = 0; j < 14; j++ ) {
  
-         i = outpack2.nsave;
-         h12 = (struct header12 *)outpack2.buf[i].data;
-         SetHeader12( h12 );
-         h12->kss = 0;
-         h12->kvi = 0;
-         h12->ps = 0;
-         h12->kzo = 1;
-         outpack2.buf[i].size = sizeof(struct header12);
-         outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-         outpack2.nsave++;
-
-         i = outpack2.nsave;
-         h12 = (struct header12 *)outpack2.buf[i].data;
-         SetHeader12( h12 );
-         h12->kss = 0;
-         h12->kvi = 0;
-         h12->ps = 0;
-         h12->kzo = 3;
-         outpack2.buf[i].size = sizeof(struct header12);
-         outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-         outpack2.nsave++;
+			kzo13_2();
 
          i = outpack2.nsave;
          h12 = (struct header12 *)outpack2.buf[i].data;
@@ -7341,21 +5673,8 @@ int HandlerCmd95mo3a( int param0, int param1 )
          outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
          outpack2.nsave++;
 
-         i = outpack2.nsave;
-         h12 = (struct header12 *)outpack2.buf[i].data;
-         SetHeader12( h12 );
-         h12->kss = 0;
-         h12->kvi = 0;
-         h12->ps = 0;
-         h12->kzo = 7;
-         outpack2.buf[i].size = sizeof(struct header12);
-         outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-         outpack2.nsave++;
-
-         i = outpack2.nsave;
-         outpack2.buf[i].size = 0;
-         outpack2.buf[i].cmd = BUF3KIT_CMD_BLKT;
-         outpack2.nsave++;
+			kzo7_2();
+			BLKT(2);
 
       } //for(j)
 
@@ -7363,7 +5682,7 @@ int HandlerCmd95mo3a( int param0, int param1 )
       stat.link |= FLAG_BUF2;
       ControlLed2( 1 );
    }
-
+   
 //---------- Outpack3 (cmd95mo3a) ----------
 
    if( param0 == 1 ) { //SVC-2
@@ -7671,21 +5990,13 @@ int HandlerCmd95mo3a( int param0, int param1 )
 //---------- Other (cmd95mo3a) ----------
 
    switch( param0 ) {
-   case 0:
-      mode.scan1 = 1;
-      break;
-   case 1:
-      mode.scan2 = 1;
-      break;
-   case 2:
-      mode.recv3 = 1;
-      break;
-   default:
-      outpack0.cr_com++;
-      outpack0.kzv = 1;
-      stat.out = stat.in = stat.link = 0;
+   case 0:      mode.scan1 = 1;      break;
+   case 1:      mode.scan2 = 1;      break;
+   case 2:      mode.recv3 = 1;      break;
+   default:		outpack0.cr_com++;
+				outpack0.kzv = 1;
+				stat.out = stat.in = stat.link = 0;
    }
-
    return( 0 );
 }
 
@@ -7707,31 +6018,11 @@ int HandlerCmd96mo3a( int param0, int param1 )
 
 //---------- Outpack1 (cmd96mo3a) ----------
 
-   if( param0 == 0 ) { //SVC-1
+  if( param0 == 0 ) { //SVC-1
 
    //SVC-1 -> Step 1
 
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 1;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 3;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
+		kzo13_1();
 
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
@@ -7742,7 +6033,7 @@ int HandlerCmd96mo3a( int param0, int param1 )
       h12->kss = ( sizeof(struct form193) / 2 ) & 0xf; //Temp!!!
       h12->kss2 = ( sizeof(struct form193) / 2 ) >> 4; //Temp!!!
       h12->kvi = 2;
-      h12->ps = 0;
+      h12->ps = 1;
       h12->kzo = 5;
       f193 = (struct form193 *)(outpack1.buf[i].data + 
          sizeof(struct header12));
@@ -7803,45 +6094,12 @@ int HandlerCmd96mo3a( int param0, int param1 )
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
       outpack1.nsave++;
 
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 7;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      outpack1.buf[i].size = 0;
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack1.nsave++;
+		kzo7_1();
+		BLKT(1);
 
    //SVC-1 -> Step 2
 
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 1;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 3;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
+		kzo13_1();
 
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
@@ -7879,50 +6137,13 @@ int HandlerCmd96mo3a( int param0, int param1 )
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
       outpack1.nsave++;
 
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 7;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      outpack1.buf[i].size = 0;
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      outpack1.buf[i].size = 0;
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack1.nsave++;
+		kzo7_1();
+		BLKT(1);
+		BLKT(1);
 
    //SVC-1 -> Step 3
 
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 1;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 3;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
+		kzo13_1();
 
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
@@ -7958,47 +6179,14 @@ int HandlerCmd96mo3a( int param0, int param1 )
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
       outpack1.nsave++;
 
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 7;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      outpack1.buf[i].size = 0;
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack1.nsave++;
+		kzo7_1();
+		BLKT(1);
 
    //SVC-1 -> Step 4
 
       for( j = 0; j < 14; j++ ) {
  
-         i = outpack1.nsave;
-         h12 = (struct header12 *)outpack1.buf[i].data;
-         SetHeader12( h12 );
-         h12->kss = 0;
-         h12->kvi = 0;
-         h12->ps = 0;
-         h12->kzo = 1;
-         outpack1.buf[i].size = sizeof(struct header12);
-         outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-         outpack1.nsave++;
-
-         i = outpack1.nsave;
-         h12 = (struct header12 *)outpack1.buf[i].data;
-         SetHeader12( h12 );
-         h12->kss = 0;
-         h12->kvi = 0;
-         h12->ps = 0;
-         h12->kzo = 3;
-         outpack1.buf[i].size = sizeof(struct header12);
-         outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-         outpack1.nsave++;
+			kzo13_1();
 
          i = outpack1.nsave;
          h12 = (struct header12 *)outpack1.buf[i].data;
@@ -8027,21 +6215,8 @@ int HandlerCmd96mo3a( int param0, int param1 )
          outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
          outpack1.nsave++;
 
-         i = outpack1.nsave;
-         h12 = (struct header12 *)outpack1.buf[i].data;
-         SetHeader12( h12 );
-         h12->kss = 0;
-         h12->kvi = 0;
-         h12->ps = 0;
-         h12->kzo = 7;
-         outpack1.buf[i].size = sizeof(struct header12);
-         outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-         outpack1.nsave++;
-
-         i = outpack1.nsave;
-         outpack1.buf[i].size = 0;
-         outpack1.buf[i].cmd = BUF3KIT_CMD_BLKT;
-         outpack1.nsave++;
+			kzo7_1();
+			BLKT(1);
 
       } //for(j)
 
@@ -8056,27 +6231,7 @@ int HandlerCmd96mo3a( int param0, int param1 )
 
    //SVC-2 -> Step 1
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 1;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 3;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
+		kzo13_2();
 
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
@@ -8087,7 +6242,7 @@ int HandlerCmd96mo3a( int param0, int param1 )
       h12->kss = ( sizeof(struct form193) / 2 ) & 0xf; //Temp!!!
       h12->kss2 = ( sizeof(struct form193) / 2 ) >> 4; //Temp!!!
       h12->kvi = 2;
-      h12->ps = 0;
+      h12->ps = 1;
       h12->kzo = 5;
       f193 = (struct form193 *)(outpack2.buf[i].data + 
          sizeof(struct header12));
@@ -8148,45 +6303,12 @@ int HandlerCmd96mo3a( int param0, int param1 )
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
       outpack2.nsave++;
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 7;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      outpack2.buf[i].size = 0;
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack2.nsave++;
+		kzo7_2();
+		BLKT(2);
 
    //SVC-2 -> Step 2
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 1;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 3;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
+		kzo13_2();
 
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
@@ -8224,50 +6346,13 @@ int HandlerCmd96mo3a( int param0, int param1 )
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
       outpack2.nsave++;
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 7;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      outpack2.buf[i].size = 0;
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      outpack2.buf[i].size = 0;
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack2.nsave++;
+		kzo7_2();
+		BLKT(2);
+		BLKT(2);
 
    //SVC-2 -> Step 3
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 1;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 3;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
+		kzo13_2();
 
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
@@ -8303,47 +6388,14 @@ int HandlerCmd96mo3a( int param0, int param1 )
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
       outpack2.nsave++;
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 7;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      outpack2.buf[i].size = 0;
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack2.nsave++;
+		kzo7_2();
+		BLKT(2);
 
    //SVC-2 -> Step 4
 
       for( j = 0; j < 14; j++ ) {
  
-         i = outpack2.nsave;
-         h12 = (struct header12 *)outpack2.buf[i].data;
-         SetHeader12( h12 );
-         h12->kss = 0;
-         h12->kvi = 0;
-         h12->ps = 0;
-         h12->kzo = 1;
-         outpack2.buf[i].size = sizeof(struct header12);
-         outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-         outpack2.nsave++;
-
-         i = outpack2.nsave;
-         h12 = (struct header12 *)outpack2.buf[i].data;
-         SetHeader12( h12 );
-         h12->kss = 0;
-         h12->kvi = 0;
-         h12->ps = 0;
-         h12->kzo = 3;
-         outpack2.buf[i].size = sizeof(struct header12);
-         outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-         outpack2.nsave++;
+			kzo13_2();
 
          i = outpack2.nsave;
          h12 = (struct header12 *)outpack2.buf[i].data;
@@ -8372,21 +6424,8 @@ int HandlerCmd96mo3a( int param0, int param1 )
          outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
          outpack2.nsave++;
 
-         i = outpack2.nsave;
-         h12 = (struct header12 *)outpack2.buf[i].data;
-         SetHeader12( h12 );
-         h12->kss = 0;
-         h12->kvi = 0;
-         h12->ps = 0;
-         h12->kzo = 7;
-         outpack2.buf[i].size = sizeof(struct header12);
-         outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-         outpack2.nsave++;
-
-         i = outpack2.nsave;
-         outpack2.buf[i].size = 0;
-         outpack2.buf[i].cmd = BUF3KIT_CMD_BLKT;
-         outpack2.nsave++;
+		kzo7_2();
+		BLKT(2);
 
       } //for(j)
 
@@ -8701,20 +6740,13 @@ int HandlerCmd96mo3a( int param0, int param1 )
 //---------- Other (cmd96mo3a) ----------
 
    switch( param0 ) {
-   case 0:
-      mode.scan1 = 1;
-      break;
-   case 1:
-     mode.scan2 = 1;
-     break;
-   case 2:
-      mode.recv3 = 1;
-      break;
-   default:
-      outpack0.cr_com++;
-      outpack0.kzv = 1;
-      stat.out = stat.in = stat.link = 0;
-      break;
+   case 0:      mode.scan1 = 1;      break;
+   case 1:      mode.scan2 = 1;      break;
+   case 2:      mode.recv3 = 1;      break;
+   default:     outpack0.cr_com++;
+				outpack0.kzv = 1;
+				stat.out = stat.in = stat.link = 0;
+				break;
    }
 
    return( 0 );
@@ -8738,32 +6770,11 @@ int HandlerCmd101mo3a( int param0, int param1 )
    }
 
 //---------- Outpack1 (cmd101mo3a) ----------
-
-   if( param0 == 0 ) { //SVC-1
+ if( param0 == 0 ) { //SVC-1
 
    //SVC-1 -> Step 1
 
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 1;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 3;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
+		kzo13_1();
 
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
@@ -8774,7 +6785,7 @@ int HandlerCmd101mo3a( int param0, int param1 )
       h12->kss = ( sizeof(struct form193) / 2 ) & 0xf; //Temp!!!
       h12->kss2 = ( sizeof(struct form193) / 2 ) >> 4; //Temp!!!
       h12->kvi = 2;
-      h12->ps = 0;
+      h12->ps = 1;
       h12->kzo = 5;
       f193 = (struct form193 *)(outpack1.buf[i].data + 
          sizeof(struct header12));
@@ -8835,45 +6846,12 @@ int HandlerCmd101mo3a( int param0, int param1 )
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
       outpack1.nsave++;
 
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 7;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      outpack1.buf[i].size = 0;
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack1.nsave++;
+		kzo7_1();
+		BLKT(1);
 
    //SVC-1 -> Step 2
 
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 1;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 3;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
+		kzo13_1();
 
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
@@ -8911,50 +6889,13 @@ int HandlerCmd101mo3a( int param0, int param1 )
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
       outpack1.nsave++;
 
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 7;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      outpack1.buf[i].size = 0;
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      outpack1.buf[i].size = 0;
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack1.nsave++;
+		kzo7_1();
+		BLKT(1);
+		BLKT(1);
 
    //SVC-1 -> Step 3
 
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 1;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 3;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
+		kzo13_1();
 
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
@@ -8990,47 +6931,14 @@ int HandlerCmd101mo3a( int param0, int param1 )
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
       outpack1.nsave++;
 
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 7;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      outpack1.buf[i].size = 0;
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack1.nsave++;
+		kzo7_1();
+		BLKT(1);
 
    //SVC-1 -> Step 4
 
       for( j = 0; j < 14; j++ ) {
  
-         i = outpack1.nsave;
-         h12 = (struct header12 *)outpack1.buf[i].data;
-         SetHeader12( h12 );
-         h12->kss = 0;
-         h12->kvi = 0;
-         h12->ps = 0;
-         h12->kzo = 1;
-         outpack1.buf[i].size = sizeof(struct header12);
-         outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-         outpack1.nsave++;
-
-         i = outpack1.nsave;
-         h12 = (struct header12 *)outpack1.buf[i].data;
-         SetHeader12( h12 );
-         h12->kss = 0;
-         h12->kvi = 0;
-         h12->ps = 0;
-         h12->kzo = 3;
-         outpack1.buf[i].size = sizeof(struct header12);
-         outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-         outpack1.nsave++;
+			kzo13_1();
 
          i = outpack1.nsave;
          h12 = (struct header12 *)outpack1.buf[i].data;
@@ -9059,21 +6967,8 @@ int HandlerCmd101mo3a( int param0, int param1 )
          outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
          outpack1.nsave++;
 
-         i = outpack1.nsave;
-         h12 = (struct header12 *)outpack1.buf[i].data;
-         SetHeader12( h12 );
-         h12->kss = 0;
-         h12->kvi = 0;
-         h12->ps = 0;
-         h12->kzo = 7;
-         outpack1.buf[i].size = sizeof(struct header12);
-         outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-         outpack1.nsave++;
-
-         i = outpack1.nsave;
-         outpack1.buf[i].size = 0;
-         outpack1.buf[i].cmd = BUF3KIT_CMD_BLKT;
-         outpack1.nsave++;
+			kzo7_1();
+			BLKT(1);
 
       } //for(j)
 
@@ -9088,27 +6983,7 @@ int HandlerCmd101mo3a( int param0, int param1 )
 
    //SVC-2 -> Step 1
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 1;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 3;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
+		kzo13_1();
 
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
@@ -9119,7 +6994,7 @@ int HandlerCmd101mo3a( int param0, int param1 )
       h12->kss = ( sizeof(struct form193) / 2 ) & 0xf; //Temp!!!
       h12->kss2 = ( sizeof(struct form193) / 2 ) >> 4; //Temp!!!
       h12->kvi = 2;
-      h12->ps = 0;
+      h12->ps = 1;
       h12->kzo = 5;
       f193 = (struct form193 *)(outpack2.buf[i].data + 
          sizeof(struct header12));
@@ -9180,45 +7055,12 @@ int HandlerCmd101mo3a( int param0, int param1 )
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
       outpack2.nsave++;
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 7;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      outpack2.buf[i].size = 0;
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack2.nsave++;
+		kzo7_2();
+		BLKT(2);
 
    //SVC-2 -> Step 2
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 1;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 3;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
+		kzo13_2();
 
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
@@ -9256,50 +7098,13 @@ int HandlerCmd101mo3a( int param0, int param1 )
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
       outpack2.nsave++;
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 7;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      outpack2.buf[i].size = 0;
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      outpack2.buf[i].size = 0;
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack2.nsave++;
+		kzo7_2();
+		BLKT(2);
+		BLKT(2);
 
    //SVC-2 -> Step 3
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 1;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 3;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
+		kzo13_2();
 
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
@@ -9335,47 +7140,14 @@ int HandlerCmd101mo3a( int param0, int param1 )
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
       outpack2.nsave++;
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 7;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      outpack2.buf[i].size = 0;
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack2.nsave++;
+		kzo7_2();
+		BLKT(2);
 
    //SVC-2 -> Step 4
 
       for( j = 0; j < 14; j++ ) {
  
-         i = outpack2.nsave;
-         h12 = (struct header12 *)outpack2.buf[i].data;
-         SetHeader12( h12 );
-         h12->kss = 0;
-         h12->kvi = 0;
-         h12->ps = 0;
-         h12->kzo = 1;
-         outpack2.buf[i].size = sizeof(struct header12);
-         outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-         outpack2.nsave++;
-
-         i = outpack2.nsave;
-         h12 = (struct header12 *)outpack2.buf[i].data;
-         SetHeader12( h12 );
-         h12->kss = 0;
-         h12->kvi = 0;
-         h12->ps = 0;
-         h12->kzo = 3;
-         outpack2.buf[i].size = sizeof(struct header12);
-         outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-         outpack2.nsave++;
+			kzo13_2();
 
          i = outpack2.nsave;
          h12 = (struct header12 *)outpack2.buf[i].data;
@@ -9404,21 +7176,8 @@ int HandlerCmd101mo3a( int param0, int param1 )
          outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
          outpack2.nsave++;
 
-         i = outpack2.nsave;
-         h12 = (struct header12 *)outpack2.buf[i].data;
-         SetHeader12( h12 );
-         h12->kss = 0;
-         h12->kvi = 0;
-         h12->ps = 0;
-         h12->kzo = 7;
-         outpack2.buf[i].size = sizeof(struct header12);
-         outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-         outpack2.nsave++;
-
-         i = outpack2.nsave;
-         outpack2.buf[i].size = 0;
-         outpack2.buf[i].cmd = BUF3KIT_CMD_BLKT;
-         outpack2.nsave++;
+			kzo7_2();
+			BLKT(2);
 
       } //for(j)
 
@@ -9426,7 +7185,7 @@ int HandlerCmd101mo3a( int param0, int param1 )
       stat.link |= FLAG_BUF2;
       ControlLed2( 1 );
    }
-
+  
 //---------- Outpack3 (cmd101mo3a) ----------
 
    if( param0 == 1 ) { //SVC-2
@@ -9566,7 +7325,6 @@ int HandlerCmd101mo3a( int param0, int param1 )
          stat.out |= FLAG_BUF3;
          ControlLed3( 1 );
       }
-
    }
 
 //---------- Outpack4 (cmd101mo32a) ----------
@@ -9734,16 +7492,10 @@ int HandlerCmd101mo3a( int param0, int param1 )
 
 //---------- Other (cmd101mo3a) ----------
 
-   switch( param0 ) {
-   case 0:
-      mode.scan1 = 1;
-      break;
-   case 1:
-      mode.scan2 = 1;
-      break;
-   case 2:
-      mode.recv3 = 1;
-      break;
+  switch( param0 ) {
+   case 0:      mode.scan1 = 1;      break;
+   case 1:      mode.scan2 = 1;      break;
+   case 2:      mode.recv3 = 1;      break;
    default:
       outpack0.cr_com++;
       outpack0.kzv = 1;
@@ -9772,31 +7524,11 @@ int HandlerCmd102mo3a( int param0, int param1 )
 
 //---------- Outpack1 (cmd102mo3a) ----------
 
-   if( param0 == 0 ) { //SVC-1
+    if( param0 == 0 ) { //SVC-1
 
    //SVC-1 -> Step 1
 
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 1;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 3;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
+		kzo13_1();
 
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
@@ -9807,7 +7539,7 @@ int HandlerCmd102mo3a( int param0, int param1 )
       h12->kss = ( sizeof(struct form193) / 2 ) & 0xf; //Temp!!!
       h12->kss2 = ( sizeof(struct form193) / 2 ) >> 4; //Temp!!!
       h12->kvi = 2;
-      h12->ps = 0;
+      h12->ps = 1;
       h12->kzo = 5;
       f193 = (struct form193 *)(outpack1.buf[i].data + 
          sizeof(struct header12));
@@ -9868,45 +7600,12 @@ int HandlerCmd102mo3a( int param0, int param1 )
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
       outpack1.nsave++;
 
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 7;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      outpack1.buf[i].size = 0;
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack1.nsave++;
+		kzo7_1();
+		BLKT(1);
 
    //SVC-1 -> Step 2
 
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 1;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 3;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
+		kzo13_1();
 
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
@@ -9944,50 +7643,13 @@ int HandlerCmd102mo3a( int param0, int param1 )
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
       outpack1.nsave++;
 
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 7;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      outpack1.buf[i].size = 0;
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      outpack1.buf[i].size = 0;
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack1.nsave++;
+		kzo7_1();
+		BLKT(1);
+		BLKT(1);
 
    //SVC-1 -> Step 3
 
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 1;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 3;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
+		kzo13_1();
 
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
@@ -10023,47 +7685,14 @@ int HandlerCmd102mo3a( int param0, int param1 )
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
       outpack1.nsave++;
 
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 7;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      outpack1.buf[i].size = 0;
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack1.nsave++;
+		kzo7_1();
+		BLKT(1);
 
    //SVC-1 -> Step 4
 
       for( j = 0; j < 14; j++ ) {
  
-         i = outpack1.nsave;
-         h12 = (struct header12 *)outpack1.buf[i].data;
-         SetHeader12( h12 );
-         h12->kss = 0;
-         h12->kvi = 0;
-         h12->ps = 0;
-         h12->kzo = 1;
-         outpack1.buf[i].size = sizeof(struct header12);
-         outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-         outpack1.nsave++;
-
-         i = outpack1.nsave;
-         h12 = (struct header12 *)outpack1.buf[i].data;
-         SetHeader12( h12 );
-         h12->kss = 0;
-         h12->kvi = 0;
-         h12->ps = 0;
-         h12->kzo = 3;
-         outpack1.buf[i].size = sizeof(struct header12);
-         outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-         outpack1.nsave++;
+			kzo13_1();
 
          i = outpack1.nsave;
          h12 = (struct header12 *)outpack1.buf[i].data;
@@ -10092,21 +7721,8 @@ int HandlerCmd102mo3a( int param0, int param1 )
          outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
          outpack1.nsave++;
 
-         i = outpack1.nsave;
-         h12 = (struct header12 *)outpack1.buf[i].data;
-         SetHeader12( h12 );
-         h12->kss = 0;
-         h12->kvi = 0;
-         h12->ps = 0;
-         h12->kzo = 7;
-         outpack1.buf[i].size = sizeof(struct header12);
-         outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-         outpack1.nsave++;
-
-         i = outpack1.nsave;
-         outpack1.buf[i].size = 0;
-         outpack1.buf[i].cmd = BUF3KIT_CMD_BLKT;
-         outpack1.nsave++;
+			kzo7_1();
+			BLKT(1);	
 
       } //for(j)
 
@@ -10121,27 +7737,7 @@ int HandlerCmd102mo3a( int param0, int param1 )
 
    //SVC-2 -> Step 1
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 1;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 3;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
+		kzo13_2();
 
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
@@ -10152,7 +7748,7 @@ int HandlerCmd102mo3a( int param0, int param1 )
       h12->kss = ( sizeof(struct form193) / 2 ) & 0xf; //Temp!!!
       h12->kss2 = ( sizeof(struct form193) / 2 ) >> 4; //Temp!!!
       h12->kvi = 2;
-      h12->ps = 0;
+      h12->ps = 1;
       h12->kzo = 5;
       f193 = (struct form193 *)(outpack2.buf[i].data + 
          sizeof(struct header12));
@@ -10213,45 +7809,12 @@ int HandlerCmd102mo3a( int param0, int param1 )
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
       outpack2.nsave++;
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 7;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      outpack2.buf[i].size = 0;
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack2.nsave++;
+		kzo7_2();
+		BLKT(2);
 
    //SVC-2 -> Step 2
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 1;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 3;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
+		kzo13_2();
 
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
@@ -10289,50 +7852,13 @@ int HandlerCmd102mo3a( int param0, int param1 )
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
       outpack2.nsave++;
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 7;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      outpack2.buf[i].size = 0;
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      outpack2.buf[i].size = 0;
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack2.nsave++;
+		kzo7_2();
+		BLKT(2);
+		BLKT(2);
 
    //SVC-2 -> Step 3
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 1;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 3;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
+		kzo13_2();
 
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
@@ -10368,47 +7894,14 @@ int HandlerCmd102mo3a( int param0, int param1 )
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
       outpack2.nsave++;
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 7;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      outpack2.buf[i].size = 0;
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack2.nsave++;
+		kzo7_2();
+		BLKT(2);
 
    //SVC-2 -> Step 4
 
       for( j = 0; j < 14; j++ ) {
  
-         i = outpack2.nsave;
-         h12 = (struct header12 *)outpack2.buf[i].data;
-         SetHeader12( h12 );
-         h12->kss = 0;
-         h12->kvi = 0;
-         h12->ps = 0;
-         h12->kzo = 1;
-         outpack2.buf[i].size = sizeof(struct header12);
-         outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-         outpack2.nsave++;
-
-         i = outpack2.nsave;
-         h12 = (struct header12 *)outpack2.buf[i].data;
-         SetHeader12( h12 );
-         h12->kss = 0;
-         h12->kvi = 0;
-         h12->ps = 0;
-         h12->kzo = 3;
-         outpack2.buf[i].size = sizeof(struct header12);
-         outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-         outpack2.nsave++;
+			kzo13_2();
 
          i = outpack2.nsave;
          h12 = (struct header12 *)outpack2.buf[i].data;
@@ -10437,21 +7930,9 @@ int HandlerCmd102mo3a( int param0, int param1 )
          outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
          outpack2.nsave++;
 
-         i = outpack2.nsave;
-         h12 = (struct header12 *)outpack2.buf[i].data;
-         SetHeader12( h12 );
-         h12->kss = 0;
-         h12->kvi = 0;
-         h12->ps = 0;
-         h12->kzo = 7;
-         outpack2.buf[i].size = sizeof(struct header12);
-         outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-         outpack2.nsave++;
-
-         i = outpack2.nsave;
-         outpack2.buf[i].size = 0;
-         outpack2.buf[i].cmd = BUF3KIT_CMD_BLKT;
-         outpack2.nsave++;
+		kzo7_2();
+		BLKT(2);
+		BLKT(2);
 
       } //for(j)
 
@@ -10768,15 +8249,9 @@ int HandlerCmd102mo3a( int param0, int param1 )
 //---------- Other (cmd102mo3a) ----------
 
    switch( param0 ) {
-   case 0:
-      mode.scan1 = 1;
-      break;
-   case 1:
-      mode.scan2 = 1;
-      break;
-   case 2:
-      mode.recv3 = 1;
-      break;
+   case 0:      mode.scan1 = 1;      break;
+   case 1:      mode.scan2 = 1;      break;
+   case 2:      mode.recv3 = 1;      break;
    default:
       outpack0.cr_com++;
       outpack0.kzv = 1;
@@ -10809,27 +8284,7 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
 
    //SVC-1 -> Step 1
 
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 1;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 3;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
+		kzo13_1();
 
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
@@ -10840,7 +8295,7 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
       h12->kss = ( sizeof(struct form193) / 2 ) & 0xf; //Temp!!!
       h12->kss2 = ( sizeof(struct form193) / 2 ) >> 4; //Temp!!!
       h12->kvi = 2;
-      h12->ps = 0;
+      h12->ps = 1;
       h12->kzo = 5;
       f193 = (struct form193 *)(outpack1.buf[i].data + 
          sizeof(struct header12));
@@ -10909,45 +8364,12 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
       outpack1.nsave++;
 
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 7;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      outpack1.buf[i].size = 0;
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack1.nsave++;
+		kzo7_1();
+		BLKT(1);
 
    //SVC-1 -> Step 2
 
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 1;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 3;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
+		kzo13_1();
 
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
@@ -10985,50 +8407,13 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
       outpack1.nsave++;
 
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 7;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      outpack1.buf[i].size = 0;
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      outpack1.buf[i].size = 0;
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack1.nsave++;
+		kzo7_1();
+		BLKT(1);
+		BLKT(1);
 
    //SVC-1 -> Step 3
 
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 1;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 3;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
+		kzo13_1();
 
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
@@ -11064,47 +8449,14 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
       outpack1.nsave++;
 
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 7;
-      outpack1.buf[i].size = sizeof(struct header12);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
-
-      i = outpack1.nsave;
-      outpack1.buf[i].size = 0;
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack1.nsave++;
+		kzo7_1();
+		BLKT(1);
 
    //SVC-1 -> Step 4
 
       for( j = 0; j < 14; j++ ) {
  
-         i = outpack1.nsave;
-         h12 = (struct header12 *)outpack1.buf[i].data;
-         SetHeader12( h12 );
-         h12->kss = 0;
-         h12->kvi = 0;
-         h12->ps = 0;
-         h12->kzo = 1;
-         outpack1.buf[i].size = sizeof(struct header12);
-         outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-         outpack1.nsave++;
-
-         i = outpack1.nsave;
-         h12 = (struct header12 *)outpack1.buf[i].data;
-         SetHeader12( h12 );
-         h12->kss = 0;
-         h12->kvi = 0;
-         h12->ps = 0;
-         h12->kzo = 3;
-         outpack1.buf[i].size = sizeof(struct header12);
-         outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-         outpack1.nsave++;
+			kzo13_1();
 
          i = outpack1.nsave;
          h12 = (struct header12 *)outpack1.buf[i].data;
@@ -11133,21 +8485,8 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
          outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
          outpack1.nsave++;
 
-         i = outpack1.nsave;
-         h12 = (struct header12 *)outpack1.buf[i].data;
-         SetHeader12( h12 );
-         h12->kss = 0;
-         h12->kvi = 0;
-         h12->ps = 0;
-         h12->kzo = 7;
-         outpack1.buf[i].size = sizeof(struct header12);
-         outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-         outpack1.nsave++;
-
-         i = outpack1.nsave;
-         outpack1.buf[i].size = 0;
-         outpack1.buf[i].cmd = BUF3KIT_CMD_BLKT;
-         outpack1.nsave++;
+			kzo7_1();
+			BLKT(1);
 
       } //for(j)
 
@@ -11162,27 +8501,7 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
 
    //SVC-2 -> Step 1
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 1;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 3;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
+		kzo13_2();
 
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
@@ -11193,7 +8512,7 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
       h12->kss = ( sizeof(struct form193) / 2 ) & 0xf; //Temp!!!
       h12->kss2 = ( sizeof(struct form193) / 2 ) >> 4; //Temp!!!
       h12->kvi = 2;
-      h12->ps = 0;
+      h12->ps = 1;
       h12->kzo = 5;
       f193 = (struct form193 *)(outpack2.buf[i].data + 
          sizeof(struct header12));
@@ -11254,45 +8573,12 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
       outpack2.nsave++;
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 7;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      outpack2.buf[i].size = 0;
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack2.nsave++;
+		kzo7_2();
+		BLKT(2);
 
    //SVC-2 -> Step 2
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 1;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 3;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
+		kzo13_2();
 
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
@@ -11330,50 +8616,13 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
       outpack2.nsave++;
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 7;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      outpack2.buf[i].size = 0;
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      outpack2.buf[i].size = 0;
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack2.nsave++;
+		kzo7_2();
+		BLKT(2);
+		BLKT(2);
 
    //SVC-2 -> Step 3
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 1;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 3;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
+		kzo13_2();
 
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
@@ -11409,47 +8658,14 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
       outpack2.nsave++;
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->kss = 0;
-      h12->kvi = 0;
-      h12->ps = 0;
-      h12->kzo = 7;
-      outpack2.buf[i].size = sizeof(struct header12);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
-      i = outpack2.nsave;
-      outpack2.buf[i].size = 0;
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack2.nsave++;
+		kzo7_2();
+		BLKT(2);
 
    //SVC-2 -> Step 4
 
       for( j = 0; j < 14; j++ ) {
  
-         i = outpack2.nsave;
-         h12 = (struct header12 *)outpack2.buf[i].data;
-         SetHeader12( h12 );
-         h12->kss = 0;
-         h12->kvi = 0;
-         h12->ps = 0;
-         h12->kzo = 1;
-         outpack2.buf[i].size = sizeof(struct header12);
-         outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-         outpack2.nsave++;
-
-         i = outpack2.nsave;
-         h12 = (struct header12 *)outpack2.buf[i].data;
-         SetHeader12( h12 );
-         h12->kss = 0;
-         h12->kvi = 0;
-         h12->ps = 0;
-         h12->kzo = 3;
-         outpack2.buf[i].size = sizeof(struct header12);
-         outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-         outpack2.nsave++;
+			kzo13_2();
 
          i = outpack2.nsave;
          h12 = (struct header12 *)outpack2.buf[i].data;
@@ -11478,21 +8694,8 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
          outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
          outpack2.nsave++;
 
-         i = outpack2.nsave;
-         h12 = (struct header12 *)outpack2.buf[i].data;
-         SetHeader12( h12 );
-         h12->kss = 0;
-         h12->kvi = 0;
-         h12->ps = 0;
-         h12->kzo = 7;
-         outpack2.buf[i].size = sizeof(struct header12);
-         outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-         outpack2.nsave++;
-
-         i = outpack2.nsave;
-         outpack2.buf[i].size = 0;
-         outpack2.buf[i].cmd = BUF3KIT_CMD_BLKT;
-         outpack2.nsave++;
+			kzo7_2();
+			BLKT(2);
 
       } //for(j)
 
@@ -11500,6 +8703,7 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
       stat.link |= FLAG_BUF2;
       ControlLed2( 1 );
    }
+
 
 //---------- Outpack3 (cmd103mo3a) ----------
 
@@ -11640,7 +8844,6 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
          stat.out |= FLAG_BUF3;
          ControlLed3( 1 );
       }
-
    }
 
 //---------- Outpack4 (cmd103mo32a) ----------
@@ -11809,15 +9012,9 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
 //---------- Other (cmd103mo3a) ----------
 
    switch( param0 ) {
-   case 0:
-      mode.scan1 = 1;
-      break;
-   case 1:
-      mode.scan2 = 1;
-      break;
-   case 2:
-      mode.recv3 = 1;
-      break;
+    case 0:      mode.scan1 = 1;      break;
+	case 1:      mode.scan2 = 1;      break;
+    case 2:      mode.recv3 = 1;      break;
    default:
       outpack0.cr_com++;
       outpack0.kzv = 1;

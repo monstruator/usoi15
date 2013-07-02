@@ -10,6 +10,7 @@
       unsigned int in;
       unsigned int link;
       unsigned int flag;
+	  unsigned int rli;	  //режим запросов РЛИ
    };
 
    #define TIMEOUT_OFF 0
@@ -44,6 +45,8 @@
       unsigned int mn1: 1;
       unsigned int scan1: 1;
       unsigned int scan2: 1;
+	  unsigned int rli1: 1;
+      unsigned int rli2: 1;
       unsigned int recv3: 1;
       unsigned int rez: 11;
 
@@ -168,7 +171,7 @@
    struct formrls {
       short num_out;
       short num_in;
-      int time; //double
+      double time; //int
       float car_freq;
       float imp_freq;
       float inp_len;
@@ -188,7 +191,7 @@
       unsigned short cr_com;
       short num_com;
       int a_params[5];
-      short pr_bearing; //int
+      int pr_bearing; //short
       float p;
       float k;
       short nform;
@@ -456,8 +459,8 @@
       unsigned short rez12 : 2;
 
       unsigned short rez13 : 8;
-      unsigned short kss : 4;
-      unsigned short kss2 : 4;
+      unsigned short kss : 8;
+   //   unsigned short kss2 : 4;
 
       unsigned short kvi : 4;
       unsigned short sk : 1;

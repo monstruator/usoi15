@@ -25,6 +25,19 @@ void HandlerTimeout( void )
       }
    }
 
+   if( mode.rli1 ) {
+		printf("HandlerTimeout nload=%d nsave=%d\n",outpack1.nload,outpack1.nsave);
+      if( outpack1.nload == outpack1.nsave ) {
+         outpack1.nload = outpack1.nsave = outpack1.blk = count1 = 0;
+         HandlerCmdRli1();
+      } else {
+         if( ++count1 > 24 ) {
+            outpack1.nload = outpack1.nsave = outpack1.blk = count1 = 0;
+         }
+      }
+   }
+
+
    if( mode.scan2 ) {
       if( outpack2.nload == outpack2.nsave ) {
          outpack2.nload = outpack2.nsave = outpack2.blk = count2 = 0;
@@ -42,6 +55,7 @@ void HandlerTimeout( void )
    outpack4.blk &= ~BUF3KIT_BLKT;
    outpack5.blk &= ~BUF3KIT_BLKT;
    outpack6.blk &= ~BUF3KIT_BLKT;
+
    SendOutPack1();
    SendOutPack2();
    SendOutPack3();
@@ -56,9 +70,9 @@ void HandlerTimeout( void )
       count = 0;
    }
 
-   if( count > 22 ) {
+   if( count > 42 ) {
       if( verbose > 0 ) {
-         printf( "Command %d abort timeout.\n", outpack0.num_com );
+         printf( "Command %d abort timeout. stat.out=%x \n", outpack0.num_com,stat.out );
       }
       outpack0.kzv = 1;
       ko = (struct errusoi *)&outpack0.k_o;

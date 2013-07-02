@@ -79,7 +79,7 @@ int CheckStatus( void )
       stat.out = stat.in = 0;
       if( stat.link ) {
          if( verbose > 0 ) {
-            printf( "Link Error! _Chk_status\n" );
+            printf( "Link Error! %x \n",stat.link );
          }
 //         outpack0.kzv = 1;
 //         outpack0.krk = KRK_ERR;
@@ -121,7 +121,7 @@ void SetHeader12( struct header12 *head )
    head->rez12 = 0;
    head->rez13 = 0xcd;
    head->kss = 0; //Size message (word)
-   head->kss2 = 0; //Temp valume!!!
+   //head->kss2 = 0; //Temp valume!!!
    head->kvi = 0; //Type mesage
    head->sk = 0;
    head->kg = 0;
@@ -154,6 +154,15 @@ void ResetBuffers( void )
    ControlLed3( -1 );
    ControlLed4( -1 );
    ControlLed5( -1 );
+}
+
+void ResetBuffers1( void ) 
+{
+   stat.out = stat.in = stat.link = stat.flag = 0;
+   tout.stat = tout.count = 0;
+   outpack1.nsave = outpack1.nload = outpack1.blk = 0;
+   outbuf1.save = outbuf1.load = 0;
+   ControlLed1( -1 );
 }
 
 void SetForm11( struct form11 *form )
