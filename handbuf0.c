@@ -58,7 +58,6 @@ void HandlerInPack0( void )
       if( verbose > 0 ) {
          printf( "New command: %d.\n", inpack0.num_com );
       }
-
       cr_com = inpack0.cr_com;
       outpack0.num_com = inpack0.num_com;
       outpack0.lp2_param = inpack0.a_params[0];
@@ -67,7 +66,6 @@ void HandlerInPack0( void )
       outpack0.ended_loop = 0;
       outpack0.krk = 0;
       outpack0.link = 0;
-	  stat.link=mode.scan1=mode.scan2=0; //отключение сканирование с приходом новой команды	
 
       ResetBuffers();
       ControlLed5( 0 );
@@ -82,7 +80,7 @@ void HandlerInPack0( void )
             HandlerCmd1pr32( inpack0.a_params[0] );
             break;
          case 1:
-            HandlerCmd1mo3a( inpack0.a_params[0] , inpack0.a_params[1]);
+            HandlerCmd1mo3a( inpack0.a_params[0] );
             break;
          default:
             outpack0.kzv = 1;
@@ -108,6 +106,7 @@ void HandlerInPack0( void )
          switch( mode.pr ) {
          case 1:
             HandlerCmd3mo3a( inpack0.a_params[0] );
+//            HandlerCmd3mo3a( inpack0.k );
             break;
          default:
             outpack0.kzv = 1;
@@ -116,15 +115,8 @@ void HandlerInPack0( void )
          }   
          break;
       case 4:
-         switch( mode.pr ) {
-         case 1:
-            HandlerCmd4mo3a( inpack0.a_params[0] , inpack0.a_params[1] );
-            break;
-         default:
-            outpack0.kzv = 1;
-            outpack0.cr_com++;
-            break;
-         }   
+         outpack0.kzv = 1;
+         outpack0.cr_com++;
          break;
       case 5:
          switch( mode.pr ) {
@@ -495,7 +487,7 @@ void HandlerInPack0( void )
             HandlerCmd60pr32();
             break;
          case 1:
-            HandlerCmd60mo3a( inpack0.a_params[0] );
+            HandlerCmd60mo3a();
             break;
          default:
             outpack0.kzv = 1;
@@ -541,7 +533,7 @@ void HandlerInPack0( void )
             HandlerCmd64pr32();
             break;
          case 1:
-            HandlerCmd64mo3a( inpack0.a_params[0] );
+            HandlerCmd64mo3a();
             break;
          default:
             outpack0.kzv = 1;
@@ -555,7 +547,7 @@ void HandlerInPack0( void )
             HandlerCmd65pr32( inpack0.a_params[0] );
             break;
          case 1:
-            HandlerCmd65mo3a( inpack0.a_params[0] , inpack0.a_params[1] );
+            HandlerCmd65mo3a( inpack0.a_params[0] );
             break;
          default:
             outpack0.kzv = 1;
@@ -725,7 +717,7 @@ void HandlerInPack0( void )
             HandlerCmd92pr32( inpack0.a_params[0] );
             break;
          case 1:
-            HandlerCmd92mo3a( inpack0.a_params[0], inpack0.a_params[1] );
+            HandlerCmd92mo3a( inpack0.a_params[0] );
             break;
          default:
             outpack0.kzv = 1;
@@ -857,7 +849,6 @@ void HandlerInPack0( void )
    SendOutPack4();
    SendOutPack5();
    SendOutPack6();
-   SendOutPack7();
 
 }
 
@@ -868,7 +859,7 @@ int SendOutPack0( void )
    static short link = 0;
    static unsigned char count = 0;
    unsigned int p;
-   unsigned int i,i1;
+   unsigned int i;
    struct header0 *h;
    unsigned int j;
    unsigned int n;
@@ -903,15 +894,6 @@ int SendOutPack0( void )
       outbuf0.buf[j].size = sizeof(struct header0) + n;
       outbuf0.nsave ++;
    }
-	if (mode.rli1)
-	{
-		   printf("word=%d num=%d\n",outpack0.svch1_rli.nword,outpack0.svch1_rli.num);
-		   outpack0.svch1_rli.nword=outpack0.svch1_rli.num=0;
-	}
-
-   printf("sach18.cr=%d nf=%x\n",outpack0.svch1.cr,outpack0.svch1.sach18[0]);
-   printf("sach18.nword=%d \n",outpack0.svch1.nword);
-   for(i1=0;i1<outpack0.svch1.nword;i1++) printf("%04x ",outpack0.svch1.word[i1]);printf("\n");
 
    if( ( outpack0.cr_com != cr_com ) || ( outpack0.krk != krk ) || 
          ( outpack0.link != link ) ) {
@@ -922,10 +904,6 @@ int SendOutPack0( void )
          printf( "c_c=%u n_c=%d l_p=0x%x kzv=0x%x k_o=0x%x e_l=%d krk=0x%x link=0x%x\n",
             outpack0.cr_com, outpack0.num_com, outpack0.lp2_param, 
             outpack0.kzv, outpack0.k_o, outpack0.ended_loop, outpack0.krk, outpack0.link );
-//		 printf("sach18.cr=%d nf=%x\n",outpack0.svch1.cr,outpack0.svch1.sach18[0]);
-//		 printf("sach18.nword=%d \n",outpack0.svch1.nword);
-//		 for(i1=0;i1<outpack0.svch1.nword;i1++) printf("%04x ",outpack0.svch1.word[i1]);printf("\n");
-
       }
    }
 

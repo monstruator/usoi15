@@ -1,3 +1,4 @@
+
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -28,12 +29,9 @@ int port1 = 4000;
 char name2[30] = "192.168.2.157";
 int port2 = 4000;
 char name3[30] = "/dev/pcs1";
-char name4[30] = "/dev/pcs2"; //2
+char name4[30] = "/dev/pcs2";
 char name5[30] = "/dev/pcs7";
 char name6[30] = "/dev/pcs8";
-
-char name7[30] = "/dev/pcs3"; // ­®¢ë©! “Š
-
 char tfile[30] = "/TInUSOI.txt";
 int verbose = 0;
 
@@ -44,7 +42,6 @@ int mfd3 = -1;
 int mfd4 = -1;
 int mfd5 = -1;
 int mfd6 = -1;
-int mfd7 = -1;
 
 struct sockaddr_in maddr0;
 
@@ -54,15 +51,12 @@ fd_set awfd;
 void Terminate( int );
 void InitArgs( int, char** );
 void ArmSelect( void );
-
 int Max7( int, int, int, int, int, int, int );
-int Max8( int, int, int, int, int, int, int , int );
-
 int ReadTestFile( char * );
 
 void main( int argc, char **argv )
 {
-   int i,i1;
+   int i;
 
    struct hostent *hp;
    int saddr = sizeof(struct sockaddr);
@@ -135,17 +129,6 @@ void main( int argc, char **argv )
       }
    }
 
-   mfd7 = OpenDEVnb( name7 );
-   if( mfd7 == -1 ) {
-      perror( "OpenDEVnb" );
-      exit( EXIT_FAILURE );
-   } else {
-      if( verbose > -1 ) {
-         printf( "Open device %s.\n", name7 );
-      }
-   }
-
-
    memset( &maddr0, 0, sizeof(struct sockaddr_in) );
    maddr0.sin_family = AF_INET;
    maddr0.sin_port = htons( port0 );
@@ -183,8 +166,6 @@ void main( int argc, char **argv )
    FD_SET( mfd4, &arfd );
    FD_SET( mfd5, &arfd );
    FD_SET( mfd6, &arfd );
-   FD_SET( mfd7, &arfd );
-
 
    ControlLed1( 0 );
    ControlLed2( 0 );
@@ -204,11 +185,8 @@ void main( int argc, char **argv )
          exit( EXIT_FAILURE );
       }
 
-//      rc = select( 1 + Max7( msock0, msock1, msock2, mfd3, mfd4, mfd5, mfd6 ), 
-//       &rfd, &wfd, 0, &tv.it_value );
-      rc = select( 1 + Max8( msock0, msock1, msock2, mfd3, mfd4, mfd5, mfd6, mfd7 ), 
-       &rfd, &wfd, 0, &tv.it_value );
-
+      rc = select( 1 + Max7( msock0, msock1, msock2, mfd3, mfd4, mfd5, mfd6 ), 
+         &rfd, &wfd, 0, &tv.it_value );
 
       if( rc == -1 ) {
          perror( "select" );
@@ -221,6 +199,7 @@ void main( int argc, char **argv )
       }
 
 //--------------- Timeout ---------------
+
       if( rc == 0 ) {
          if( verbose > 2 ) {
             puts( "Timeout." );
@@ -238,6 +217,7 @@ void main( int argc, char **argv )
          ArmSelect();
          continue;
       }
+
 //--------------- Socket 0 ---------------
 
       if( msock0 != -1 ) {
@@ -258,7 +238,6 @@ void main( int argc, char **argv )
          }
          if( FD_ISSET( msock0, &wfd ) ) {
             if( outbuf0.nload < outbuf0.nsave ) {
-				//printf("load=%d save=%d\n",outbuf0.nload,outbuf0.nsave);
                i = outbuf0.nload;
                r = sendto( msock0, outbuf0.buf[i].data, outbuf0.buf[i].size,
                   0, (struct sockaddr *)&maddr0, sizeof(maddr0) );
@@ -271,13 +250,12 @@ void main( int argc, char **argv )
                } else {
                   if( verbose > 2) {
                      printf( "Send %d bytes socket 0: %d bytes.\n", 
-                        outbuf0.buf[i].size, i );
+                        outbuf0.buf[i].size, r );
                   }
                   outbuf0.nload++;
                }
             } else {
                FD_CLR( msock0, &awfd );
-				//printf("nsave=nload=0\n");
                outbuf0.nload = outbuf0.nsave = 0;
             }
          }
@@ -307,7 +285,7 @@ void main( int argc, char **argv )
                   break;
                default:
                   if( verbose > 1) {
-                     printf( "Recv socket 1: %d bytes. save=%d\n", r ,inbuf1.save);
+                     printf( "Recv socket 1: %d bytes.\n", r );
                   }
                   inbuf1.save += r; 
                   HandlerInBuf1();
@@ -459,7 +437,6 @@ void main( int argc, char **argv )
 
       if( mfd4 != -1 ) {
          if( FD_ISSET( mfd4, &rfd ) ) {
-			//printf("4-r\n");
             if( inbuf4.save < BUFFER1_SIZE ) {
                i = inbuf4.save;
                r = read( mfd4, &inbuf4.data[i], BUFFER1_SIZE - i );
@@ -483,8 +460,7 @@ void main( int argc, char **argv )
                inbuf4.save = inbuf4.load = 0;
             }
          }
-         if( i1=FD_ISSET( mfd4, &wfd ) ) {
-			//printf("4-w %d \n",i1);
+         if( FD_ISSET( mfd4, &wfd ) ) {
             if( outbuf4.load < outbuf4.save ) {
                i = outbuf4.load;
                r = write( mfd4, &outbuf4.data[i], outbuf4.save - i );
@@ -606,57 +582,9 @@ void main( int argc, char **argv )
             }
          }
       }
-//--------------------Device 7------------
-      if( mfd7 != -1 ) {
-         if( FD_ISSET( mfd7, &rfd ) ) {
-            if( inbuf7.save < BUFFER1_SIZE ) {
-               i = inbuf7.save;
-               r = read( mfd7, &inbuf7.data[i], BUFFER1_SIZE - i );
-               if( r <= 0 ) {
-                  if( verbose > 1 ) {
-                     printf( "Read divice 6: %d.\n", r );
-                  }
-               } else {
-                  if( verbose > 1 ) {
-                     printf( "Read device 7: %d bytes.\n", r );
-                  }
-                  inbuf7.save += r; 
-                  HandlerInBuf7();
-                  ArmSelect();
-               }
-            } else {
-               if( verbose ) {
-                  errno = ENOMEM;
-                  perror( "InBuf7" );
-               }
-               inbuf7.save = inbuf7.load = 0;
-            }
-         }
 
-			
-         if( i1=FD_ISSET( mfd7, &wfd ) ) {
-            if( outbuf7.load < outbuf7.save ) {
-               i = outbuf7.load;
-               r = write( mfd7, &outbuf7.data[i], outbuf7.save - i );
-               if( r == -1 ) {
-                  if( verbose > 0 ) {
-                     puts( "Write device 7: -1." );
-                  }
-                  FD_CLR( mfd7, &awfd );
-               } else {
-                  if( verbose > 1) {
-                     printf( "Write %d bytes device 7: %d bytes.\n", 
-                        outbuf7.save - i, r );
-                  }
-                  outbuf7.load += r;
-               } 
-            } else {
-               FD_CLR( mfd7, &awfd );
-               outbuf7.load = outbuf7.save = 0;
-            }
-         }
-      }
 //--------------- Continue ---------------
+
    }
 }
 
@@ -762,22 +690,6 @@ int Max7( int a1, int a2, int a3, int a4, int a5, int a6, int a7 )
    return( m );
 }
 
-int Max8( int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8 )
-{
-   int m = 0;
-
-   if( a1 > m ) m = a1;
-   if( a2 > m ) m = a2;
-   if( a3 > m ) m = a3;
-   if( a4 > m ) m = a4;
-   if( a5 > m ) m = a5;
-   if( a6 > m ) m = a6;
-   if( a7 > m ) m = a7;
-   if( a8 > m ) m = a8;
-   return( m );
-}
-
-
 void ArmSelect( void )
 {
    if( outbuf0.nload != outbuf0.nsave ) {
@@ -833,12 +745,6 @@ void ArmSelect( void )
    if( outbuf4.load != outbuf4.save ) {
       if( mfd4 != -1 ) {
          FD_SET( mfd4, &awfd );
-      } 
-   }
-
-   if( outbuf7.load != outbuf7.save ) {
-      if( mfd7 != -1 ) {
-         FD_SET( mfd7, &awfd );
       } 
    }
 

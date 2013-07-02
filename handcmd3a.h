@@ -3,10 +3,9 @@
 
    #define HANDCMD3A_H
 
-   extern int HandlerCmd1mo3a( int , int);
+   extern int HandlerCmd1mo3a( int );
    extern int HandlerCmd2mo3a( int );
    extern int HandlerCmd3mo3a( int );
-   extern int HandlerCmd4mo3a( int, int );
    extern int HandlerCmd5mo3a( int );
    extern int HandlerCmd6mo3a( int );
    extern int HandlerCmd7mo3a( int );
@@ -31,11 +30,11 @@
    extern int HandlerCmd42mo3a( int );
    extern int HandlerCmd43mo3a( int );
    extern int HandlerCmd50mo3a( void );
-   extern int HandlerCmd60mo3a( int );
+   extern int HandlerCmd60mo3a( void );
    extern int HandlerCmd61mo3a( void );
    extern int HandlerCmd63mo3a( void );
-   extern int HandlerCmd64mo3a( int );
-   extern int HandlerCmd65mo3a( int , int );
+   extern int HandlerCmd64mo3a( void );
+   extern int HandlerCmd65mo3a( int );
    extern int HandlerCmd70mo3a( void );
    extern int HandlerCmd71mo3a( void );
    extern int HandlerCmd73mo3a( void );
@@ -46,7 +45,7 @@
    extern int HandlerCmd83mo3a( void );
    extern int HandlerCmd90mo3a( void );
    extern int HandlerCmd91mo3a( void );
-   extern int HandlerCmd92mo3a( int, int );
+   extern int HandlerCmd92mo3a( int );
    extern int HandlerCmd93mo3a( int, int, int, int );
    extern int HandlerCmd94mo3a( int , int );
    extern int HandlerCmd95mo3a( int , int );

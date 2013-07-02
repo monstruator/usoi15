@@ -15,7 +15,6 @@ int HandlerInBuf3( void )
    unsigned short n;
    int i;
 
-	printf("HIB3\n");
    if( verbose > 1 ) {
       printf( "HandlerInBuf3: save-load=%d.\n", inbuf3.save - inbuf3.load );
    }
@@ -66,8 +65,6 @@ int HandlerInBuf3( void )
          outpack4.blk &= ~BUF3KIT_BLK3;
          outpack5.blk &= ~BUF3KIT_BLK3;
          outpack6.blk &= ~BUF3KIT_BLK3;
-         outpack7.blk &= ~BUF3KIT_BLK3;
-
          HandlerInPack3( pack , inbuf3.load - ip );
          if( outpack3.nload >= outpack3.nsave ) {
             outpack3.nsave = outpack3.nload = 0;
@@ -314,10 +311,8 @@ int HandlerInPack3( struct packet34 *pack, int size )
 
 int SendOutPack3( void )
 {
-   int i,i1;
+   int i;
    int j;
-
-//   printf("SOP3 l=%d s=%d blk=%d\n",outpack3.nload,outpack3.nsave,outpack3.blk);
 
    if( outpack3.nload >= outpack3.nsave ) {
       return( 0 );
@@ -330,12 +325,9 @@ int SendOutPack3( void )
       memcpy( &outbuf3.data[j], outpack3.buf[i].data, outpack3.buf[i].size );
       outbuf3.save += outpack3.buf[i].size;
       outpack3.nload++;
-      if( verbose > -1 ) {
-         printf( "SendOutPack3: size=%d cmd=%08x.", 
-         outpack3.buf[i].size, outpack3.buf[i].cmd );
-		 for (i1=0;i1<outpack3.buf[i].size;i1++)
-			printf(" %x ",outbuf3.data[i1]);printf("\n");
-	
+      if( verbose > 1 ) {
+         printf( "SendOutPack3: size=%d cmd=%08x.\n", 
+            outpack3.buf[i].size, outpack3.buf[i].cmd );
       }
       if( outpack3.buf[i].cmd & BUF3KIT_CMD_BLK0 ) {
          outpack3.blk |= BUF3KIT_BLK0;
@@ -358,10 +350,6 @@ int SendOutPack3( void )
       if( outpack3.buf[i].cmd & BUF3KIT_CMD_BLK6 ) {
          outpack3.blk |= BUF3KIT_BLK6;
       }
-      if( outpack3.buf[i].cmd & BUF3KIT_CMD_BLK7 ) {
-         outpack3.blk |= BUF3KIT_BLK7;
-      }
-
       if( outpack3.buf[i].cmd & BUF3KIT_CMD_BLKT ) {
          outpack3.blk |= BUF3KIT_BLKT;
       }
@@ -386,17 +374,12 @@ int SendOutPack3( void )
       if( outpack3.buf[i].cmd & BUF3KIT_CMD_OUT6 ) {
          SendOutPack6();
       }
-      if( outpack3.buf[i].cmd & BUF3KIT_CMD_OUT7 ) {
-         SendOutPack7();
-      }
-
       if( outpack3.buf[i].cmd & BUF3KIT_CMD_DEC ) {
          outpack3.nload -= outpack3.buf[i].param;
       }
       if( outpack3.buf[i].cmd & BUF3KIT_CMD_KRK ) {
 //         outpack0.krk = outpack3.buf[i].param;
          outpack0.link = outpack3.buf[i].param;
-			//printf("6=%d\n",outpack0.link);
       }
       if( outpack3.buf[i].cmd & BUF3KIT_CMD_SVC ) {
          stat.flag |= FLAG_SVC2;

@@ -11,8 +11,6 @@
    #include "handbuf4.h"
    #include "handbuf5.h"
    #include "handbuf6.h"
-   #include "handbuf7.h"
-
    #include "handtout.h"
    #include "handcmd32.h"
    #include "handcmd3a.h"
@@ -30,7 +28,6 @@
    #define FLAG_BUF4 0x0010
    #define FLAG_BUF5 0x0020
    #define FLAG_BUF6 0x0040
-   #define FLAG_BUF7 0x0080
 
    #define FLAG_KASRT1 0x0100
    #define FLAG_KASRT2 0x0200
@@ -49,7 +46,7 @@
 
       struct status stat;
       struct timeout tout;
-      struct workmode mode; //
+      struct workmode mode;
       struct counts count;
 
       struct buffer2 inbuf0;
@@ -66,8 +63,6 @@
       struct buffer1 outbuf5;
       struct buffer1 inbuf6;
       struct buffer1 outbuf6;
-      struct buffer1 inbuf7;
-      struct buffer1 outbuf7;
 
       struct packcmd inpack0;
       struct packusoi outpack0;
@@ -77,8 +72,6 @@
       struct buffer3kit outpack4;
       struct buffer3kit outpack5;
       struct buffer3kit outpack6;
-      struct buffer3kit outpack7;
-
 
       struct teststart tstart;
 
@@ -112,9 +105,6 @@
       extern struct buffer1 outbuf5;
       extern struct buffer1 inbuf6;
       extern struct buffer1 outbuf6;
-      extern struct buffer1 inbuf7;
-      extern struct buffer1 outbuf7;
-
 
       extern void InitGlobals( void );
 
@@ -126,8 +116,6 @@
       extern struct buffer3kit outpack4;
       extern struct buffer3kit outpack5;
       extern struct buffer3kit outpack6;
-      extern struct buffer3kit outpack7;
-
 
       extern struct teststart tstart;
 

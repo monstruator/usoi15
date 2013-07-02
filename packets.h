@@ -10,7 +10,6 @@
       unsigned int in;
       unsigned int link;
       unsigned int flag;
-      unsigned int rli;	  //режим запросов РЛИ
    };
 
    #define TIMEOUT_OFF 0
@@ -28,16 +27,12 @@
       unsigned long in4;
       unsigned long in5;
       unsigned long in6;
-      unsigned long in7;
-
       unsigned long out1;
       unsigned long out2;
       unsigned long out3;
       unsigned long out4;
       unsigned long out5;
       unsigned long out6;
-      unsigned long out7;
-
    };
 
 //-------------------- Mode -------------------
@@ -49,8 +44,6 @@
       unsigned int mn1: 1;
       unsigned int scan1: 1;
       unsigned int scan2: 1;
-      unsigned int rli1: 1;
-      unsigned int rli2: 1;
       unsigned int recv3: 1;
       unsigned int rez: 11;
 
@@ -59,19 +52,36 @@
       int addr1;
       int addr2;
       int addr3;
+	  
+	  unsigned short a0: 4;
+      unsigned short a1: 4;
+      unsigned short a2: 4;
+      unsigned short a3: 4;
+	  
+	  unsigned short a4: 4;
+      unsigned short a5: 4;
+      unsigned short p0: 4;
+      unsigned short p1: 4;
+	  
+      unsigned short p2: 4;
+      unsigned short p3: 4;
+      unsigned short p4: 4;
+      unsigned short p5: 4;
    };
 
 //------------------- Constants ------------------
 
-   #define KRK_OK 0
-   #define KRK_ERR 1
-   #define KRK_LINK_ERR 2
-   #define KRK_SWITCH_RECV 3
-   #define KRK_DATA_NOT 4
-   #define KRK_MODE_REO 5
-   #define KRK_DATA_OK 6
-   #define KRK_CMD_OK 7
-   #define KRK_LINK_OK 8
+	#define KRK_OK 0
+	#define KRK_ERR 1
+	#define KRK_LINK_ERR 2
+	#define KRK_SWITCH_RECV 3
+	#define KRK_DATA_NOT 4
+	#define KRK_MODE_REO 5
+	#define KRK_DATA_OK 6
+	#define KRK_CMD_OK 7
+	#define KRK_LINK_OK 8
+	#define KRK_SWITCH_TRANS 9
+	#define KRK_DATA_AND_TRANS 10
 
 //-------------------- Buffers -------------------
 
@@ -118,9 +128,7 @@
    #define BUF3KIT_BLK4 0x10
    #define BUF3KIT_BLK5 0x20
    #define BUF3KIT_BLK6 0x40
-   #define BUF3KIT_BLK7 0x80
-   #define BUF3KIT_BLKT 0x100
-
+   #define BUF3KIT_BLKT 0x80
    #define BUF3KIT_CMD_NONE 0x000000
    #define BUF3KIT_CMD_BLK0 0x000001
    #define BUF3KIT_CMD_BLK1 0x000002
@@ -129,22 +137,18 @@
    #define BUF3KIT_CMD_BLK4 0x000010
    #define BUF3KIT_CMD_BLK5 0x000020
    #define BUF3KIT_CMD_BLK6 0x000040
-   #define BUF3KIT_CMD_BLK7 0x000080
-
-   #define BUF3KIT_CMD_BLKT 0x000100
-   #define BUF3KIT_CMD_OUT0 0x000200
-   #define BUF3KIT_CMD_OUT1 0x000400
-   #define BUF3KIT_CMD_OUT2 0x000800
-   #define BUF3KIT_CMD_OUT3 0x001000
-   #define BUF3KIT_CMD_OUT4 0x002000
-   #define BUF3KIT_CMD_OUT5 0x004000
-   #define BUF3KIT_CMD_OUT6 0x008000
-   #define BUF3KIT_CMD_OUT7 0x010000
-
-   #define BUF3KIT_CMD_DEC  0x020000
-   #define BUF3KIT_CMD_END  0x040000
-   #define BUF3KIT_CMD_KRK  0x080000
-   #define BUF3KIT_CMD_SVC  0x100000
+   #define BUF3KIT_CMD_BLKT 0x000080
+   #define BUF3KIT_CMD_OUT0 0x000100
+   #define BUF3KIT_CMD_OUT1 0x000200
+   #define BUF3KIT_CMD_OUT2 0x000400
+   #define BUF3KIT_CMD_OUT3 0x000800
+   #define BUF3KIT_CMD_OUT4 0x001000
+   #define BUF3KIT_CMD_OUT5 0x002000
+   #define BUF3KIT_CMD_OUT6 0x004000
+   #define BUF3KIT_CMD_DEC 0x010000
+   #define BUF3KIT_CMD_END 0x020000
+   #define BUF3KIT_CMD_KRK 0x040000
+   #define BUF3KIT_CMD_SVC 0x080000
    struct buffer3kit {
       struct buffer3 buf[ BUF3KIT_MAX ];
       unsigned int nsave;
@@ -164,7 +168,7 @@
    struct formrls {
       short num_out;
       short num_in;
-      double time;
+      int time; //double
       float car_freq;
       float imp_freq;
       float inp_len;
@@ -184,7 +188,7 @@
       unsigned short cr_com;
       short num_com;
       int a_params[5];
-      int pr_bearing;
+      short pr_bearing; //int
       float p;
       float k;
       short nform;
@@ -306,6 +310,7 @@
             short form4[88];
          } r999_reo;
          struct {
+            unsigned short cr;
             unsigned short sach18;
             short nform;
             struct formrls form[3];
@@ -451,8 +456,8 @@
       unsigned short rez12 : 2;
 
       unsigned short rez13 : 8;
-      unsigned short kss : 8;
-//      unsigned short kss2 : 4;
+      unsigned short kss : 4;
+      unsigned short kss2 : 4;
 
       unsigned short kvi : 4;
       unsigned short sk : 1;
@@ -600,29 +605,29 @@
       unsigned short nf: 8;
 
       unsigned short a0: 4;
-      unsigned short a1: 4;
+      unsigned short v1: 4;
       unsigned short a2: 4;
-      unsigned short a3: 4;
+      unsigned short v3: 4;
 
-      unsigned short a4: 4;
+      unsigned short p4: 4;
       unsigned short a5: 4;
       unsigned short p0: 4;
-      unsigned short p1: 4;
+      unsigned short r1: 4;
 
-      unsigned short p2: 4;
-      unsigned short p3: 4;
-      unsigned short p4: 4;
+      unsigned short v2: 4;
+      unsigned short r3: 4;
+      unsigned short a4: 4;
       unsigned short p5: 4;
 
       unsigned short r0: 4;
-      unsigned short r1: 4;
+      unsigned short p1: 4;
       unsigned short r2: 4;
-      unsigned short r3: 4;
+      unsigned short p3: 4;
 
       unsigned short v0: 4;
-      unsigned short v1: 4;
-      unsigned short v2: 4;
-      unsigned short v3: 4;
+      unsigned short a1: 4;
+      unsigned short p2: 4;
+      unsigned short a3: 4;
    };
 
    struct form193 {

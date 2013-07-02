@@ -37,9 +37,6 @@ void InitGlobals( void )
    memset( (char *)&inbuf6, 0, sizeof(inbuf6) );
    memset( (char *)&outbuf6, 0, sizeof(outbuf6) );
 
-   memset( (char *)&inbuf7, 0, sizeof(inbuf7) );
-   memset( (char *)&outbuf7, 0, sizeof(outbuf7) );
-
    memset( (char *)&inpack0, 0, sizeof(inpack0) );
    memset( (char *)&outpack0, 0, sizeof(outpack0) );
    memset( (char *)&outpack1, 0, sizeof(outpack1) );
@@ -48,7 +45,6 @@ void InitGlobals( void )
    memset( (char *)&outpack4, 0, sizeof(outpack4) );
    memset( (char *)&outpack5, 0, sizeof(outpack5) );
    memset( (char *)&outpack6, 0, sizeof(outpack6) );
-   memset( (char *)&outpack7, 0, sizeof(outpack7) );
 
    tstart.itog = 0xffffffff;
    tstart.bu = 0xffffffff;
@@ -83,7 +79,7 @@ int CheckStatus( void )
       stat.out = stat.in = 0;
       if( stat.link ) {
          if( verbose > 0 ) {
-            printf( "Link Error! %x \n",stat.link );
+            printf( "Link Error! _Chk_status\n" );
          }
 //         outpack0.kzv = 1;
 //         outpack0.krk = KRK_ERR;
@@ -125,7 +121,7 @@ void SetHeader12( struct header12 *head )
    head->rez12 = 0;
    head->rez13 = 0xcd;
    head->kss = 0; //Size message (word)
-   //head->kss2 = 0; //Temp valume!!!
+   head->kss2 = 0; //Temp valume!!!
    head->kvi = 0; //Type mesage
    head->sk = 0;
    head->kg = 0;
@@ -147,29 +143,17 @@ void ResetBuffers( void )
    outpack4.nsave = outpack4.nload = outpack4.blk = 0;
    outpack5.nsave = outpack5.nload = outpack5.blk = 0;
    outpack6.nsave = outpack6.nload = outpack6.blk = 0;
-   outpack7.nsave = outpack7.nload = outpack7.blk = 0;
    outbuf1.save = outbuf1.load = 0;
    outbuf2.save = outbuf2.load = 0;
    outbuf3.save = outbuf3.load = 0;
    outbuf4.save = outbuf4.load = 0;
    outbuf5.save = outbuf5.load = 0;
    outbuf6.save = outbuf6.load = 0;
-   outbuf7.save = outbuf7.load = 0;
-
    ControlLed1( -1 );
    ControlLed2( -1 );
    ControlLed3( -1 );
    ControlLed4( -1 );
    ControlLed5( -1 );
-}
-
-void ResetBuffers1( void ) 
-{
-   stat.out = stat.in = stat.link = stat.flag = 0;
-   tout.stat = tout.count = 0;
-   outpack1.nsave = outpack1.nload = outpack1.blk = 0;
-   outbuf1.save = outbuf1.load = 0;
-   ControlLed1( -1 );
 }
 
 void SetForm11( struct form11 *form )

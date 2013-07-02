@@ -14,7 +14,7 @@ int HandlerInBuf4( void )
    static struct packet34 *pack;
    unsigned short n;
    int i;
-	printf("HIB4\n");
+
    if( verbose > 1 ) {
       printf( "HandlerInBuf4: save-load=%d.\n", inbuf4.save - inbuf4.load );
    }
@@ -65,8 +65,6 @@ int HandlerInBuf4( void )
          outpack4.blk &= ~BUF3KIT_BLK4;
          outpack5.blk &= ~BUF3KIT_BLK4;
          outpack6.blk &= ~BUF3KIT_BLK4;
-         outpack7.blk &= ~BUF3KIT_BLK4;
-
          HandlerInPack4( pack , inbuf4.load - ip );
          if( outpack4.nload >= outpack4.nsave ) {
             outpack4.nsave = outpack4.nload = 0;
@@ -257,8 +255,6 @@ int SendOutPack4( void )
    int i;
    int j;
 
-//   printf("SOP4 l=%d s=%d blk=%d\n",outpack4.nload,outpack4.nsave,outpack4.blk);
-
    if( outpack4.nload >= outpack4.nsave ) {
       return( 0 );
    } else if( ! outpack4.blk ) {
@@ -270,7 +266,7 @@ int SendOutPack4( void )
       memcpy( &outbuf4.data[j], outpack4.buf[i].data, outpack4.buf[i].size );
       outbuf4.save += outpack4.buf[i].size;
       outpack4.nload++;
-      if( verbose > -1 ) {
+      if( verbose > 1 ) {
          printf( "SendOutPack4: size=%d cmd=%08x.\n", 
             outpack4.buf[i].size, outpack4.buf[i].cmd );
       }
@@ -319,10 +315,6 @@ int SendOutPack4( void )
       if( outpack4.buf[i].cmd & BUF3KIT_CMD_OUT6 ) {
          SendOutPack6();
       }
-      if( outpack4.buf[i].cmd & BUF3KIT_CMD_OUT7 ) {
-         SendOutPack7();
-      }
-
       if( outpack4.buf[i].cmd & BUF3KIT_CMD_DEC ) {
          outpack4.nload -= outpack4.buf[i].param;
       }

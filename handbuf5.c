@@ -67,8 +67,6 @@ int HandlerInBuf5( void )
          outpack4.blk &= ~BUF3KIT_BLK5;
          outpack5.blk &= ~BUF3KIT_BLK5;
          outpack6.blk &= ~BUF3KIT_BLK5;
-         outpack7.blk &= ~BUF3KIT_BLK5;
-
          HandlerInPack5( pack, inbuf5.load - ip );
          if( outpack5.nload >= outpack5.nsave ) {
             outpack5.nsave = outpack5.nload = 0;
@@ -292,10 +290,6 @@ int SendOutPack5( void )
       if( outpack5.buf[i].cmd & BUF3KIT_CMD_BLK6 ) {
          outpack5.blk |= BUF3KIT_BLK6;
       }
-      if( outpack5.buf[i].cmd & BUF3KIT_CMD_BLK7 ) {
-         outpack5.blk |= BUF3KIT_BLK7;
-      }
-
       if( outpack5.buf[i].cmd & BUF3KIT_CMD_BLKT ) {
          outpack5.blk |= BUF3KIT_BLKT;
       }
@@ -320,10 +314,6 @@ int SendOutPack5( void )
       if( outpack5.buf[i].cmd & BUF3KIT_CMD_OUT6 ) {
          SendOutPack6();
       }
-      if( outpack5.buf[i].cmd & BUF3KIT_CMD_OUT7 ) {
-         SendOutPack7();
-      }
-
       if( outpack5.buf[i].cmd & BUF3KIT_CMD_DEC ) {
          outpack5.nload -= outpack5.buf[i].param;
       }

@@ -57,8 +57,6 @@ int HandlerInBuf2( void )
          outpack4.blk &= ~BUF3KIT_BLK2;
          outpack5.blk &= ~BUF3KIT_BLK2;
          outpack6.blk &= ~BUF3KIT_BLK2;
-         outpack7.blk &= ~BUF3KIT_BLK2;
-
          HandlerInPack2( pack , inbuf2.load - ip );
          if( outpack2.nload >= outpack2.nsave ) {
             outpack2.nsave = outpack2.nload = 0;
@@ -454,9 +452,9 @@ int SendSVC2( const void *buf, unsigned len )
    SetHeader12( h12 );
    h12->npol = 1;
    h12->nspol = 1;  
-   h12->kss = len / 2;
-//   h12->kss = ( len / 2 ) & 0xf; //Temp!!!
- //  h12->kss2 = ( len / 2 ) >> 4; //Temp!!!
+//   h12->kss = len / 2;
+   h12->kss = ( len / 2 ) & 0xf; //Temp!!!
+   h12->kss2 = ( len / 2 ) >> 4; //Temp!!!
    h12->kvi = 2;
    h12->ps = 1;
    h12->kzo = 5;
@@ -672,10 +670,6 @@ int SendOutPack2( void )
       if( outpack2.buf[i].cmd & BUF3KIT_CMD_BLK6 ) {
          outpack2.blk |= BUF3KIT_BLK6;
       }
-      if( outpack2.buf[i].cmd & BUF3KIT_CMD_BLK7 ) {
-         outpack2.blk |= BUF3KIT_BLK7;
-      }
-
       if( outpack2.buf[i].cmd & BUF3KIT_CMD_BLKT ) {
          outpack2.blk |= BUF3KIT_BLKT;
       }
@@ -700,10 +694,6 @@ int SendOutPack2( void )
       if( outpack2.buf[i].cmd & BUF3KIT_CMD_OUT6 ) {
          SendOutPack6();
       }
-      if( outpack2.buf[i].cmd & BUF3KIT_CMD_OUT7 ) {
-         SendOutPack7();
-      }
-
       if( outpack2.buf[i].cmd & BUF3KIT_CMD_DEC ) {
          outpack2.nload -= outpack2.buf[i].param;
       }
