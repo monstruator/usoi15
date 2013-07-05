@@ -452,9 +452,9 @@ int SendSVC2( const void *buf, unsigned len )
    SetHeader12( h12 );
    h12->npol = 1;
    h12->nspol = 1;  
-//   h12->kss = len / 2;
-   h12->kss = ( len / 2 ) & 0xf; //Temp!!!
-   h12->kss2 = ( len / 2 ) >> 4; //Temp!!!
+   h12->kss = len / 2;
+//   h12->kss = ( len / 2 ) & 0xf; //Temp!!!
+//   h12->kss2 = ( len / 2 ) >> 4; //Temp!!!
    h12->kvi = 2;
    h12->ps = 1;
    h12->kzo = 5;

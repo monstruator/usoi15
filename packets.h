@@ -70,6 +70,9 @@
       unsigned short p3: 4;
       unsigned short p4: 4;
       unsigned short p5: 4;
+
+      unsigned short cf1[10];  //слова 1-10 чф1
+      unsigned short cf2[5];  //слова 1-5 чф2
    };
 
 //------------------- Constants ------------------
@@ -662,21 +665,25 @@
    };
 
    struct form199 {
-      struct sac s;
+      struct sac s;  			//6 short
       unsigned short t1: 8;
       unsigned short t2: 8;
+
       unsigned short pn: 8;
       unsigned short kfs: 8;
+
       unsigned short v1_0: 4;
       unsigned short v1_1: 4;
       unsigned short v1_2: 4;
       unsigned short v1_3: 4;
+
       unsigned int v2_0: 6;
       unsigned int v2_1: 6;
       unsigned int v2_2: 7;
       unsigned int r11: 1;
       unsigned int v3_0: 6;
       unsigned int v3_1: 6;
+
       unsigned short v3_2: 8;
       unsigned short r12: 8;
       unsigned short r13: 16;
@@ -689,6 +696,14 @@
       unsigned short r20: 16;
       unsigned short f1[8];
    };
+
+/*   struct form199 {
+      struct sac s;  			//6 short
+      unsigned short f193[6];  //слова 7-12 ф193
+      unsigned short cf1[10];  //слова 1-10 чф1
+      unsigned short cf2[5];  //слова 1-5 чф2
+   };
+*/
 
    struct fomr1n {
       unsigned short r1: 4;

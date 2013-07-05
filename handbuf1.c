@@ -7,6 +7,7 @@ extern int verbose;
 
 int inbuf1step = STEP_MARK;
 
+
 int HandlerInBuf1( void )
 {
    static int ip;
@@ -21,7 +22,7 @@ int HandlerInBuf1( void )
       if( inbuf1step == STEP_NONE ) {
          inbuf1.save = inbuf1.load;
       }
-	printf("inbuf1step=%d\n",inbuf1step);
+//	printf("inbuf1step=%d\n",inbuf1step);
 
       if( inbuf1step == STEP_MARK ) {
          if( MarkInBuf1() ) {
@@ -30,7 +31,7 @@ int HandlerInBuf1( void )
             inbuf1step = STEP_HEADER;
          }
       }
-	printf("inbuf1step=%d\n",inbuf1step);
+//	printf("inbuf1step=%d\n",inbuf1step);
 
       if( inbuf1step == STEP_HEADER ) {
          if( HeadInBuf1() ) {
@@ -44,7 +45,7 @@ int HandlerInBuf1( void )
             }
          }
       }
-	printf("inbuf1step=%d\n",inbuf1step);
+//	printf("inbuf1step=%d\n",inbuf1step);
 
       if( inbuf1step == STEP_DATA ) {
 		switch( DataInBuf1( NULL ) ) {
@@ -53,7 +54,7 @@ int HandlerInBuf1( void )
 					 return 0;
          }
       }
-	printf("inbuf1step=%d\n",inbuf1step);
+//	printf("inbuf1step=%d\n",inbuf1step);
 
       if( inbuf1step == STEP_HANDLER ) {
          outpack1.blk &= ~BUF3KIT_BLK1;
@@ -74,7 +75,7 @@ int HandlerInBuf1( void )
 			printf("SendOutPack\n");
          inbuf1step = STEP_MARK;
       }
-	printf("inbuf1step=%d\n",inbuf1step);
+//	printf("inbuf1step=%d\n",inbuf1step);
 
    }
 
@@ -310,10 +311,16 @@ int HandlerInPack1( struct packet12 *pack, int size )
 				else 
 				{
 					//скопировать потом еще последний form5
-					outpack0.svch1_rli.nword += fsn-21; //добавляем только строки (подыгрыш)
+					outpack0.svch1_rli.nword += fsn-6; //добавляем только строки (подыгрыш) //было 21
 					//outpack0.svch1.nword += fsn; //добавляем только строки (реальное РЛИ)
 				}
-	            memcpy( &outpack0.svch1_rli.form6[outpack0.svch1_rli.num*203],(char *)fs+sizeof(struct sac) + 44 , 406); //form6
+	            memcpy( &outpack0.svch1_rli.form6[outpack0.svch1_rli.num*203],(char *)fs+sizeof(struct sac) + 14 , 406); //form6 //44
+//	            memcpy( &outpack0.svch1_rli.form6[outpack0.svch1_rli.num*203],(char *)fs, 406); //form6 //24
+	            for (i=0;i<203;i++) printf(" %04x ",outpack0.svch1_rli.form6[outpack0.svch1_rli.num*203+i]);printf("\n");
+	            printf(" %04x ",outpack0.svch1_rli.form6[outpack0.svch1_rli.num*203+1]>>7);printf("\n");
+
+//	            for (i=0;i<203;i++) printf(" %04x ",*pack->wf+i);printf("\n");
+
 				printf("nword=%d\n",outpack0.svch1_rli.nword);					
 				printf("%d пакет. fsn=%d\n",outpack0.svch1_rli.num,fsn);
 				outpack0.svch1_rli.num++;
@@ -400,12 +407,15 @@ int HandlerInPack1( struct packet12 *pack, int size )
             count.out1++;
         }
         if( fs->nf == 199 ) {
-           /* f199 = (struct form199 *)fs;
-            switch(f199->kfs) {
+            f199 = (struct form199 *)fs;
+            /*switch(f199->kfs) {
             case 34: case 39: outpack0.link = KRK_MODE_REO;  break;
             default: outpack0.link = KRK_CMD_OK; break;
-            }
-			*/
+            }*/
+			
+//			for(i=0;i<10;i++) mode.cf1[i]=f199->cf1[i];
+//			for(i=0;i<5;i++)  mode.cf2[i]=f199->cf2[i];
+			
             if( stat.link ) {
 				//ResetBuffers1(); 
 				//HandlerCmdKasrt17(); SendOutPack1();
@@ -732,9 +742,6 @@ int SendOutPack1( void )
       }
       if( outpack1.buf[i].cmd & BUF3KIT_CMD_BLK6 ) {
          outpack1.blk |= BUF3KIT_BLK6;
-      }
-      if( outpack1.buf[i].cmd & BUF3KIT_CMD_BLK7 ) {
-         outpack1.blk |= BUF3KIT_BLK7;
       }
       if( outpack1.buf[i].cmd & BUF3KIT_CMD_BLKT ) {
          outpack1.blk |= BUF3KIT_BLKT;

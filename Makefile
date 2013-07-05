@@ -5,11 +5,11 @@
 all: MO3AK
 
 MO3AK: main.o globals.o tcpip.o device.o handbuf0.o handbuf1.o handbuf2.o \
-		handbuf3.o handbuf4.o handbuf5.o handbuf6.o handbuf7.o handtout.o \
+		handbuf3.o handbuf4.o handbuf5.o handbuf6.o handtout.o \
         handcmd.o handcmd32.o handcmd3a.o led.o
 	cc -ms -o MO3AK main.o globals.o tcpip.o device.o handbuf0.o handbuf1.o \
         handbuf2.o handbuf3.o handbuf4.o handbuf5.o handbuf6.o handtout.o \
-        handcmd.o handcmd32.o handcmd3a.o handbuf7.o led.o
+        handcmd.o handcmd32.o handcmd3a.o led.o
 	usemsg MO3AK usemsg
 
 main.o: main.c globals.h
@@ -44,9 +44,6 @@ handbuf5.o: handbuf5.c globals.h
 
 handbuf6.o: handbuf6.c globals.h
 	cc -ms -c -o handbuf6.o handbuf6.c
-
-handbuf7.o: handbuf7.c globals.h
-	cc -ms -c -o handbuf7.o handbuf7.c
 
 handtout.o: handtout.c globals.h
 	cc -ms -c -o handtout.o handtout.c
