@@ -72,7 +72,7 @@ int HandlerInBuf1( void )
             ControlLed1( 0 );
          }
          SendOutPack1();
-			printf("SendOutPack\n");
+		//	printf("SendOutPack\n");
          inbuf1step = STEP_MARK;
       }
 //	printf("inbuf1step=%d\n",inbuf1step);
