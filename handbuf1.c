@@ -315,6 +315,15 @@ int HandlerInPack1( struct packet12 *pack, int size )
 					//outpack0.svch1.nword += fsn; //добавляем только строки (реальное РЛИ)
 				}
 	            memcpy( &outpack0.svch1_rli.form6[outpack0.svch1_rli.num*203],(char *)fs+sizeof(struct sac) + 14 , 406); //form6 //44
+
+				for(i=0;i<10;i++) outpack0.svch1_rli.form1[i]=mode.cf1_svch1[i];
+				
+				switch(fs->kvi)
+				{
+					case 5 : case 9 : 
+						for(i=0;i<5;i++)  outpack0.svch1_rli.form2[i]=mode.cf2_svch1[i];
+				}		
+
 //	            memcpy( &outpack0.svch1_rli.form6[outpack0.svch1_rli.num*203],(char *)fs, 406); //form6 //24
 	            for (i=0;i<203;i++) printf(" %04x ",outpack0.svch1_rli.form6[outpack0.svch1_rli.num*203+i]);printf("\n");
 	            printf(" %04x ",outpack0.svch1_rli.form6[outpack0.svch1_rli.num*203+1]>>7);printf("\n");
@@ -376,7 +385,7 @@ int HandlerInPack1( struct packet12 *pack, int size )
             }
         }
         if( fs->nf == 193 ) {
-            f199 = (struct form199 *)b;
+            /*f199 = (struct form199 *)b;
             memset( f199, 0, sizeof(struct form199) );
             memcpy( f199, fs, sizeof(struct form193) );
             f199->s.ps = 1;
@@ -404,17 +413,19 @@ int HandlerInPack1( struct packet12 *pack, int size )
             f199->s.p4 = fs->a4;
             f199->s.p5 = fs->a5;
             SendSVC1( f199, sizeof(struct form199) );
-            count.out1++;
+            count.out1++; */
         }
         if( fs->nf == 199 ) {
             f199 = (struct form199 *)fs;
+
             /*switch(f199->kfs) {
             case 34: case 39: outpack0.link = KRK_MODE_REO;  break;
             default: outpack0.link = KRK_CMD_OK; break;
             }*/
 			
-//			for(i=0;i<10;i++) mode.cf1[i]=f199->cf1[i];
-//			for(i=0;i<5;i++)  mode.cf2[i]=f199->cf2[i];
+			
+			for(i=0;i<10;i++) mode.cf1_svch1[i]=f199->cf1[i];
+			for(i=0;i<5;i++)  mode.cf2_svch1[i]=f199->cf2[i];
 			
             if( stat.link ) {
 				//ResetBuffers1(); 
@@ -440,7 +451,7 @@ int HandlerInPack1( struct packet12 *pack, int size )
          if( fs->nf == 203 ) {
             f199 = (struct form199 *)b;
             memset( f199, 0, sizeof(struct form199) );
-            f199->s.ps = 1;
+            /*f199->s.ps = 1;
             f199->s.vr = 0;
             f199->s.kvi = 2;
             f199->s.nf = 199;
@@ -468,7 +479,7 @@ int HandlerInPack1( struct packet12 *pack, int size )
             f199->t2 = 0x1d;
             f199->kfs = 34;
             SendSVC1( f199, sizeof(struct form199) );
-            count.out1++;
+            count.out1++;*/
          }
          break;
       }

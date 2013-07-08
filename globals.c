@@ -165,6 +165,15 @@ void ResetBuffers1( void )
    ControlLed1( -1 );
 }
 
+void ResetBuffers2( void ) 
+{
+   stat.out = stat.in = stat.link = stat.flag = 0;
+   tout.stat = tout.count = 0;
+   outpack2.nsave = outpack2.nload = outpack2.blk = 0;
+   outbuf2.save = outbuf2.load = 0;
+   ControlLed2( -1 );
+}
+
 void SetForm11( struct form11 *form )
 {
    memset( (char *)form, 0, sizeof(struct form11) );

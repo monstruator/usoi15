@@ -278,7 +278,7 @@ int HandlerInPack6( const void *buf, unsigned len )
          f199 = (struct form199 *)b;
          memset( f199, 0, sizeof(struct form199) );
          memcpy( f199, s, sizeof(struct form193) );
-         f199->s.ps = 1;
+         /*f199->s.ps = 1;
          f199->s.vr = 0;
          f199->s.kvi = 2;
          f199->s.nf = 199;
@@ -300,11 +300,11 @@ int HandlerInPack6( const void *buf, unsigned len )
          f199->s.p4 = s->a4;
          f199->s.p5 = s->a5;
          WriteC2( f199, sizeof(struct form199) );
-         count.out6++;
+         count.out6++;*/
       }
       if( s->nf == 199 ) {
          f199 = (struct form199 *)s;
-         switch(f199->kfs) {
+         /*switch(f199->kfs) {
          case 34:
          case 39:
             outpack0.link = KRK_MODE_REO;
@@ -316,11 +316,11 @@ int HandlerInPack6( const void *buf, unsigned len )
          if( stat.link ) {
             ResetBuffers();
             outpack0.cr_com++;
-         }
+         }*/
       }
       if( s->nf == 203 ) {
          f199 = (struct form199 *)b;
-         memset( f199, 0, sizeof(struct form199) );
+         /*memset( f199, 0, sizeof(struct form199) );
          f199->s.ps = 1;
          f199->s.vr = 0;
          f199->s.kvi = 2;
@@ -346,7 +346,7 @@ int HandlerInPack6( const void *buf, unsigned len )
          f199->t2 = 0x1d;
          f199->kfs = 34;
          WriteC2( f199, sizeof(struct form199) );
-         count.out6++;
+         count.out6++;*/
       }
       break;
    case 0xf0:

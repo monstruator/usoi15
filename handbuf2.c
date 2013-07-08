@@ -336,7 +336,7 @@ int HandlerInPack2( struct packet12 *pack, int size )
         if( fs->nf == 26 ) {
             f27 = (struct sac *)b;
             memset( f27, 0, sizeof(struct sac) );
-            f27->ps = 2;
+            f27->ps = 1;
             f27->vr = 0;
             f27->kvi = 2;
             f27->nf = 27;
@@ -378,7 +378,7 @@ int HandlerInPack2( struct packet12 *pack, int size )
             f199 = (struct form199 *)b;
             memset( f199, 0, sizeof(struct form199) );
             memcpy( f199, fs, sizeof(struct form193) );
-            f199->s.ps = 1;
+            /*f199->s.ps = 1;
             f199->s.vr = 0;
             f199->s.kvi = 2;
             f199->s.nf = 199;
@@ -403,7 +403,7 @@ int HandlerInPack2( struct packet12 *pack, int size )
             f199->s.p4 = fs->a4;
             f199->s.p5 = fs->a5;
             SendSVC2( f199, sizeof(struct form199) );
-            count.out2++;
+            count.out2++; */
         }
         if( fs->nf == 199 ) {
             f199 = (struct form199 *)fs;
@@ -439,7 +439,7 @@ int HandlerInPack2( struct packet12 *pack, int size )
          if( fs->nf == 203 ) {
             f199 = (struct form199 *)b;
             memset( f199, 0, sizeof(struct form199) );
-            f199->s.ps = 1;
+            /*f199->s.ps = 1;
             f199->s.vr = 0;
             f199->s.kvi = 2;
             f199->s.nf = 199;
@@ -467,7 +467,7 @@ int HandlerInPack2( struct packet12 *pack, int size )
             f199->t2 = 0x1d;
             f199->kfs = 34;
             SendSVC2( f199, sizeof(struct form199) );
-            count.out2++;
+            count.out2++; */
          }
          break;
       }

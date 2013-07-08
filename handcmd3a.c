@@ -385,7 +385,7 @@ int HandlerCmd2mo3a( int param )
 
    i = outpack3.nsave;
          	
-   if( param ) {
+   if( param ) 
       if( mode.mo1a ) BU1_K6(0x15);
       else       	  BU1_K6(0x1b);
     else       		  BU1_K6(0x00);
