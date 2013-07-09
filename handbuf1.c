@@ -315,6 +315,7 @@ int HandlerInPack1( struct packet12 *pack, int size )
 					//outpack0.svch1.nword += fsn; //добавляем только строки (реальное РЛИ)
 				}
 	            memcpy( &outpack0.svch1_rli.form6[outpack0.svch1_rli.num*203],(char *)fs+sizeof(struct sac) + 14 , 406); //form6 //44
+	            memcpy( &outpack0.svch1_rli.form5, (char *)fs+sizeof(struct sac) + 2 , 12); //form5
 
 				for(i=0;i<10;i++) outpack0.svch1_rli.form1[i]=mode.cf1_svch1[i];
 				
@@ -423,7 +424,12 @@ int HandlerInPack1( struct packet12 *pack, int size )
             default: outpack0.link = KRK_CMD_OK; break;
             }*/
 			
-			
+			for(i=0;i<10;i++) printf(" %x ",f199->cf1[i]);printf(" *199.1\n");
+			for(i=0;i<5;i++)  printf(" %x ",f199->cf2[i]);printf(" *199.2\n");
+
+//            memcpy( mode,cf1_svch1[0] , f199 +24, 20 );
+  //          memcpy( mode,cf2_svch1[0] , f199 +44, 10 );
+
 			for(i=0;i<10;i++) mode.cf1_svch1[i]=f199->cf1[i];
 			for(i=0;i<5;i++)  mode.cf2_svch1[i]=f199->cf2[i];
 			

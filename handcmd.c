@@ -260,7 +260,7 @@ int HandlerCmdRli1( void )
       printf( "HandlerCmdRli1: %d \n",n_rli1 );
    }
 	n_rli1++;
-	if (n_rli1>30) 
+	if (n_rli1>100)  //30
 		{
 			n_rli1=mode.rli1=0; //завершение после 25 опросов
 			printf("mode.rli1=0\n");

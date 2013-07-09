@@ -3893,7 +3893,9 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
       p34->data[4] = Sum2( (unsigned char *)p34->data, 4 ); //KS-DATA
       p34->data[5] = Sum2( (unsigned char *)p34, sizeof(struct header34) + 5 );
       outpack4.buf[i].size = sizeof(struct header34) + 6;
-      outpack4.buf[i].cmd = BUF3KIT_CMD_BLKT | BUF3KIT_CMD_SVC;
+      outpack4.buf[i].cmd = BUF3KIT_CMD_BLK4 | BUF3KIT_CMD_SVC;
+//      outpack4.buf[i].cmd = BUF3KIT_CMD_BLKT | BUF3KIT_CMD_SVC;
+
       outpack4.nsave++;
 
       BLKT(4);BLKT(4);BLKT(4);
@@ -6186,7 +6188,7 @@ int HandlerCmd101mo3a( int param0, int param1 )
 		outpack1.buf[i].size=0;
 		outpack1.buf[i].cmd=BUF3KIT_CMD_END;
 		outpack1.nsave++;
-				
+			
 
       stat.out |= FLAG_BUF1;
  //     stat.link |= FLAG_BUF1;
@@ -6482,7 +6484,7 @@ int HandlerCmd101mo3a( int param0, int param1 )
 
       BLKT(4);BLKT(4);BLKT(4);
 
-      i = outpack4.nsave;
+     i = outpack4.nsave;
       p34 = (struct packet34 *)outpack4.buf[i].data;
       p34->head.pream = 0x3534;
       p34->head.code = 5;
@@ -6587,8 +6589,12 @@ int HandlerCmd101mo3a( int param0, int param1 )
 //---------- Other (cmd101mo3a) ----------
 
   switch( param0 ) {
- //  case 0:      mode.scan1 = 1;      break; 
- //  case 1:      mode.scan2 = 1;      break;
+   case 0:     	
+				//mode.scan1 = 1;      
+				break; 
+   case 1:      
+				//mode.scan2 = 1;
+			    break;
    case 2:      mode.recv3 = 1;      break;
    default:
       outpack0.cr_com++;
@@ -7736,7 +7742,7 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
    if( param0 == 0 ) { //SVC-1
       BU2_K6(0x0d);
 
-      i = outpack4.nsave;
+/*      i = outpack4.nsave;
       p34 = (struct packet34 *)outpack4.buf[i].data;
       p34->head.pream = 0x3534;
       p34->head.code = 5;
@@ -7747,12 +7753,13 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
       p34->data[4] = Sum2( (unsigned char *)p34->data, 4 ); //KS-DATA
       p34->data[5] = Sum2( (unsigned char *)p34, sizeof(struct header34) + 5 );
       outpack4.buf[i].size = sizeof(struct header34) + 6;
-      outpack4.buf[i].cmd = BUF3KIT_CMD_BLKT | BUF3KIT_CMD_SVC;
+//      outpack4.buf[i].cmd = BUF3KIT_CMD_BLKT | BUF3KIT_CMD_SVC;
+      outpack4.buf[i].cmd = BUF3KIT_CMD_BLK4 | BUF3KIT_CMD_SVC;
       outpack4.nsave++;
-
+*/
       BLKT(4);BLKT(4);BLKT(4);
 
-      i = outpack4.nsave;
+/*      i = outpack4.nsave;
       p34 = (struct packet34 *)outpack4.buf[i].data;
       p34->head.pream = 0x3534;
       p34->head.code = 5;
@@ -7765,7 +7772,7 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
       outpack4.buf[i].size = sizeof(struct header34) + 6;
       outpack4.buf[i].cmd = BUF3KIT_CMD_BLK4;
       outpack4.nsave++;
-
+*/
 		BU2_K6(0x11);
 
       stat.out |= FLAG_BUF4;
