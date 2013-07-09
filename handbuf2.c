@@ -493,28 +493,7 @@ int SendSVC2( const void *buf, unsigned len )
    }
 
 //---------- Step-1 ----------
-
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 1;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
-
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 3;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
+	kzo13_2();
 
    i = outpack2.nsave;
    h12 = (struct header12 *)outpack2.buf[i].data;
@@ -532,40 +511,10 @@ int SendSVC2( const void *buf, unsigned len )
    outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
    outpack2.nsave++;
 
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 7;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
-
+	kzo7_2();
 //---------- Step 2 ----------
 
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 1;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
-
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 3;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
+	kzo13_2();
 
    i = outpack2.nsave;
    h12 = (struct header12 *)outpack2.buf[i].data;
@@ -603,50 +552,12 @@ int SendSVC2( const void *buf, unsigned len )
    outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
    outpack2.nsave++;
 
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 7;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
+	kzo7_2();
 
-   i = outpack2.nsave;
-   outpack2.buf[i].size = 0;
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLKT;
-   outpack2.nsave++;
-
-   i = outpack2.nsave;
-   outpack2.buf[i].size = 0;
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLKT;
-   outpack2.nsave++;
-
+	BLKT(2);BLKT(2);
 //---------- Step 3 ----------
 
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 1;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
-
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 3;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
+	kzo13_2();
 
    i = outpack2.nsave;
    h12 = (struct header12 *)outpack2.buf[i].data;
@@ -682,16 +593,7 @@ int SendSVC2( const void *buf, unsigned len )
    outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
    outpack2.nsave++;
 
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 7;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
+	kzo7_2();
 
    SendOutPack2();
 

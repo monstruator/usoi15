@@ -184,27 +184,7 @@ int HandlerCmdScan1( void )
 		} //завершение после 80 опросов
    ControlLed1( 1 );
 
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 1;
-   h12->kzo = 1;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
-
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 1;
-   h12->kzo = 3;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
+	kzo13_1();
 
    i = outpack1.nsave;
    h12 = (struct header12 *)outpack1.buf[i].data;
@@ -234,18 +214,7 @@ int HandlerCmdScan1( void )
    outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
    outpack1.nsave++;
 
-/*
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 1;
-   h12->kzo = 7;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
-*/
+/* kzo7_1(); */
    return( 0 );
 }
 
@@ -268,27 +237,7 @@ int HandlerCmdRli1( void )
 		}
    ControlLed1( 1 );
 
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 1;
-   h12->kzo = 1;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
-
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 1;
-   h12->kzo = 3;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
+	kzo13_1();	
 
    i = outpack1.nsave;
    h12 = (struct header12 *)outpack1.buf[i].data;
@@ -337,27 +286,7 @@ int HandlerCmdScan2( void )
 
    ControlLed2( 1 );
 
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 1;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
-
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 3;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
+	kzo13_2();
 
    i = outpack2.nsave;
    h12 = (struct header12 *)outpack2.buf[i].data;
@@ -386,16 +315,7 @@ int HandlerCmdScan2( void )
    outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
    outpack2.nsave++;
 
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss = 0;
-   h12->kvi = 0;
-   h12->ps = 0;
-   h12->kzo = 7;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
+	kzo7_2();
 
    return( 0 );
 }
