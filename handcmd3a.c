@@ -4093,7 +4093,6 @@ int HandlerCmd94mo3a( int param0, int param1 )
 //---------- Outpack1 (cmd94mo3a) ----------
 
    if( param0 == 0 ) { //SVC-1
-
    //SVC-1 -> Step 1
 
   kzo13_1();
@@ -4183,11 +4182,11 @@ int HandlerCmd94mo3a( int param0, int param1 )
       f11->ku1 = 1; //PRD-ON
       f11->ku2 = 0; //PRM-OFF
       f11->ku3 = 0; //TKI
-      f11->ku4 = 1; //FM1
+//      f11->ku4 = 1; //FM1
 //      f11->ku5 = 1; //PRD-M1
 //      f11->ku6 = 7; //PRM-M7
-      f11->ku7 = 0; //PRD-0dB
-      f11->ku8 = 0; //FK-0
+//      f11->ku7 = 0; //PRD-0dB
+//      f11->ku8 = 0; //FK-0
       f11->ku9z0 = 1; //ZAPROS-0
       f11->ku9z1 = 1; //ZAPROS-1
       f11->ku9z2 = 1; //ZAPROS-2
@@ -4205,8 +4204,7 @@ int HandlerCmd94mo3a( int param0, int param1 )
       outpack1.nsave++;
 
 		kzo7_1();
-		BLKT(1);
-		BLKT(1);
+		BLKT(1);BLKT(1);
 
    //SVC-1 -> Step 3
 
@@ -4244,11 +4242,6 @@ int HandlerCmd94mo3a( int param0, int param1 )
       memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
       outpack1.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-	  if (param0==3)
-	  {			
-      	outpack1.buf[i].cmd   = BUF3KIT_CMD_BLK1 | BUF3KIT_CMD_KRK;
-      	outpack1.buf[i].param = KRK_SWITCH_RECV;
-	  }
       outpack1.nsave++;
 
 		kzo7_1();

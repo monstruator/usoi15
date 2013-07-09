@@ -76,6 +76,8 @@
 
       unsigned short cf1_svch2[10];  //слова 1-5 чф1
       unsigned short cf2_svch2[5];  //слова 1-5 чф2
+	  unsigned short no_num;  //kol-vo form3 NO
+	  
    };
 
 //------------------- Constants ------------------
@@ -606,6 +608,40 @@
    };
 
    struct sac {
+      unsigned short ps: 1;
+      unsigned short vr: 1;
+      unsigned short rez1: 1;
+      unsigned short kvi: 4;
+      unsigned short rez2: 1;
+      unsigned short nf: 8;
+
+      unsigned short a0: 4;
+      unsigned short a1: 4;
+      unsigned short a2: 4;
+      unsigned short a3: 4;
+
+      unsigned short a4: 4;
+      unsigned short a5: 4;
+      unsigned short p0: 4;
+      unsigned short p1: 4;
+
+      unsigned short p2: 4;
+      unsigned short p3: 4;
+      unsigned short p4: 4;
+      unsigned short p5: 4;
+
+      unsigned short r0: 4;
+      unsigned short r1: 4;
+      unsigned short r2: 4;
+      unsigned short r3: 4;
+
+      unsigned short v0: 4;
+      unsigned short v1: 4;
+      unsigned short v2: 4;
+      unsigned short v3: 4;
+   };
+ 
+ struct sac_dmv {
       unsigned short ps: 1;
       unsigned short vr: 1;
       unsigned short rez1: 1;

@@ -898,10 +898,14 @@ int SendOutPack0( void )
 	
 	if (mode.rli1)
 	{
-	   printf("word=%d num=%d\n",outpack0.svch1_rli.nword,outpack0.svch1_rli.num);
+	   printf("word=%d num=%d rli\n",outpack0.svch1_rli.nword,outpack0.svch1_rli.num);
 	   outpack0.svch1_rli.nword=outpack0.svch1_rli.num=0;
 	}
-
+	if (mode.scan1)
+	{
+	   printf("word=%d no_num=%d \n",outpack0.svch1_no.nword,mode.no_num);
+	   mode.no_num=0;
+	}
    //printf("sach18.cr=%d nf=%x\n",outpack0.svch1.cr,outpack0.svch1.sach18[0]);
    //printf("sach18.nword=%d \n",outpack0.svch1.nword);
    //!!for(i1=0;i1<outpack0.svch1.nword;i1++) printf("%04x ",outpack0.svch1.word[i1]);printf("\n");
