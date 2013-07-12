@@ -37,6 +37,18 @@ void HandlerTimeout( void )
       }
    }
 
+   if( mode.rli2 ) {
+		printf("HandlerTimeout nload=%d nsave=%d\n",outpack2.nload,outpack2.nsave);
+      if( outpack2.nload == outpack2.nsave ) {
+         outpack2.nload = outpack2.nsave = outpack1.blk = count2 = 0;
+         HandlerCmdRli2();
+      } else {
+         if( ++count2 > 24 ) {
+            outpack2.nload = outpack2.nsave = outpack2.blk = count2 = 0;
+         }
+      }
+   }
+
 
    if( mode.scan2 ) {
       if( outpack2.nload == outpack2.nsave ) {
