@@ -805,7 +805,7 @@ void HandlerInPack0( void )
       case 102:
          switch( mode.pr ) {
          case 1:
-            HandlerCmd102mo3a( inpack0.a_params[0], inpack0.a_params[1] );
+            HandlerCmd102mo3a( inpack0.a_params[0], inpack0.a_params[1], inpack0.a_params[2] );
             break;
          default:
             outpack0.kzv = 1;
