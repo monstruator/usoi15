@@ -56,7 +56,7 @@ int ReadTestFile( char * );
 
 void main( int argc, char **argv )
 {
-   int i;
+   int i,i1;
 
    struct hostent *hp;
    int saddr = sizeof(struct sockaddr);
@@ -241,7 +241,7 @@ void main( int argc, char **argv )
                i = outbuf0.nload;
                r = sendto( msock0, outbuf0.buf[i].data, outbuf0.buf[i].size,
                   0, (struct sockaddr *)&maddr0, sizeof(maddr0) );
-               delay( 1 ); //KLVS CRACK
+               //delay( 1 ); //KLVS CRACK
                if( r <= 0 ) {
                   if( verbose > 0) {
                      printf( "Send socket 0: %d.\n", r );
@@ -303,6 +303,7 @@ void main( int argc, char **argv )
             if( outbuf1.load < outbuf1.save ) {
                i = outbuf1.load;
                r = send( msock1, &outbuf1.data[i], outbuf1.save - i, 0 );
+			   for(i1=20;i1<60;i1++) printf(" %02x",outbuf1.data[i1]);printf("\n");
                if( r == -1 ) {
                   if( verbose > 0 ) {
                      puts( "Send socket 1: -1." );

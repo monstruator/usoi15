@@ -179,7 +179,7 @@
    struct formrls {
       short num_out;
       short num_in;
-      int time; //int
+      int time; //int double
       float car_freq;
       float imp_freq;
       float inp_len;
@@ -199,7 +199,7 @@
       unsigned short cr_com;
       short num_com;
       int a_params[5];
-      short pr_bearing; //short
+      short pr_bearing; //short int
       float p;
       float k;
       short nform;
@@ -630,10 +630,10 @@
       unsigned short p4: 4;
       unsigned short p5: 4;
 
-      unsigned short r0: 4;
-      unsigned short r1: 4;
-      unsigned short r2: 4;
       unsigned short r3: 4;
+      unsigned short r2: 4;
+      unsigned short r1: 4;
+      unsigned short r0: 4;
 
       unsigned short v0: 4;
       unsigned short v1: 4;

@@ -805,7 +805,7 @@ void HandlerInPack0( void )
       case 102:
          switch( mode.pr ) {
          case 1:
-            HandlerCmd102mo3a( inpack0.a_params[0], inpack0.a_params[1], inpack0.a_params[2] );
+            HandlerCmd102mo3a( inpack0.a_params[0], inpack0.a_params[1]);
             break;
          default:
             outpack0.kzv = 1;
@@ -917,8 +917,8 @@ int SendOutPack0( void )
 	   mode.no_num=0;
 	}
 
-   //printf("sach18.cr=%d nf=%x\n",outpack0.svch1.cr,outpack0.svch1.sach18[0]);
-   //printf("sach18.nword=%d \n",outpack0.svch1.nword);
+   printf("sach18.cr=%d nf=%x\n",outpack0.svch1.cr,outpack0.svch1.sach18[0]);
+   printf("sach18.nword=%d \n",outpack0.svch1.nword);
    for(i1=0;i1<outpack0.svch2.nword;i1++) printf("%04x ",outpack0.svch2.word[i1]);printf("\n");
 
    if( ( outpack0.cr_com != cr_com ) || ( outpack0.krk != krk ) || 

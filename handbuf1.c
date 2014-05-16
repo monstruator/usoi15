@@ -305,8 +305,8 @@ int HandlerInPack1( struct packet12 *pack, int size )
 			{
 				if (outpack0.svch1_rli.nword==0)  //первая строка
 				{
-					//outpack0.svch1.nword = fsn+1;//размер пакета + num ()
-					outpack0.svch1_rli.nword = fsn; //пока без нума
+					outpack0.svch1.nword = fsn+1;//размер пакета + num ()
+					//outpack0.svch1_rli.nword = fsn; //пока без нума
 				}
 				else 
 				{
@@ -318,11 +318,11 @@ int HandlerInPack1( struct packet12 *pack, int size )
 	            memcpy( &outpack0.svch1_rli.form5, (char *)fs+sizeof(struct sac) + 2 , 12); //form5
 
 				for(i=0;i<10;i++) outpack0.svch1_rli.form1[i]=mode.cf1_svch1[i];
-				for(i=0;i<5;i++)  outpack0.svch1_rli.form2[i]=mode.cf2_svch1[i];break;
+				for(i=0;i<5;i++)  outpack0.svch1_rli.form2[i]=mode.cf2_svch1[i];
 				
 //	            memcpy( &outpack0.svch1_rli.form6[outpack0.svch1_rli.num*203],(char *)fs, 406); //form6 //24
-	            for (i=0;i<203;i++) printf(" %04x ",outpack0.svch1_rli.form6[outpack0.svch1_rli.num*203+i]);printf("\n");
-	            printf(" %04x ",outpack0.svch1_rli.form6[outpack0.svch1_rli.num*203+1]>>7);printf("\n");
+//!	            for (i=0;i<203;i++) printf(" %04x ",outpack0.svch1_rli.form6[outpack0.svch1_rli.num*203+i]);printf("\n");
+//!	            printf(" %04x ",outpack0.svch1_rli.form6[outpack0.svch1_rli.num*203+1]>>7);printf("\n");
 
 //	            for (i=0;i<203;i++) printf(" %04x ",*pack->wf+i);printf("\n");
 
@@ -644,7 +644,7 @@ int SendSVC1( const void *buf, unsigned len )
 
 int SendOutPack1( void )
 {
-   int i;
+   int i,i1;
    int j;
    struct header12 *h12; //!
 
@@ -664,6 +664,7 @@ int SendOutPack1( void )
 			//SetHeader12( h12 );
 	        printf( "SendOutPack1: size=%d cmd=%08x kvi=%d kzo=%d.\n", 
             outpack1.buf[i].size, outpack1.buf[i].cmd, h12->kvi, h12->kzo );
+			//for(i1=0;i1<7;i1++) printf("%x ",outpack1.buf[i].data[i1+j]);
       }
       if( outpack1.buf[i].cmd & BUF3KIT_CMD_BLK0 ) {
          outpack1.blk |= BUF3KIT_BLK0;

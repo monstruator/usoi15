@@ -3393,12 +3393,14 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
       } else {
          f26->vr = 0;
       }
+      count.out1++;
       f26->kvi = 2;
       f26->nf = 26;
-      f26->r0 = ( ( ( count.out1 / 10000 ) % 1000 ) % 100 ) % 10;
-      f26->r1 = ( ( ( count.out1 / 10000 ) % 1000 ) % 100 ) / 10;
-      f26->r2 = ( ( count.out1 / 10000 ) % 1000 ) / 100;
-      f26->r3 = ( count.out1 / 10000 ) / 1000;
+      f26->r0 = ( ( ( count.out1 % 10000 ) % 1000 ) % 100 ) % 10;
+      f26->r1 = ( ( ( count.out1 % 10000 ) % 1000 ) % 100 ) / 10;
+      f26->r2 = ( ( count.out1 % 10000 ) % 1000 ) / 100;
+      f26->r3 = ( count.out1 % 10000 ) / 1000;
+		//printf("\n count.out1=%d r0=%x r1=%x r2=%x r3=%x\n",count.out1,f26->r0,f26->r1,f26->r2,f26->r3);
       if( param1 ) {
          f26->v0 = ( ( param1 % 3600 ) / 60 ) % 10;
          f26->v1 = ( ( param1 % 3600 ) / 60 ) / 10;;
@@ -3423,7 +3425,6 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
       outpack1.buf[i].size = sizeof(struct header12) + sizeof(struct sac);
       outpack1.buf[i].cmd = BUF3KIT_CMD_OUT1;
       outpack1.nsave++;
-      count.out1++;
 
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
@@ -4119,10 +4120,11 @@ int HandlerCmd94mo3a( int param0, int param1 )
       }
       f203->kvi = 2;
       f203->nf = 203;
-      f203->r0 = ( ( ( count.out1 / 10000 ) % 1000 ) % 100 ) % 10;
-      f203->r1 = ( ( ( count.out1 / 10000 ) % 1000 ) % 100 ) / 10;
-      f203->r2 = ( ( count.out1 / 10000 ) % 1000 ) / 100;
-      f203->r3 = ( count.out1 / 10000 ) / 1000;
+	  count.out1++;
+      f203->r0 = ( ( ( count.out1 % 10000 ) % 1000 ) % 100 ) % 10;
+      f203->r1 = ( ( ( count.out1 % 10000 ) % 1000 ) % 100 ) / 10;
+      f203->r2 = ( ( count.out1 % 10000 ) % 1000 ) / 100;
+      f203->r3 = ( count.out1 % 10000 ) / 1000;
       if( param1 ) {
          f203->v0 = ( ( param1 % 3600 ) / 60 ) % 10;
          f203->v1 = ( ( param1 % 3600 ) / 60 ) / 10;;
@@ -4134,7 +4136,6 @@ int HandlerCmd94mo3a( int param0, int param1 )
       outpack1.buf[i].size = sizeof(struct header12) + sizeof(struct sac);
       outpack1.buf[i].cmd = BUF3KIT_CMD_OUT1;
       outpack1.nsave++;
-      count.out1++;
 
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
@@ -4324,10 +4325,12 @@ int HandlerCmd94mo3a( int param0, int param1 )
       }
       f203->kvi = 2;
       f203->nf = 203;
-      f203->r0 = ( ( ( count.out1 / 10000 ) % 1000 ) % 100 ) % 10;
-      f203->r1 = ( ( ( count.out1 / 10000 ) % 1000 ) % 100 ) / 10;
-      f203->r2 = ( ( count.out1 / 10000 ) % 1000 ) / 100;
-      f203->r3 = ( count.out1 / 10000 ) / 1000;
+	  count.out1++;
+
+      f203->r0 = ( ( ( count.out1 % 10000 ) % 1000 ) % 100 ) % 10;
+      f203->r1 = ( ( ( count.out1 % 10000 ) % 1000 ) % 100 ) / 10;
+      f203->r2 = ( ( count.out1 % 10000 ) % 1000 ) / 100;
+      f203->r3 = ( count.out1 % 10000 ) / 1000;
       if( param1 ) {
          f203->v0 = ( ( param1 % 3600 ) / 60 ) % 10;
          f203->v1 = ( ( param1 % 3600 ) / 60 ) / 10;;
@@ -4746,10 +4749,12 @@ int HandlerCmd95mo3a( int param0, int param1 )
       }
       f193->s.kvi = 2;
       f193->s.nf = 193;
-      f193->s.r0 = ( ( ( count.out1 / 10000 ) % 1000 ) % 100 ) % 10;
-      f193->s.r1 = ( ( ( count.out1 / 10000 ) % 1000 ) % 100 ) / 10;
-      f193->s.r2 = ( ( count.out1 / 10000 ) % 1000 ) / 100;
-      f193->s.r3 = ( count.out1 / 10000 ) / 1000;
+      count.out1++;
+
+      f193->s.r0 = ( ( ( count.out1 % 10000 ) % 1000 ) % 100 ) % 10;
+      f193->s.r1 = ( ( ( count.out1 % 10000 ) % 1000 ) % 100 ) / 10;
+      f193->s.r2 = ( ( count.out1 % 10000 ) % 1000 ) / 100;
+      f193->s.r3 = ( count.out1 % 10000 ) / 1000;
       if( param1 ) {
          f193->s.v0 = ( ( param1 % 3600 ) / 60 ) % 10;
          f193->s.v1 = ( ( param1 % 3600 ) / 60 ) / 10;;
@@ -4764,7 +4769,6 @@ int HandlerCmd95mo3a( int param0, int param1 )
       outpack1.buf[i].size = sizeof(struct header12) + sizeof(struct form193);
       outpack1.buf[i].cmd = BUF3KIT_CMD_OUT1;
       outpack1.nsave++;
-      count.out1++;
 
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
@@ -5375,10 +5379,12 @@ int HandlerCmd96mo3a( int param0, int param1 )
       }
       f193->s.kvi = 2;
       f193->s.nf = 193;
-      f193->s.r0 = ( ( ( count.out1 / 10000 ) % 1000 ) % 100 ) % 10;
-      f193->s.r1 = ( ( ( count.out1 / 10000 ) % 1000 ) % 100 ) / 10;
-      f193->s.r2 = ( ( count.out1 / 10000 ) % 1000 ) / 100;
-      f193->s.r3 = ( count.out1 / 10000 ) / 1000;
+      count.out1++;
+
+      f193->s.r0 = ( ( ( count.out1 % 10000 ) % 1000 ) % 100 ) % 10;
+      f193->s.r1 = ( ( ( count.out1 % 10000 ) % 1000 ) % 100 ) / 10;
+      f193->s.r2 = ( ( count.out1 % 10000 ) % 1000 ) / 100;
+      f193->s.r3 = ( count.out1 % 10000 ) / 1000;
       if( param1 ) {
          f193->s.v0 = ( ( param1 % 3600 ) / 60 ) % 10;
          f193->s.v1 = ( ( param1 % 3600 ) / 60 ) / 10;;
@@ -5393,7 +5399,6 @@ int HandlerCmd96mo3a( int param0, int param1 )
       outpack1.buf[i].size = sizeof(struct header12) + sizeof(struct form193);
       outpack1.buf[i].cmd = BUF3KIT_CMD_OUT1;
       outpack1.nsave++;
-      count.out1++;
 
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
@@ -6008,10 +6013,12 @@ int HandlerCmd101mo3a( int param0, int param1 )
       }
       f193->s.kvi = 2;
       f193->s.nf = 193;
-      f193->s.r0 = ( ( ( count.out1 / 10000 ) % 1000 ) % 100 ) % 10;
-      f193->s.r1 = ( ( ( count.out1 / 10000 ) % 1000 ) % 100 ) / 10;
-      f193->s.r2 = ( ( count.out1 / 10000 ) % 1000 ) / 100;
-      f193->s.r3 = ( count.out1 / 10000 ) / 1000;
+      count.out1++;
+
+      f193->s.r0 = ( ( ( count.out1 % 10000 ) % 1000 ) % 100 ) % 10;
+      f193->s.r1 = ( ( ( count.out1 % 10000 ) % 1000 ) % 100 ) / 10;
+      f193->s.r2 = ( ( count.out1 % 10000 ) % 1000 ) / 100;
+      f193->s.r3 = ( count.out1 % 10000 ) / 1000;
       if( param1 ) {
          f193->s.v0 = ( ( param1 % 3600 ) / 60 ) % 10;
          f193->s.v1 = ( ( param1 % 3600 ) / 60 ) / 10;;
@@ -6026,7 +6033,6 @@ int HandlerCmd101mo3a( int param0, int param1 )
       outpack1.buf[i].size = sizeof(struct header12) + sizeof(struct form193);
       outpack1.buf[i].cmd = BUF3KIT_CMD_OUT1;
       outpack1.nsave++;
-      count.out1++;
 
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
@@ -6228,10 +6234,12 @@ int HandlerCmd101mo3a( int param0, int param1 )
       }
       f193->s.kvi = 2;
       f193->s.nf = 193;
-      f193->s.r0 = ( ( ( count.out1 / 10000 ) % 1000 ) % 100 ) % 10;
-      f193->s.r1 = ( ( ( count.out1 / 10000 ) % 1000 ) % 100 ) / 10;
-      f193->s.r2 = ( ( count.out1 / 10000 ) % 1000 ) / 100;
-      f193->s.r3 = ( count.out1 / 10000 ) / 1000;
+      count.out1++;
+
+      f193->s.r0 = ( ( ( count.out1 % 10000 ) % 1000 ) % 100 ) % 10;
+      f193->s.r1 = ( ( ( count.out1 % 10000 ) % 1000 ) % 100 ) / 10;
+      f193->s.r2 = ( ( count.out1 % 10000 ) % 1000 ) / 100;
+      f193->s.r3 = ( count.out1 % 10000 ) / 1000;
       if( param1 ) {
          f193->s.v0 = ( ( param1 % 3600 ) / 60 ) % 10;
          f193->s.v1 = ( ( param1 % 3600 ) / 60 ) / 10;;
@@ -6666,10 +6674,12 @@ int HandlerCmd102mo3a( int param0, int param1 )
       }
       f193->s.kvi = 2;
       f193->s.nf = 193;
-      f193->s.r0 = ( ( ( count.out1 / 10000 ) % 1000 ) % 100 ) % 10;
-      f193->s.r1 = ( ( ( count.out1 / 10000 ) % 1000 ) % 100 ) / 10;
-      f193->s.r2 = ( ( count.out1 / 10000 ) % 1000 ) / 100;
-      f193->s.r3 = ( count.out1 / 10000 ) / 1000;
+      count.out1++;
+
+      f193->s.r0 = ( ( ( count.out1 % 10000 ) % 1000 ) % 100 ) % 10;
+      f193->s.r1 = ( ( ( count.out1 % 10000 ) % 1000 ) % 100 ) / 10;
+      f193->s.r2 = ( ( count.out1 % 10000 ) % 1000 ) / 100;
+      f193->s.r3 = ( count.out1 % 10000 ) / 1000;
       if( param1 ) {
          f193->s.v0 = ( ( param1 % 3600 ) / 60 ) % 10;
          f193->s.v1 = ( ( param1 % 3600 ) / 60 ) / 10;;
@@ -6684,7 +6694,6 @@ int HandlerCmd102mo3a( int param0, int param1 )
       outpack1.buf[i].size = sizeof(struct header12) + sizeof(struct form193);
       outpack1.buf[i].cmd = BUF3KIT_CMD_OUT1;
       outpack1.nsave++;
-      count.out1++;
 
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
@@ -7297,10 +7306,12 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
       }
       f193->s.kvi = 2;
       f193->s.nf = 193;
-      f193->s.r0 = ( ( ( count.out1 / 10000 ) % 1000 ) % 100 ) % 10;
-      f193->s.r1 = ( ( ( count.out1 / 10000 ) % 1000 ) % 100 ) / 10;
-      f193->s.r2 = ( ( count.out1 / 10000 ) % 1000 ) / 100;
-      f193->s.r3 = ( count.out1 / 10000 ) / 1000;
+      count.out1++;
+
+      f193->s.r0 = ( ( ( count.out1 % 10000 ) % 1000 ) % 100 ) % 10;
+      f193->s.r1 = ( ( ( count.out1 % 10000 ) % 1000 ) % 100 ) / 10;
+      f193->s.r2 = ( ( count.out1 % 10000 ) % 1000 ) / 100;
+      f193->s.r3 = ( count.out1 % 10000 ) / 1000;
       if( param1 ) {
          f193->s.v0 = ( ( param1 % 3600 ) / 60 ) % 10;
          f193->s.v1 = ( ( param1 % 3600 ) / 60 ) / 10;;
@@ -7323,7 +7334,6 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
       outpack1.buf[i].size = sizeof(struct header12) + sizeof(struct form193);
       outpack1.buf[i].cmd = BUF3KIT_CMD_OUT1;
       outpack1.nsave++;
-      count.out1++;
 
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
