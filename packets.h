@@ -630,10 +630,11 @@
       unsigned short p4: 4;
       unsigned short p5: 4;
 
-      unsigned short r3: 4;
-      unsigned short r2: 4;
-      unsigned short r1: 4;
       unsigned short r0: 4;
+      unsigned short r1: 4;
+      unsigned short r2: 4;
+      unsigned short r3: 4;
+
 
       unsigned short v0: 4;
       unsigned short v1: 4;

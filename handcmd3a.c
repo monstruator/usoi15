@@ -3352,7 +3352,7 @@ int HandlerCmd92mo3a( int param )
    return( 0 );
 }
 
-//*************** Handler Command 2 ***************
+//*************** Handler Command 93 ***************
 
 int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
 {
@@ -3400,7 +3400,8 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
       f26->r1 = ( ( ( count.out1 % 10000 ) % 1000 ) % 100 ) / 10;
       f26->r2 = ( ( count.out1 % 10000 ) % 1000 ) / 100;
       f26->r3 = ( count.out1 % 10000 ) / 1000;
-		//printf("\n count.out1=%d r0=%x r1=%x r2=%x r3=%x\n",count.out1,f26->r0,f26->r1,f26->r2,f26->r3);
+
+	  //printf("\n count.out1=%d r0=%x r1=%x r2=%x r3=%x\n",count.out1,f26->r0,f26->r1,f26->r2,f26->r3);
       if( param1 ) {
          f26->v0 = ( ( param1 % 3600 ) / 60 ) % 10;
          f26->v1 = ( ( param1 % 3600 ) / 60 ) / 10;;
@@ -3500,7 +3501,7 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
 
 		kzo7_1();
 		BLKT(1);
-		BLKT(1);
+		//BLKT(1);
 
    //SVC-1 -> Step 3
 
@@ -3624,10 +3625,11 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
       }
       f26->kvi = 2;
       f26->nf = 26;
-      f26->r0 = ( ( ( count.out2 / 10000 ) % 1000 ) % 100 ) % 10;
-      f26->r1 = ( ( ( count.out2 / 10000 ) % 1000 ) % 100 ) / 10;
-      f26->r2 = ( ( count.out2 / 10000 ) % 1000 ) / 100;
-      f26->r3 = ( count.out2 / 10000 ) / 1000;
+      count.out2++;
+      f26->r0 = ( ( ( count.out2 % 10000 ) % 1000 ) % 100 ) % 10;
+      f26->r1 = ( ( ( count.out2 % 10000 ) % 1000 ) % 100 ) / 10;
+      f26->r2 = ( ( count.out2 % 10000 ) % 1000 ) / 100;
+      f26->r3 = ( count.out2 % 10000 ) / 1000;
       if( param1 ) {
          f26->v0 = ( ( param1 % 3600 ) / 60 ) % 10;
          f26->v1 = ( ( param1 % 3600 ) / 60 ) / 10;;
@@ -3652,7 +3654,6 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
       outpack2.buf[i].size = sizeof(struct header12) + sizeof(struct sac);
       outpack2.buf[i].cmd = BUF3KIT_CMD_OUT2;
       outpack2.nsave++;
-      count.out2++;
 
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
@@ -3728,7 +3729,7 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
 
 		kzo7_2();
 		BLKT(2);
-		BLKT(2);
+		//BLKT(2);
 
    //SVC-2 -> Step 3
 
@@ -3848,7 +3849,7 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
       outpack3.buf[i].cmd = BUF3KIT_CMD_BLK3 | BUF3KIT_CMD_SVC;
       outpack3.nsave++;
 
-      BLKT(3);BLKT(3);BLKT(3);
+      BLKT(3);BLKT(3);//BLKT(3);
 
       i = outpack3.nsave;
       p34 = (struct packet34 *)outpack3.buf[i].data;
@@ -3875,7 +3876,7 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
          BU1_K6(0x3b);
 		 BU1_K7(0x01);
 
-         BLKT(3);BLKT(3);BLKT(3);
+         BLKT(3);BLKT(3);//BLKT(3);
 
          BU1_K6(0x1b);
          BU1_K7(0x00);
@@ -3907,7 +3908,7 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
 
       outpack4.nsave++;
 
-      BLKT(4);BLKT(4);BLKT(4);
+      BLKT(4);BLKT(4);//BLKT(4);
 
       i = outpack4.nsave;
       p34 = (struct packet34 *)outpack4.buf[i].data;
@@ -4208,7 +4209,8 @@ int HandlerCmd94mo3a( int param0, int param1 )
       outpack1.nsave++;
 
 		kzo7_1();
-		BLKT(1);BLKT(1);
+		BLKT(1);
+		//BLKT(1);
 
    //SVC-1 -> Step 3
 
@@ -4325,12 +4327,12 @@ int HandlerCmd94mo3a( int param0, int param1 )
       }
       f203->kvi = 2;
       f203->nf = 203;
-	  count.out1++;
+	  count.out2++;
 
-      f203->r0 = ( ( ( count.out1 % 10000 ) % 1000 ) % 100 ) % 10;
-      f203->r1 = ( ( ( count.out1 % 10000 ) % 1000 ) % 100 ) / 10;
-      f203->r2 = ( ( count.out1 % 10000 ) % 1000 ) / 100;
-      f203->r3 = ( count.out1 % 10000 ) / 1000;
+      f203->r0 = ( ( ( count.out2 % 10000 ) % 1000 ) % 100 ) % 10;
+      f203->r1 = ( ( ( count.out2 % 10000 ) % 1000 ) % 100 ) / 10;
+      f203->r2 = ( ( count.out2 % 10000 ) % 1000 ) / 100;
+      f203->r3 = ( count.out2 % 10000 ) / 1000;
       if( param1 ) {
          f203->v0 = ( ( param1 % 3600 ) / 60 ) % 10;
          f203->v1 = ( ( param1 % 3600 ) / 60 ) / 10;;
@@ -4342,7 +4344,6 @@ int HandlerCmd94mo3a( int param0, int param1 )
       outpack2.buf[i].size = sizeof(struct header12) + sizeof(struct sac);
       outpack2.buf[i].cmd = BUF3KIT_CMD_OUT2;
       outpack2.nsave++;
-      count.out2++;
 
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
@@ -4527,7 +4528,8 @@ int HandlerCmd94mo3a( int param0, int param1 )
       outpack3.buf[i].cmd = BUF3KIT_CMD_BLK3 | BUF3KIT_CMD_SVC;
       outpack3.nsave++;
 
-      BLKT(3);BLKT(3);BLKT(3);
+      BLKT(3);BLKT(3);
+		//BLKT(3);
 
       i = outpack3.nsave;
       p34 = (struct packet34 *)outpack3.buf[i].data;
@@ -4583,7 +4585,8 @@ int HandlerCmd94mo3a( int param0, int param1 )
       outpack4.buf[i].cmd = BUF3KIT_CMD_BLKT | BUF3KIT_CMD_SVC;
       outpack4.nsave++;
 
-      BLKT(4);BLKT(4);BLKT(4);
+      BLKT(4);BLKT(4);
+		//BLKT(4);
 
       i = outpack4.nsave;
       p34 = (struct packet34 *)outpack4.buf[i].data;
@@ -4841,7 +4844,8 @@ int HandlerCmd95mo3a( int param0, int param1 )
       outpack1.nsave++;
 
 		kzo7_1();
-		BLKT(1);		BLKT(1);
+		BLKT(1);	
+		//	BLKT(1);
 
    //SVC-1 -> Step 3
 
@@ -4959,10 +4963,11 @@ int HandlerCmd95mo3a( int param0, int param1 )
       }
       f193->s.kvi = 2;
       f193->s.nf = 193;
-      f193->s.r0 = ( ( ( count.out2 / 10000 ) % 1000 ) % 100 ) % 10;
-      f193->s.r1 = ( ( ( count.out2 / 10000 ) % 1000 ) % 100 ) / 10;
-      f193->s.r2 = ( ( count.out2 / 10000 ) % 1000 ) / 100;
-      f193->s.r3 = ( count.out2 / 10000 ) / 1000;
+      count.out2++;
+      f193->s.r0 = ( ( ( count.out2 % 10000 ) % 1000 ) % 100 ) % 10;
+      f193->s.r1 = ( ( ( count.out2 % 10000 ) % 1000 ) % 100 ) / 10;
+      f193->s.r2 = ( ( count.out2 % 10000 ) % 1000 ) / 100;
+      f193->s.r3 = ( count.out2 % 10000 ) / 1000;
       if( param1 ) {
          f193->s.v0 = ( ( param1 % 3600 ) / 60 ) % 10;
          f193->s.v1 = ( ( param1 % 3600 ) / 60 ) / 10;;
@@ -4977,7 +4982,6 @@ int HandlerCmd95mo3a( int param0, int param1 )
       outpack2.buf[i].size = sizeof(struct header12) + sizeof(struct form193);
       outpack2.buf[i].cmd = BUF3KIT_CMD_OUT2;
       outpack2.nsave++;
-      count.out2++;
 
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
@@ -5051,7 +5055,7 @@ int HandlerCmd95mo3a( int param0, int param1 )
 
 		kzo7_2();
 		BLKT(2);
-		BLKT(2);
+		//BLKT(2);
 
    //SVC-2 -> Step 3
 
@@ -5158,7 +5162,7 @@ int HandlerCmd95mo3a( int param0, int param1 )
       outpack3.buf[i].cmd = BUF3KIT_CMD_BLK3 | BUF3KIT_CMD_SVC;
       outpack3.nsave++;
 
-      BLKT(3);BLKT(3);BLKT(3);
+      BLKT(3);BLKT(3);//BLKT(3);
 
       i = outpack3.nsave;
       p34 = (struct packet34 *)outpack3.buf[i].data;
@@ -5214,7 +5218,8 @@ int HandlerCmd95mo3a( int param0, int param1 )
       outpack4.buf[i].cmd = BUF3KIT_CMD_BLKT | BUF3KIT_CMD_SVC;
       outpack4.nsave++;
 
-      BLKT(4);BLKT(4);BLKT(4);
+      BLKT(4);BLKT(4);
+		//BLKT(4);
 
       i = outpack4.nsave;
       p34 = (struct packet34 *)outpack4.buf[i].data;
@@ -5472,7 +5477,7 @@ int HandlerCmd96mo3a( int param0, int param1 )
 
 		kzo7_1();
 		BLKT(1);
-		BLKT(1);
+		//BLKT(1);
 
    //SVC-1 -> Step 3
 
@@ -5590,10 +5595,11 @@ int HandlerCmd96mo3a( int param0, int param1 )
       }
       f193->s.kvi = 2;
       f193->s.nf = 193;
-      f193->s.r0 = ( ( ( count.out2 / 10000 ) % 1000 ) % 100 ) % 10;
-      f193->s.r1 = ( ( ( count.out2 / 10000 ) % 1000 ) % 100 ) / 10;
-      f193->s.r2 = ( ( count.out2 / 10000 ) % 1000 ) / 100;
-      f193->s.r3 = ( count.out2 / 10000 ) / 1000;
+      count.out2++;
+      f193->s.r0 = ( ( ( count.out2 % 10000 ) % 1000 ) % 100 ) % 10;
+      f193->s.r1 = ( ( ( count.out2 % 10000 ) % 1000 ) % 100 ) / 10;
+      f193->s.r2 = ( ( count.out2 % 10000 ) % 1000 ) / 100;
+      f193->s.r3 = ( count.out2 % 10000 ) / 1000;
       if( param1 ) {
          f193->s.v0 = ( ( param1 % 3600 ) / 60 ) % 10;
          f193->s.v1 = ( ( param1 % 3600 ) / 60 ) / 10;;
@@ -5608,7 +5614,6 @@ int HandlerCmd96mo3a( int param0, int param1 )
       outpack2.buf[i].size = sizeof(struct header12) + sizeof(struct form193);
       outpack2.buf[i].cmd = BUF3KIT_CMD_OUT2;
       outpack2.nsave++;
-      count.out2++;
 
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
@@ -5682,7 +5687,7 @@ int HandlerCmd96mo3a( int param0, int param1 )
 
 		kzo7_2();
 		BLKT(2);
-		BLKT(2);
+		//BLKT(2);
 
    //SVC-2 -> Step 3
 
@@ -5790,7 +5795,7 @@ int HandlerCmd96mo3a( int param0, int param1 )
       outpack3.buf[i].cmd = BUF3KIT_CMD_BLK3 | BUF3KIT_CMD_SVC;
       outpack3.nsave++;
 
-      BLKT(3);BLKT(3);BLKT(3);
+      BLKT(3);BLKT(3);//BLKT(3);
 
       i = outpack3.nsave;
       p34 = (struct packet34 *)outpack3.buf[i].data;
@@ -5846,7 +5851,7 @@ int HandlerCmd96mo3a( int param0, int param1 )
       outpack4.buf[i].cmd = BUF3KIT_CMD_BLKT | BUF3KIT_CMD_SVC;
       outpack4.nsave++;
 
-      BLKT(4);BLKT(4);BLKT(4);
+      BLKT(4);BLKT(4);//BLKT(4);
 
       i = outpack4.nsave;
       p34 = (struct packet34 *)outpack4.buf[i].data;
@@ -6107,7 +6112,7 @@ int HandlerCmd101mo3a( int param0, int param1 )
 
 		kzo7_1();
 		BLKT(1);
-		BLKT(1);
+		//BLKT(1);
 
    //SVC-1 -> Step 3
 
@@ -6234,12 +6239,12 @@ int HandlerCmd101mo3a( int param0, int param1 )
       }
       f193->s.kvi = 2;
       f193->s.nf = 193;
-      count.out1++;
+      count.out2++;
 
-      f193->s.r0 = ( ( ( count.out1 % 10000 ) % 1000 ) % 100 ) % 10;
-      f193->s.r1 = ( ( ( count.out1 % 10000 ) % 1000 ) % 100 ) / 10;
+      f193->s.r0 = ( ( ( count.out2 % 10000 ) % 1000 ) % 100 ) % 10;
+      f193->s.r1 = ( ( ( count.out2 % 10000 ) % 1000 ) % 100 ) / 10;
       f193->s.r2 = ( ( count.out1 % 10000 ) % 1000 ) / 100;
-      f193->s.r3 = ( count.out1 % 10000 ) / 1000;
+      f193->s.r3 = ( count.out2 % 10000 ) / 1000;
       if( param1 ) {
          f193->s.v0 = ( ( param1 % 3600 ) / 60 ) % 10;
          f193->s.v1 = ( ( param1 % 3600 ) / 60 ) / 10;;
@@ -6254,7 +6259,6 @@ int HandlerCmd101mo3a( int param0, int param1 )
       outpack2.buf[i].size = sizeof(struct header12) + sizeof(struct form193);
       outpack2.buf[i].cmd = BUF3KIT_CMD_OUT2;
       outpack2.nsave++;
-      count.out2++;
 
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
@@ -6329,7 +6333,7 @@ int HandlerCmd101mo3a( int param0, int param1 )
 
 		kzo7_2();
 		BLKT(2);
-		BLKT(2);
+		//BLKT(2);
 
    //SVC-2 -> Step 3
 
@@ -6446,7 +6450,7 @@ int HandlerCmd101mo3a( int param0, int param1 )
       outpack3.buf[i].cmd = BUF3KIT_CMD_BLK3 | BUF3KIT_CMD_SVC;
       outpack3.nsave++;
 
-      BLKT(3);BLKT(3);BLKT(3);
+      BLKT(3);BLKT(3);//BLKT(3);
 
       i = outpack3.nsave;
       p34 = (struct packet34 *)outpack3.buf[i].data;
@@ -6503,7 +6507,7 @@ int HandlerCmd101mo3a( int param0, int param1 )
       outpack4.nsave++;
 
 
-      BLKT(4);BLKT(4);BLKT(4);
+      BLKT(4);BLKT(4);//BLKT(4);
 
      i = outpack4.nsave;
       p34 = (struct packet34 *)outpack4.buf[i].data;
@@ -6767,7 +6771,7 @@ int HandlerCmd102mo3a( int param0, int param1 )
 
 		kzo7_1();
 		BLKT(1);
-		BLKT(1);
+		//BLKT(1);
 
    //SVC-1 -> Step 3
 
@@ -6884,10 +6888,11 @@ int HandlerCmd102mo3a( int param0, int param1 )
       }
       f193->s.kvi = 2;
       f193->s.nf = 193;
-      f193->s.r0 = ( ( ( count.out2 / 10000 ) % 1000 ) % 100 ) % 10;
-      f193->s.r1 = ( ( ( count.out2 / 10000 ) % 1000 ) % 100 ) / 10;
-      f193->s.r2 = ( ( count.out2 / 10000 ) % 1000 ) / 100;
-      f193->s.r3 = ( count.out2 / 10000 ) / 1000;
+      count.out2++;
+      f193->s.r0 = ( ( ( count.out2 % 10000 ) % 1000 ) % 100 ) % 10;
+      f193->s.r1 = ( ( ( count.out2 % 10000 ) % 1000 ) % 100 ) / 10;
+      f193->s.r2 = ( ( count.out2 % 10000 ) % 1000 ) / 100;
+      f193->s.r3 = ( count.out2 % 10000 ) / 1000;
       if( param1 ) {
          f193->s.v0 = ( ( param1 % 3600 ) / 60 ) % 10;
          f193->s.v1 = ( ( param1 % 3600 ) / 60 ) / 10;;
@@ -6902,7 +6907,6 @@ int HandlerCmd102mo3a( int param0, int param1 )
       outpack2.buf[i].size = sizeof(struct header12) + sizeof(struct form193);
       outpack2.buf[i].cmd = BUF3KIT_CMD_OUT2;
       outpack2.nsave++;
-      count.out2++;
 
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
@@ -6976,7 +6980,7 @@ int HandlerCmd102mo3a( int param0, int param1 )
 
 		kzo7_2();
 		BLKT(2);
-		BLKT(2);
+		//BLKT(2);
 
    //SVC-2 -> Step 3
 
@@ -7054,7 +7058,7 @@ int HandlerCmd102mo3a( int param0, int param1 )
 
 		kzo7_2();
 		BLKT(2);
-		BLKT(2);
+		//BLKT(2);
 
       } //for(j)
 
@@ -7083,7 +7087,7 @@ int HandlerCmd102mo3a( int param0, int param1 )
       outpack3.buf[i].cmd = BUF3KIT_CMD_BLK3 | BUF3KIT_CMD_SVC;
       outpack3.nsave++;
 
-      BLKT(3);BLKT(3);BLKT(3);
+      BLKT(3);BLKT(3);//BLKT(3);
 
       i = outpack3.nsave;
       p34 = (struct packet34 *)outpack3.buf[i].data;
@@ -7138,7 +7142,7 @@ int HandlerCmd102mo3a( int param0, int param1 )
       outpack4.buf[i].cmd = BUF3KIT_CMD_BLKT | BUF3KIT_CMD_SVC;
       outpack4.nsave++;
 
-      BLKT(4);BLKT(4);BLKT(4);
+      BLKT(4);BLKT(4);//BLKT(4);
 
       i = outpack4.nsave;
       p34 = (struct packet34 *)outpack4.buf[i].data;
@@ -7407,7 +7411,7 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
 
 		kzo7_1();
 		BLKT(1);
-		BLKT(1);
+		//BLKT(1);
 
    //SVC-1 -> Step 3
 
@@ -7524,10 +7528,12 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
       }
       f193->s.kvi = 2;
       f193->s.nf = 193;
-      f193->s.r0 = ( ( ( count.out2 / 10000 ) % 1000 ) % 100 ) % 10;
-      f193->s.r1 = ( ( ( count.out2 / 10000 ) % 1000 ) % 100 ) / 10;
-      f193->s.r2 = ( ( count.out2 / 10000 ) % 1000 ) / 100;
-      f193->s.r3 = ( count.out2 / 10000 ) / 1000;
+      count.out2++;
+
+      f193->s.r0 = ( ( ( count.out2 % 10000 ) % 1000 ) % 100 ) % 10;
+      f193->s.r1 = ( ( ( count.out2 % 10000 ) % 1000 ) % 100 ) / 10;
+      f193->s.r2 = ( ( count.out2 % 10000 ) % 1000 ) / 100;
+      f193->s.r3 = ( count.out2 % 10000 ) / 1000;
       if( param1 ) {
          f193->s.v0 = ( ( param1 % 3600 ) / 60 ) % 10;
          f193->s.v1 = ( ( param1 % 3600 ) / 60 ) / 10;;
@@ -7542,7 +7548,6 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
       outpack2.buf[i].size = sizeof(struct header12) + sizeof(struct form193);
       outpack2.buf[i].cmd = BUF3KIT_CMD_OUT2;
       outpack2.nsave++;
-      count.out2++;
 
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
@@ -7616,7 +7621,7 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
 
 		kzo7_2();
 		BLKT(2);
-		BLKT(2);
+		//BLKT(2);
 
    //SVC-2 -> Step 3
 
@@ -7723,7 +7728,7 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
       outpack3.buf[i].cmd = BUF3KIT_CMD_BLK3 | BUF3KIT_CMD_SVC;
       outpack3.nsave++;
 
-      BLKT(3);BLKT(3);BLKT(3);
+      BLKT(3);BLKT(3);//BLKT(3);
 
       i = outpack3.nsave;
       p34 = (struct packet34 *)outpack3.buf[i].data;
@@ -7750,7 +7755,7 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
           BU1_K6(0x3b);
 		  BU1_K7(0x01);
 
-         BLKT(3);BLKT(3);BLKT(3);
+         BLKT(3);BLKT(3);//BLKT(3);
 
           BU1_K6(0x1b);
 		  BU1_K7(0x00);
@@ -7780,7 +7785,7 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
 //      outpack4.buf[i].cmd = BUF3KIT_CMD_BLK4 | BUF3KIT_CMD_SVC;
       outpack4.nsave++;
 
-      BLKT(4);BLKT(4);BLKT(4);
+      BLKT(4);BLKT(4);//BLKT(4);
 
       i = outpack4.nsave;
       p34 = (struct packet34 *)outpack4.buf[i].data;
@@ -7924,7 +7929,7 @@ int HandlerCmd104mo3a( int param0, int param1, int param2 )
 		  BU1_K7(0x01);
 
 
-        BLKT(3);BLKT(3);BLKT(3);
+        BLKT(3);BLKT(3);//BLKT(3);
 
           BU1_K6(0x1b);
 		  BU1_K7(0x00);
