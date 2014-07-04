@@ -303,7 +303,7 @@ void main( int argc, char **argv )
             if( outbuf1.load < outbuf1.save ) {
                i = outbuf1.load;
                r = send( msock1, &outbuf1.data[i], outbuf1.save - i, 0 );
-			   printf("1ch - ");for(i1=20;i1<60;i1++) printf(" %02x",outbuf1.data[i1]);printf("\n");
+			   //printf("1ch - ");for(i1=20;i1<60;i1++) printf(" %02x",outbuf1.data[i1]);printf("\n");
                if( r == -1 ) {
                   if( verbose > 0 ) {
                      puts( "Send socket 1: -1." );
@@ -365,7 +365,7 @@ void main( int argc, char **argv )
             if( outbuf2.load < outbuf2.save ) {
                i = outbuf2.load;
                r = send( msock2, &outbuf2.data[i], outbuf2.save - i, 0 );
-			   printf("2ch - ");for(i1=20;i1<60;i1++) printf(" %02x",outbuf2.data[i1]);printf("\n");
+			   //printf("2ch - ");for(i1=20;i1<60;i1++) printf(" %02x",outbuf2.data[i1]);printf("\n");
 
                if( r == -1 ) {
                   if( verbose > 0 ) {

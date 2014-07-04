@@ -178,6 +178,8 @@ int HandlerCmdScan1( void )
 	n_scan1++;
 	if (n_scan1>80)//80 
 		{
+			outpack0.svch1.nword=0;
+			outpack0.svch2.nword=0;
 			n_scan1=mode.scan1=0;
 			printf("mode.scan1=0\n");
 			return(0);
@@ -226,12 +228,13 @@ int HandlerCmdRli1( void )
 	static short n_rli1; //кол-во повторов скана
 
    if( verbose > 0 ) {
-      printf( "HandlerCmdRli1: %d \n",n_rli1 );
+      printf( "HandlerCmdRli1: %d \n",mode.n_rli1 );
    }
-	n_rli1++;
-	if (n_rli1>100)  //30
+	mode.n_rli1++;
+	if (mode.n_rli1>70)  //30
 		{
-			n_rli1=mode.rli1=0; //завершение после 25 опросов
+			outpack0.svch1.nword=0;
+			mode.n_rli1=mode.rli1=0; //завершение после 25 опросов
 			printf("mode.rli1=0\n");
 			return(0);
 		}
@@ -280,12 +283,13 @@ int HandlerCmdRli2( void )
 	static short n_rli2; //кол-во повторов скана
 
    if( verbose > 0 ) {
-      printf( "HandlerCmdRli2: %d \n",n_rli2 );
+      printf( "HandlerCmdRli2: %d \n",mode.n_rli2 );
    }
-	n_rli2++;
-	if (n_rli2>100)  //30
+	mode.n_rli2++;
+	if (mode.n_rli2>70)  //30
 		{
-			n_rli2=mode.rli2=0; //завершение после 25 опросов
+			outpack0.svch2.nword=0;
+			mode.n_rli2=mode.rli2=0; //завершение после 25 опросов
 			printf("mode.rli2=0\n");
 			return(0);
 		}

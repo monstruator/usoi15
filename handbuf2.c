@@ -7,6 +7,7 @@ extern int verbose;
 
 int inbuf2step = STEP_MARK;
 
+
 int HandlerInBuf2( void )
 {
    static int ip;
@@ -21,7 +22,7 @@ int HandlerInBuf2( void )
       if( inbuf2step == STEP_NONE ) {
          inbuf2.save = inbuf2.load;
       }
-//	printf("inbuf2step=%d\n",inbuf2step);
+//	printf("inbuf1step=%d\n",inbuf1step);
 
       if( inbuf2step == STEP_MARK ) {
          if( MarkInBuf2() ) {
@@ -30,7 +31,7 @@ int HandlerInBuf2( void )
             inbuf2step = STEP_HEADER;
          }
       }
-//	printf("inbuf2step=%d\n",inbuf2step);
+//	printf("inbuf1step=%d\n",inbuf1step);
 
       if( inbuf2step == STEP_HEADER ) {
          if( HeadInBuf2() ) {
@@ -44,7 +45,7 @@ int HandlerInBuf2( void )
             }
          }
       }
-//	printf("inbuf2step=%d\n",inbuf2step);
+//	printf("inbuf1step=%d\n",inbuf1step);
 
       if( inbuf2step == STEP_DATA ) {
 		switch( DataInBuf2( NULL ) ) {
@@ -53,7 +54,7 @@ int HandlerInBuf2( void )
 					 return 0;
          }
       }
-//	printf("inbuf2step=%d\n",inbuf2step);
+//	printf("inbuf1step=%d\n",inbuf1step);
 
       if( inbuf2step == STEP_HANDLER ) {
          outpack1.blk &= ~BUF3KIT_BLK2;
@@ -74,7 +75,7 @@ int HandlerInBuf2( void )
 		//	printf("SendOutPack\n");
          inbuf2step = STEP_MARK;
       }
-//	printf("inbuf2step=%d\n",inbuf2step);
+//	printf("inbuf1step=%d\n",inbuf1step);
 
    }
 
@@ -174,10 +175,11 @@ int DataInBuf2( unsigned short *nd )
 		memcpy(&inbuf2.data[0],&inbuf2.data[inbuf2.load],inbuf2.save-inbuf2.load);
 		inbuf2.save-=inbuf2.load;
 		inbuf2.load=0;
-		//printf("ndata=%d s=%d l=%d\n",ndata,inbuf2.save,inbuf2.load);
+		//printf("ndata=%d s=%d l=%d\n",ndata,inbuf1.save,inbuf1.load);
       return( 2 ); //не полностью принят пакет
    }
 }
+
 
 int HandlerInPack2( struct packet12 *pack, int size )
 {
@@ -188,11 +190,17 @@ int HandlerInPack2( struct packet12 *pack, int size )
    struct sac *fs;
    struct sac *f27;
    struct form199 *f199;
+   struct form18 *f18;
+   struct form18a *f18a;
+   struct form_reo *freo;
+
+	static short paket_rli;
    unsigned fsa;
    unsigned fsp;
    unsigned fsr;
    unsigned fsv;
    unsigned fsn;
+   short *form_num;
    int i;
    char b[sizeof(struct form199)];
 
@@ -211,7 +219,7 @@ int HandlerInPack2( struct packet12 *pack, int size )
    //********* (24.06.2011) *********
 
  //  if( pack->head.ps == 0 ) {
- //     outpack2.blk |= BUF3KIT_BLK2;
+ //     outpack1.blk |= BUF3KIT_BLK1;
  //  }
 
    //*********************************
@@ -257,7 +265,7 @@ int HandlerInPack2( struct packet12 *pack, int size )
          sr->svc2_fk = ( f12->s4 ) & 0xf;
          if( sk->s0cpp == 1 ) {
             outpack0.kzv = 1;
-            ko->cpp2 = 1;
+            ko->cpp1 = 1;
          }
 			printf("prd=%d prm=%d 9pr=%d s1tr=%d s1m=%d s1rp=%d s1vr=%d \n",
 	         sk->s2prd,sk->s2prm,sk->s9pream,sk->s1fk,sk->s1fm,sk->s1prm,sk->s1rab);
@@ -268,7 +276,7 @@ int HandlerInPack2( struct packet12 *pack, int size )
 			if ((mode.rli2) || (mode.scan2))
 			{
 				kzo7_2();	
-				//stat.out|=FLAG_BUF2; //не надо т.к. вне команды
+				//stat.out|=FLAG_BUF1; //не надо т.к. вне команды
 			}
          break;
       default:
@@ -304,8 +312,8 @@ int HandlerInPack2( struct packet12 *pack, int size )
 			{
 				if (outpack0.svch2_rli.nword==0)  //первая строка
 				{
-					//outpack0.svch2.nword = fsn+1;//размер пакета + num ()
-					outpack0.svch2_rli.nword = fsn; //пока без нума
+					outpack0.svch2.nword = fsn+1;//размер пакета + num ()
+					//outpack0.svch2_rli.nword = fsn; //пока без нума
 				}
 				else 
 				{
@@ -313,48 +321,83 @@ int HandlerInPack2( struct packet12 *pack, int size )
 					outpack0.svch2_rli.nword += fsn-6; //добавляем только строки (подыгрыш) //было 21
 					//outpack0.svch2.nword += fsn; //добавляем только строки (реальное РЛИ)
 				}
+				printf("до %d пакет рли2. всего %d fsn=%d\n",outpack0.svch2_rli.num,paket_rli,fsn);
+
 	            memcpy( &outpack0.svch2_rli.form6[outpack0.svch2_rli.num*203],(char *)fs+sizeof(struct sac) + 14 , 406); //form6 //44
 	            memcpy( &outpack0.svch2_rli.form5, (char *)fs+sizeof(struct sac) + 2 , 12); //form5
 
 				for(i=0;i<10;i++) outpack0.svch2_rli.form1[i]=mode.cf1_svch2[i];
-				for(i=0;i<5;i++)  outpack0.svch2_rli.form2[i]=mode.cf2_svch2[i];break;
+				for(i=0;i<5;i++)  outpack0.svch2_rli.form2[i]=mode.cf2_svch2[i];
 				
 //	            memcpy( &outpack0.svch2_rli.form6[outpack0.svch2_rli.num*203],(char *)fs, 406); //form6 //24
-	            for (i=0;i<203;i++) printf(" %04x ",outpack0.svch2_rli.form6[outpack0.svch1_rli.num*203+i]);printf("\n");
-	            printf(" %04x ",outpack0.svch2_rli.form6[outpack0.svch2_rli.num*203+1]>>7);printf("\n");
+//!	            for (i=0;i<203;i++) printf(" %04x ",outpack0.svch2_rli.form6[outpack0.svch2_rli.num*203+i]);printf("\n");
+//!	            printf(" %04x ",outpack0.svch2_rli.form6[outpack0.svch2_rli.num*203+1]>>7);printf("\n");
 
 //	            for (i=0;i<203;i++) printf(" %04x ",*pack->wf+i);printf("\n");
 
 				printf("nword=%d\n",outpack0.svch2_rli.nword);					
-				printf("%d пакет. fsn=%d\n",outpack0.svch2_rli.num,fsn);
+				printf("%d пакет рли2. всего %d fsn=%d\n",outpack0.svch2_rli.num,paket_rli,fsn);
 				outpack0.svch2_rli.num++;
+				paket_rli++;
 			}
-			else if (mode.scan1)
+			else if (mode.scan2)
 				switch (fs->kvi)
 				{
 					case 5 : 
-						if ((fs->r0==1)&&(fs->r1==0)&&(fs->r2==0)&&(fs->r3==0)) //pervoe reg soobwenie
+							//printf(" outpack0.link = %d", outpack0.link);
+
+				       if( stat.link ) {
+				    		//outpack0.link = KRK_CMD_OK;
+							//stat.link=0;
+           				}
+
+						printf("nword=%d tki kvi=5 recieve\n",outpack0.svch2_no.nword);					
+			            //for (i=6;i<32;i++) printf(" %04x ",*(pack->wf+i));printf("\n");
+
+			            f18 = (struct form18 *)fs;
+						printf(" fsn= %x \n ",f18->fsn);
+						//printf(" form_num= %x \n ",f18->cf1[0]>>11);
+						//printf(" form_num= %x \n ",f18->cf2[0]>>11);
+						//printf(" form_num= %x \n ",f18->cf3[0]);
+
+						if (f18->cf1[0]>>11 == 1) //est' Form1
 						{
-							if (outpack0.svch2_no.nword==0)  //первая строка
-								outpack0.svch2_no.nword = fsn; //
-							else outpack0.svch2_no.nword += fsn-30; 
-							memcpy( &outpack0.svch2_no.form3[mode.no_num*11],(char *)fs+sizeof(struct sac) + 32 , 22); //form6 //44	
+							printf("est' form1\n");
+							for(i=0;i<10;i++) outpack0.svch2_no.form1[i]=f18->cf1[i];
+							if (outpack0.svch2_no.nword==0) 
+								outpack0.svch2_no.nword += 10; 
+
+							if (f18->cf2[0]>>11 == 2) // est' Form2
+							{
+								printf("est' form12\n");
+								for(i=0;i<5;i++) outpack0.svch2_no.form2[i]=f18->cf2[i];
+								if (outpack0.svch2_no.nword==10) 
+									outpack0.svch2_no.nword += 5; 
+
+								if (f18->cf3[0]>>11 == 3) // est' Form3 (kopiruem vse Form3)
+								{
+									printf("est' form123 %d \n",outpack0.svch2.nword); 
+									for(i=0;i<f18->fsn - 15;i++) 
+										outpack0.svch2.word[outpack0.svch2.nword+i]=f18->cf3[i];
+									outpack0.svch2_no.nword += f18->fsn-15; //
+								}	
+							}
+							else
+							if (f18->cf2[0]>>11 == 3) // est' Form3 bez Form2
+							{
+								printf("est' form3 bez form2 %d \n",outpack0.svch2.nword);
+								if (outpack0.svch2_no.form2[0]>>11 == 2) // bil Form2
+								{
+									f18a = (struct form18a *)fs;
+
+									for(i=0;i<f18->fsn - 10;i++) 
+										outpack0.svch2.word[outpack0.svch2.nword+i]=f18a->cf3[i];
+									outpack0.svch2_no.nword += f18->fsn-10; //							
+								}
+							}
 						}
-						else 
-						{
-							if (outpack0.svch2_no.nword==0)  //первая строка
-								outpack0.svch2_no.nword = fsn; //
-							else outpack0.svch2_no.nword += fsn-20; 
-							memcpy( &outpack0.svch2_no.form3[mode.no_num*11],(char *)fs+sizeof(struct sac) + 22 , 22); //form6 //44   
-			            }
-					
-						for(i=0;i<10;i++) outpack0.svch2_no.form1[i]=mode.cf1_svch2[i];
-					
-						if (fs->kvi==5) for(i=0;i<5;i++)  outpack0.svch2_no.form2[i]=mode.cf2_svch2[i];break;
-	
-			            for (i=0;i<11;i++) printf(" %04x ",outpack0.svch2_no.form3[mode.no_num*11+i]);printf("\n");
-						mode.no_num++;
-						printf("no_num=%d nword=%d tki kvi=5 recieve\n",mode.no_num,outpack0.svch2_rli.nword);					
+						printf("nword=%d no kvi=5 recieve\n",outpack0.svch2_no.nword);					
+												
 						break;					
 /*					case 6 :
 						if ((fs->r0==1)&&(fs->r1==0)&&(fs->r2==0)&&(fs->r3==0)) //pervoe reg soobwenie
@@ -362,56 +405,58 @@ int HandlerInPack2( struct packet12 *pack, int size )
 							if (outpack0.svch2_no.nword==0)  //первая строка
 								outpack0.svch2_rli.nword = fsn; //
 							else outpack0.svch2_rli.nword += fsn-30; 
-							memcpy( &outpack0.svch2_no.form3[mode.no_num*11],(char *)fs+sizeof(struct sac) + 32 , 22); //form6 //44	
+							memcpy( &outpack0.svch2_no.form3[mode.no_num2*11],(char *)fs+sizeof(struct sac) + 32 , 22); //form6 //44	
 						}
 						else 
 						{
 							if (outpack0.svch2_no.nword==0)  //первая строка
 								outpack0.svch2_rli.nword = fsn; //
 							else outpack0.svch2_rli.nword += fsn-20; 
-							memcpy( &outpack0.svch2_no.form3[mode.no_num*11],(char *)fs+sizeof(struct sac) + 22 , 22); //form6 //44   
+							memcpy( &outpack0.svch2_no.form3[mode.no_num2*11],(char *)fs+sizeof(struct sac) + 22 , 22); //form6 //44   
 			            }
 					
 						for(i=0;i<10;i++) outpack0.svch2_rli.form1[i]=mode.cf1_svch2[i];
 					
-			            for (i=0;i<11;i++) printf(" %04x ",outpack0.svch2_no.form3[mode.no_num*11+i]);printf("\n");
-						mode.no_num++;
-						printf("no_num=%d nword=%d tki recieve\n",mode.no_num,outpack0.svch2_rli.nword);					
+			            //for (i=0;i<11;i++) printf(" %04x ",outpack0.svch2_no.form3[mode.no_num2*11+i]);printf("\n");
+						mode.no_num2++;
+						printf("no_num=%d nword=%d tki recieve\n",mode.no_num2,outpack0.svch2_rli.nword);					
 						break;
 */
 					case 7 : case 8 :
-							if (outpack0.svch2_reo.nword==0)  //первая строка
-								outpack0.svch2_reo.nword = fsn; //
-							else outpack0.svch2_reo.nword += fsn-20; 
-							memcpy( &outpack0.svch2_reo.form4[0],(char *)fs+sizeof(struct sac) + 22 , 72); //form6 //44   
-//							memcpy( &outpack0.svch2_reo.form4[mode.no_num*12],(char *)fs+sizeof(struct sac) + 22 , 24); //form6 //44   
 
-					
-						for(i=0;i<10;i++) outpack0.svch2_reo.form1[i]=mode.cf1_svch2[i];
-					
-			            for (i=0;i<12;i++) printf(" %04x ",outpack0.svch1_reo.form4[mode.no_num*12+i]);printf("\n");
-						mode.no_num++;
-						printf("no_num=%d nword=%d tki kvi=7,8 recieve\n",mode.no_num,outpack0.svch2_rli.nword);					
+			            freo = (struct form_reo *)fs;
+						printf(" fsn_reo= %x \n ",freo->fsn);
+
+						for(i=0;i<10;i++) outpack0.svch2_reo.form1[i]=freo->cf1[i];
+						if (outpack0.svch2_no.nword==0) 
+							outpack0.svch2_no.nword += 10; 
+
+						for(i=0;i<freo->fsn - 10;i++) 
+							outpack0.svch2.word[outpack0.svch2.nword+i]=freo->cf2[i];
+						outpack0.svch2_no.nword += freo->fsn-10; //
+						printf("nword=%d reo kvi=7 recieve\n",outpack0.svch2_no.nword);					
+
+						mode.no_num2++;
+						printf("no_num=%d nword=%d tki kvi=7,8 recieve\n",mode.no_num2,outpack0.svch2_rli.nword);					
 						break;
 				}
         }
-
         if( fs->nf == 27 ) {
             outpack0.link = KRK_LINK_OK;
 
             //if(( stat.link )||(stat.rli)) {
 			if( stat.link ) {
                ResetBuffers2();
-               //!!HandlerCmdKasrt27();
+               HandlerCmdKasrt27();
                SendOutPack2();
                outpack0.cr_com++;
             }
         }
         if( fs->nf == 193 ) {
-            f199 = (struct form199 *)b;
+            /*f199 = (struct form199 *)b;
             memset( f199, 0, sizeof(struct form199) );
             memcpy( f199, fs, sizeof(struct form193) );
-            /*f199->s.ps = 1;
+            f199->s.ps = 1;
             f199->s.vr = 0;
             f199->s.kvi = 2;
             f199->s.nf = 199;
@@ -440,17 +485,25 @@ int HandlerInPack2( struct packet12 *pack, int size )
         }
         if( fs->nf == 199 ) {
             f199 = (struct form199 *)fs;
+
             /*switch(f199->kfs) {
             case 34: case 39: outpack0.link = KRK_MODE_REO;  break;
             default: outpack0.link = KRK_CMD_OK; break;
             }*/
 			
-//			for(i=0;i<10;i++) mode.cf1[i]=f199->cf1[i];
-//			for(i=0;i<5;i++)  mode.cf2[i]=f199->cf2[i];
+			for(i=0;i<10;i++) printf(" %x ",f199->cf1[i]);printf(" *199.1\n");
+			for(i=0;i<5;i++)  printf(" %x ",f199->cf2[i]);printf(" *199.2\n");
+
+//            memcpy( mode,cf1_svch2[0] , f199 +24, 20 );
+  //          memcpy( mode,cf2_svch2[0] , f199 +44, 10 );
+
+			for(i=0;i<10;i++) mode.cf1_svch2[i]=f199->cf1[i];
+			for(i=0;i<5;i++)  mode.cf2_svch2[i]=f199->cf2[i];
+			mode.no_num2=0;
 			
             if( stat.link ) {
 				//ResetBuffers2(); 
-				//HandlerCmdKasrt27(); SendOutPack2();
+				//HandlerCmdKasrt17(); SendOutPack1();
 				outpack2.nload = outpack2.nsave = outpack2.blk = 0;
 				outpack0.cr_com++;
 				mode.scan2=1;	//вкюлчение запросов ТКИ
@@ -459,13 +512,14 @@ int HandlerInPack2( struct packet12 *pack, int size )
                 outpack0.link = KRK_CMD_OK;
             }
             if( stat.rli ) {
-                //ResetBuffers2();
+                ResetBuffers2();
 				outpack2.nload = outpack2.nsave = outpack2.blk = 0;
 				outpack0.cr_com++;				
 				mode.rli2=1; //вкюлчение запросов РЛИ
 				stat.rli=0;
 				printf("mode.rli2=1\n");
 				outpack0.link = KRK_MODE_REO;
+				paket_rli=0;
             }
 
          }
@@ -499,8 +553,8 @@ int HandlerInPack2( struct packet12 *pack, int size )
             f199->t1 = 0x00;
             f199->t2 = 0x1d;
             f199->kfs = 34;
-            SendSVC2( f199, sizeof(struct form199) );
-            count.out2++; */
+            SendSVC1( f199, sizeof(struct form199) );
+            count.out2++;*/
          }
          break;
       }
@@ -526,6 +580,7 @@ int SendSVC2( const void *buf, unsigned len )
    }
 
 //---------- Step-1 ----------
+
 	kzo13_2();
 
    i = outpack2.nsave;
@@ -547,7 +602,7 @@ int SendSVC2( const void *buf, unsigned len )
 	kzo7_2();
 //---------- Step 2 ----------
 
-	kzo13_2();
+	kzo13_2();	
 
    i = outpack2.nsave;
    h12 = (struct header12 *)outpack2.buf[i].data;
@@ -587,7 +642,8 @@ int SendSVC2( const void *buf, unsigned len )
 
 	kzo7_2();
 
-	BLKT(2);BLKT(2);
+	BLKT(1);	BLKT(1);
+
 //---------- Step 3 ----------
 
 	kzo13_2();
@@ -626,7 +682,7 @@ int SendSVC2( const void *buf, unsigned len )
    outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
    outpack2.nsave++;
 
-	kzo7_2();
+	kzo7_2();	
 
    SendOutPack2();
 
@@ -635,7 +691,7 @@ int SendSVC2( const void *buf, unsigned len )
 
 int SendOutPack2( void )
 {
-   int i;
+   int i,i1;
    int j;
    struct header12 *h12; //!
 
@@ -655,6 +711,7 @@ int SendOutPack2( void )
 			//SetHeader12( h12 );
 	        printf( "SendOutPack2: size=%d cmd=%08x kvi=%d kzo=%d.\n", 
             outpack2.buf[i].size, outpack2.buf[i].cmd, h12->kvi, h12->kzo );
+			//for(i1=0;i1<7;i1++) printf("%x ",outpack2.buf[i].data[i1+j]);
       }
       if( outpack2.buf[i].cmd & BUF3KIT_CMD_BLK0 ) {
          outpack2.blk |= BUF3KIT_BLK0;

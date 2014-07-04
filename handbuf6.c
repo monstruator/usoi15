@@ -278,7 +278,7 @@ int HandlerInPack6( const void *buf, unsigned len )
          f199 = (struct form199 *)b;
          memset( f199, 0, sizeof(struct form199) );
          memcpy( f199, s, sizeof(struct form193) );
-         /*f199->s.ps = 1;
+         f199->s.ps = 1;
          f199->s.vr = 0;
          f199->s.kvi = 2;
          f199->s.nf = 199;
@@ -300,11 +300,11 @@ int HandlerInPack6( const void *buf, unsigned len )
          f199->s.p4 = s->a4;
          f199->s.p5 = s->a5;
          WriteC2( f199, sizeof(struct form199) );
-         count.out6++;*/
+         count.out6++;
       }
       if( s->nf == 199 ) {
          f199 = (struct form199 *)s;
-         /*switch(f199->kfs) {
+         switch(f199->kfs) {
          case 34:
          case 39:
             outpack0.link = KRK_MODE_REO;
@@ -316,11 +316,11 @@ int HandlerInPack6( const void *buf, unsigned len )
          if( stat.link ) {
             ResetBuffers();
             outpack0.cr_com++;
-         }*/
+         }
       }
       if( s->nf == 203 ) {
          f199 = (struct form199 *)b;
-         /*memset( f199, 0, sizeof(struct form199) );
+         memset( f199, 0, sizeof(struct form199) );
          f199->s.ps = 1;
          f199->s.vr = 0;
          f199->s.kvi = 2;
@@ -346,7 +346,7 @@ int HandlerInPack6( const void *buf, unsigned len )
          f199->t2 = 0x1d;
          f199->kfs = 34;
          WriteC2( f199, sizeof(struct form199) );
-         count.out6++;*/
+         count.out6++;
       }
       break;
    case 0xf0:
@@ -391,8 +391,9 @@ int ReadStC2( void )
 
 int WriteC2( const void *buf, unsigned len )
 {
-   int i,i1,col=4;
-
+    int i,i1,col=4;
+	struct packet56 *p56;
+	 
 	if( verbose > 0 ) printf( "WriteC2: %d bytes.\n", len );
 	//if( !mode.mo1a && mode.mn1 ) col=4;
 	for(i1=0;i1<col;i1++)
@@ -403,7 +404,7 @@ int WriteC2( const void *buf, unsigned len )
 		outpack6.nsave++;
 	}
    
-	//for(i1=0;i1<2;i1++)
+	for(i1=0;i1<2;i1++)
 	{
 		i = outpack6.nsave;
 		outpack6.buf[i].data[0] = 0xc0;
@@ -440,13 +441,35 @@ int WriteC2( const void *buf, unsigned len )
 		outpack6.buf[i].size = 0;
 		outpack6.buf[i].cmd = BUF3KIT_CMD_BLKT;
 		outpack6.nsave++;
+		
+		i = outpack6.nsave;
+		outpack6.buf[i].data[0] = 0x40;
+		outpack6.buf[i].size = 1;
+		outpack6.buf[i].cmd = BUF3KIT_CMD_BLK6;
+		outpack6.nsave++;
 	}
 	
-	i = outpack6.nsave;
-	outpack6.buf[i].data[0] = 0x40;
-	outpack6.buf[i].size = 1;
-	outpack6.buf[i].cmd = BUF3KIT_CMD_BLK6;
-	outpack6.nsave++;
+	  i = outpack6.nsave;
+      outpack6.buf[i].size = 0;
+      outpack6.buf[i].cmd = BUF3KIT_CMD_BLKT;
+      outpack6.nsave++;
+
+	  i = outpack6.nsave;
+      p56 = (struct packet56 *)outpack6.buf[i].data;
+      p56->head.code = 0xc0;
+      p56->data[0] = r999cfg.sp;
+      outpack6.buf[i].size = sizeof(struct header56) + 1;
+      outpack6.buf[i].cmd = BUF3KIT_CMD_BLK6;
+      outpack6.nsave++;
+
+      i = outpack6.nsave;
+      p56 = (struct packet56 *)outpack6.buf[i].data;
+      p56->head.code = 0xb0;
+      p56->data[0] = 0x00;
+      p56->data[1] = 0x30;
+      outpack6.buf[i].size = sizeof(struct header56) + 2;
+      outpack6.buf[i].cmd = BUF3KIT_CMD_BLK6;
+      outpack6.nsave++;
 
    SendOutPack6();
    return( 0 );

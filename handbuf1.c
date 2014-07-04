@@ -189,11 +189,16 @@ int HandlerInPack1( struct packet12 *pack, int size )
    struct sac *fs;
    struct sac *f27;
    struct form199 *f199;
+   struct form18 *f18;
+   struct form18a *f18a;
+   struct form_reo *freo;
+
    unsigned fsa;
    unsigned fsp;
    unsigned fsr;
    unsigned fsv;
    unsigned fsn;
+   short *form_num;
    int i;
    char b[sizeof(struct form199)];
 
@@ -314,6 +319,8 @@ int HandlerInPack1( struct packet12 *pack, int size )
 					outpack0.svch1_rli.nword += fsn-6; //добавляем только строки (подыгрыш) //было 21
 					//outpack0.svch1.nword += fsn; //добавляем только строки (реальное РЛИ)
 				}
+				printf("до %d пакет рли1. fsn=%d\n",outpack0.svch1_rli.num,fsn);
+
 	            memcpy( &outpack0.svch1_rli.form6[outpack0.svch1_rli.num*203],(char *)fs+sizeof(struct sac) + 14 , 406); //form6 //44
 	            memcpy( &outpack0.svch1_rli.form5, (char *)fs+sizeof(struct sac) + 2 , 12); //form5
 
@@ -327,35 +334,67 @@ int HandlerInPack1( struct packet12 *pack, int size )
 //	            for (i=0;i<203;i++) printf(" %04x ",*pack->wf+i);printf("\n");
 
 				printf("nword=%d\n",outpack0.svch1_rli.nword);					
-				printf("%d пакет. fsn=%d\n",outpack0.svch1_rli.num,fsn);
+				printf("%d пакет рли1. fsn=%d\n",outpack0.svch1_rli.num,fsn);
 				outpack0.svch1_rli.num++;
 			}
 			else if (mode.scan1)
 				switch (fs->kvi)
 				{
 					case 5 : 
-						if ((fs->r0==1)&&(fs->r1==0)&&(fs->r2==0)&&(fs->r3==0)) //pervoe reg soobwenie
+							//printf(" outpack0.link = %d", outpack0.link);
+
+				       if( stat.link ) {
+				    		//outpack0.link = KRK_CMD_OK;
+							//stat.link=0;
+           				}
+
+						printf("nword=%d tki kvi=5 recieve\n",outpack0.svch1_no.nword);					
+			            //for (i=6;i<32;i++) printf(" %04x ",*(pack->wf+i));printf("\n");
+
+			            f18 = (struct form18 *)fs;
+						printf(" fsn= %x \n ",f18->fsn);
+						//printf(" form_num= %x \n ",f18->cf1[0]>>11);
+						//printf(" form_num= %x \n ",f18->cf2[0]>>11);
+						//printf(" form_num= %x \n ",f18->cf3[0]);
+
+						if (f18->cf1[0]>>11 == 1) //est' Form1
 						{
-							if (outpack0.svch1_no.nword==0)  //первая строка
-								outpack0.svch1_no.nword = fsn; //
-							else outpack0.svch1_no.nword += fsn-30; 
-							memcpy( &outpack0.svch1_no.form3[mode.no_num*11],(char *)fs+sizeof(struct sac) + 32 , 22); //form6 //44	
+							printf("est' form1\n");
+							for(i=0;i<10;i++) outpack0.svch1_no.form1[i]=f18->cf1[i];
+							if (outpack0.svch1_no.nword==0) 
+								outpack0.svch1_no.nword += 10; 
+
+							if (f18->cf2[0]>>11 == 2) // est' Form2
+							{
+								printf("est' form12\n");
+								for(i=0;i<5;i++) outpack0.svch1_no.form2[i]=f18->cf2[i];
+								if (outpack0.svch1_no.nword==10) 
+									outpack0.svch1_no.nword += 5; 
+
+								if (f18->cf3[0]>>11 == 3) // est' Form3 (kopiruem vse Form3)
+								{
+									printf("est' form123 %d \n",outpack0.svch1.nword); 
+									for(i=0;i<f18->fsn - 15;i++) 
+										outpack0.svch1.word[outpack0.svch1.nword+i]=f18->cf3[i];
+									outpack0.svch1_no.nword += f18->fsn-15; //
+								}	
+							}
+							else
+							if (f18->cf2[0]>>11 == 3) // est' Form3 bez Form2
+							{
+								printf("est' form3 bez form2 %d \n",outpack0.svch1.nword);
+								if (outpack0.svch1_no.form2[0]>>11 == 2) // bil Form2
+								{
+									f18a = (struct form18a *)fs;
+
+									for(i=0;i<f18->fsn - 10;i++) 
+										outpack0.svch1.word[outpack0.svch1.nword+i]=f18a->cf3[i];
+									outpack0.svch1_no.nword += f18->fsn-10; //							
+								}
+							}
 						}
-						else 
-						{
-							if (outpack0.svch1_no.nword==0)  //первая строка
-								outpack0.svch1_no.nword = fsn; //
-							else outpack0.svch1_no.nword += fsn-20; 
-							memcpy( &outpack0.svch1_no.form3[mode.no_num*11],(char *)fs+sizeof(struct sac) + 22 , 22); //form6 //44   
-			            }
-					
-						for(i=0;i<10;i++) outpack0.svch1_no.form1[i]=mode.cf1_svch1[i];
-					
-						if (fs->kvi==5) for(i=0;i<5;i++)  outpack0.svch1_no.form2[i]=mode.cf2_svch1[i];break;
-	
-			            for (i=0;i<11;i++) printf(" %04x ",outpack0.svch1_no.form3[mode.no_num*11+i]);printf("\n");
-						mode.no_num++;
-						printf("no_num=%d nword=%d tki kvi=5 recieve\n",mode.no_num,outpack0.svch1_rli.nword);					
+						printf("nword=%d no kvi=5 recieve\n",outpack0.svch1_no.nword);					
+												
 						break;					
 /*					case 6 :
 						if ((fs->r0==1)&&(fs->r1==0)&&(fs->r2==0)&&(fs->r3==0)) //pervoe reg soobwenie
@@ -363,36 +402,39 @@ int HandlerInPack1( struct packet12 *pack, int size )
 							if (outpack0.svch1_no.nword==0)  //первая строка
 								outpack0.svch1_rli.nword = fsn; //
 							else outpack0.svch1_rli.nword += fsn-30; 
-							memcpy( &outpack0.svch1_no.form3[mode.no_num*11],(char *)fs+sizeof(struct sac) + 32 , 22); //form6 //44	
+							memcpy( &outpack0.svch1_no.form3[mode.no_num1*11],(char *)fs+sizeof(struct sac) + 32 , 22); //form6 //44	
 						}
 						else 
 						{
 							if (outpack0.svch1_no.nword==0)  //первая строка
 								outpack0.svch1_rli.nword = fsn; //
 							else outpack0.svch1_rli.nword += fsn-20; 
-							memcpy( &outpack0.svch1_no.form3[mode.no_num*11],(char *)fs+sizeof(struct sac) + 22 , 22); //form6 //44   
+							memcpy( &outpack0.svch1_no.form3[mode.no_num1*11],(char *)fs+sizeof(struct sac) + 22 , 22); //form6 //44   
 			            }
 					
 						for(i=0;i<10;i++) outpack0.svch1_rli.form1[i]=mode.cf1_svch1[i];
 					
-			            for (i=0;i<11;i++) printf(" %04x ",outpack0.svch1_no.form3[mode.no_num*11+i]);printf("\n");
-						mode.no_num++;
-						printf("no_num=%d nword=%d tki recieve\n",mode.no_num,outpack0.svch1_rli.nword);					
+			            for (i=0;i<11;i++) printf(" %04x ",outpack0.svch1_no.form3[mode.no_num1*11+i]);printf("\n");
+						mode.no_num1++;
+						printf("no_num=%d nword=%d tki recieve\n",mode.no_num1,outpack0.svch1_rli.nword);					
 						break;
 */
 					case 7 : case 8 :
-							if (outpack0.svch1_reo.nword==0)  //первая строка
-								outpack0.svch1_reo.nword = fsn; //
-							else outpack0.svch1_reo.nword += fsn-20; 
-							memcpy( &outpack0.svch1_reo.form4[0],(char *)fs+sizeof(struct sac) + 22 , 72); //form6 //44   
-//							memcpy( &outpack0.svch1_reo.form4[mode.no_num*12],(char *)fs+sizeof(struct sac) + 22 , 24); //form6 //44   
 
-					
-						for(i=0;i<10;i++) outpack0.svch1_reo.form1[i]=mode.cf1_svch1[i];
-					
-			            for (i=0;i<12;i++) printf(" %04x ",outpack0.svch1_reo.form4[mode.no_num*12+i]);printf("\n");
-						mode.no_num++;
-						printf("no_num=%d nword=%d tki kvi=7,8 recieve\n",mode.no_num,outpack0.svch1_rli.nword);					
+			            freo = (struct form_reo *)fs;
+						printf(" fsn_reo= %x \n ",freo->fsn);
+
+						for(i=0;i<10;i++) outpack0.svch1_reo.form1[i]=freo->cf1[i];
+						if (outpack0.svch1_no.nword==0) 
+							outpack0.svch1_no.nword += 10; 
+
+						for(i=0;i<freo->fsn - 10;i++) 
+							outpack0.svch1.word[outpack0.svch1.nword+i]=freo->cf2[i];
+						outpack0.svch1_no.nword += freo->fsn-10; //
+						printf("nword=%d reo kvi=7 recieve\n",outpack0.svch1_no.nword);					
+
+						mode.no_num1++;
+						printf("no_num=%d nword=%d tki kvi=7,8 recieve\n",mode.no_num1,outpack0.svch1_rli.nword);					
 						break;
 				}
         }
@@ -454,6 +496,7 @@ int HandlerInPack1( struct packet12 *pack, int size )
 
 			for(i=0;i<10;i++) mode.cf1_svch1[i]=f199->cf1[i];
 			for(i=0;i<5;i++)  mode.cf2_svch1[i]=f199->cf2[i];
+			mode.no_num1=0;
 			
             if( stat.link ) {
 				//ResetBuffers1(); 
@@ -466,7 +509,7 @@ int HandlerInPack1( struct packet12 *pack, int size )
                 outpack0.link = KRK_CMD_OK;
             }
             if( stat.rli ) {
-                //ResetBuffers1();
+                ResetBuffers1();
 				outpack1.nload = outpack1.nsave = outpack1.blk = 0;
 				outpack0.cr_com++;				
 				mode.rli1=1; //вкюлчение запросов РЛИ

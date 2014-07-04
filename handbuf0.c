@@ -67,7 +67,13 @@ void HandlerInPack0( void )
       outpack0.krk = 0;
       outpack0.link = 0;
 	  stat.link=mode.scan1=mode.scan2=0; //отключение сканирование с приходом новой команды	
+	  mode.rli1=mode.rli2=0; //отключение сканирование с приходом новой команды	
+	  mode.n_rli1=mode.n_rli2=0;	
 
+	  memset(&outpack0.svch1,0,sizeof(outpack0.svch1));	
+	  memset(&outpack0.svch2,0,sizeof(outpack0.svch2));	
+
+		
       ResetBuffers();
       ControlLed5( 0 );
 
@@ -903,8 +909,8 @@ int SendOutPack0( void )
 	}
 	if (mode.scan1)
 	{
-	   printf("word=%d no_num=%d \n",outpack0.svch1_no.nword,mode.no_num);
-	   mode.no_num=0;
+	   printf("word=%d no_num=%d \n",outpack0.svch1_no.nword,mode.no_num1);
+//	   outpack0.svch1_no.nword=0;
 	}
 	if (mode.rli2)
 	{
@@ -913,15 +919,15 @@ int SendOutPack0( void )
 	}
 	if (mode.scan2)
 	{
-	   printf("word=%d no_num=%d \n",outpack0.svch2_no.nword,mode.no_num);
-	   mode.no_num=0;
+	   printf("word=%d no_num=%d \n",outpack0.svch2_no.nword,mode.no_num2);
+//	   outpack0.svch2_no.nword=0;
 	}
 
    if (outpack0.svch1.cr!=0)
 	{
 	   printf("sach18.cr=%d nf=%x\n",outpack0.svch1.cr,outpack0.svch1.sach18[0]);
 	   printf("sach18.nword=%d \n",outpack0.svch1.nword);
-	   for(i1=0;i1<outpack0.svch2.nword;i1++) printf("%04x ",outpack0.svch2.word[i1]);printf("\n");
+	   for(i1=0;i1<outpack0.svch1.nword;i1++) printf("%04x ",outpack0.svch1.word[i1]);printf("\n");
 	}
    if( ( outpack0.cr_com != cr_com ) || ( outpack0.krk != krk ) || 
          ( outpack0.link != link ) ) {

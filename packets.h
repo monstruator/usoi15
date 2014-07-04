@@ -76,8 +76,16 @@
 
       unsigned short cf1_svch2[10];  //слова 1-5 чф1
       unsigned short cf2_svch2[5];  //слова 1-5 чф2
-	  unsigned short no_num;  //kol-vo form3 NO
+	  unsigned short no_num1;  //kol-vo form3 NO,REO po 1 svch
+	  unsigned short no_num2;  //kol-vo form3 NO,REO po 2 svch
+		short prm1; //chastota 1 cpp priem
+		short prm2; //chastota 2 cpp
+		short prd1; //chastota 1 cpp pereda4a
+		short prd2; //chastota 2 cpp
 	  
+		short n_rli1; //chastota 2 cpp
+		short n_rli2; //chastota 2 cpp
+
    };
 
 //------------------- Constants ------------------
@@ -250,7 +258,7 @@
             short sach18[6];
             unsigned short nword;
             short form1[10];
-            short form4[1100];
+            short form4[1200];
          } svch1_reo;
          struct {
             unsigned short cr;
@@ -743,6 +751,29 @@
       unsigned short cf1[10];  //слова 1-10 чф1
       unsigned short cf2[5];  //слова 1-5 чф2
    };
+
+   struct form18 {
+      struct sac s;  			//6 short
+	  short fsn; //kol-vo slov v soowenii
+      unsigned short cf1[10];  //слова 1-10 чф1
+      unsigned short cf2[5];  //слова 1-5 чф2
+      unsigned short cf3[1100];  //слова 1-11 чф3
+   };
+
+   struct form18a {
+      struct sac s;  			//6 short
+	  short fsn; //kol-vo slov v soowenii
+      unsigned short cf1[10];  //слова 1-10 чф1
+      unsigned short cf3[1100];  //слова 1-11 чф3
+   };
+
+   struct form_reo {
+      struct sac s;  			//6 short
+	  short fsn; //kol-vo slov v soowenii
+      unsigned short cf1[10];  //слова 1-10 чф1
+      unsigned short cf2[1200];  //слова 1-11 чф3
+   };
+
 
 
    struct fomr1n {

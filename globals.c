@@ -81,6 +81,7 @@ int CheckStatus( void )
          if( verbose > 0 ) {
             printf( "Link Error! %x \n",stat.link );
          }
+
 //         outpack0.kzv = 1;
 //         outpack0.krk = KRK_ERR;
          outpack0.link = KRK_LINK_ERR;

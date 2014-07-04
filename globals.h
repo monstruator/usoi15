@@ -19,6 +19,7 @@
    #define PART0_SIZE 1400
 
    #define TIMEOUT_SEC 0
+//   #define TIMEOUT_USEC 400000
    #define TIMEOUT_USEC 500000
 
    #define FLAG_BUF0 0x0001
