@@ -22,7 +22,7 @@ int HandlerInBuf2( void )
       if( inbuf2step == STEP_NONE ) {
          inbuf2.save = inbuf2.load;
       }
-//	printf("inbuf1step=%d\n",inbuf1step);
+//	printf("inbuf2step=%d\n",inbuf2step);
 
       if( inbuf2step == STEP_MARK ) {
          if( MarkInBuf2() ) {
@@ -31,7 +31,7 @@ int HandlerInBuf2( void )
             inbuf2step = STEP_HEADER;
          }
       }
-//	printf("inbuf1step=%d\n",inbuf1step);
+	//printf("inbuf2step=%d\n",inbuf2step);
 
       if( inbuf2step == STEP_HEADER ) {
          if( HeadInBuf2() ) {
@@ -45,7 +45,7 @@ int HandlerInBuf2( void )
             }
          }
       }
-//	printf("inbuf1step=%d\n",inbuf1step);
+	//printf("inbuf2step=%d\n",inbuf2step);
 
       if( inbuf2step == STEP_DATA ) {
 		switch( DataInBuf2( NULL ) ) {
@@ -54,7 +54,7 @@ int HandlerInBuf2( void )
 					 return 0;
          }
       }
-//	printf("inbuf1step=%d\n",inbuf1step);
+	//printf("inbuf2step=%d\n",inbuf2step);
 
       if( inbuf2step == STEP_HANDLER ) {
          outpack1.blk &= ~BUF3KIT_BLK2;
@@ -75,7 +75,7 @@ int HandlerInBuf2( void )
 		//	printf("SendOutPack\n");
          inbuf2step = STEP_MARK;
       }
-//	printf("inbuf1step=%d\n",inbuf1step);
+	//printf("inbuf2step=%d\n",inbuf2step);
 
    }
 
@@ -192,6 +192,7 @@ int HandlerInPack2( struct packet12 *pack, int size )
    struct form199 *f199;
    struct form18 *f18;
    struct form18a *f18a;
+   struct form18b *f18b;
    struct form_reo *freo;
 
 	static short paket_rli;
@@ -396,6 +397,23 @@ int HandlerInPack2( struct packet12 *pack, int size )
 								}
 							}
 						}
+						else
+							if (f18->cf1[0]>>11 == 3) // est' Form3 bez Form2
+							{
+									f18b = (struct form18b *)fs;
+								
+								printf("est' form3 bez form12 %d \n",outpack0.svch2.nword);
+								if (outpack0.svch2_no.form2[0]>>11 == 2) // bil Form2
+								{
+									f18b = (struct form18b *)fs;
+
+									for(i=0;i<f18->fsn;i++) 
+										outpack0.svch2.word[outpack0.svch2.nword+i]=f18b->cf3[i];
+									outpack0.svch2_no.nword += f18->fsn; //	
+									printf("\nx=%x y=%x\n",f18b->cf3[2],f18b->cf3[3]);
+						
+								}
+							}
 						printf("nword=%d no kvi=5 recieve\n",outpack0.svch2_no.nword);					
 												
 						break;					
@@ -711,7 +729,8 @@ int SendOutPack2( void )
 			//SetHeader12( h12 );
 	        printf( "SendOutPack2: size=%d cmd=%08x kvi=%d kzo=%d.\n", 
             outpack2.buf[i].size, outpack2.buf[i].cmd, h12->kvi, h12->kzo );
-			//for(i1=0;i1<7;i1++) printf("%x ",outpack2.buf[i].data[i1+j]);
+			for(i1=10;i1<90;i1++) printf("%02x ",outpack2.buf[i].data[i1+j]);
+			printf("\n");
       }
       if( outpack2.buf[i].cmd & BUF3KIT_CMD_BLK0 ) {
          outpack2.blk |= BUF3KIT_BLK0;

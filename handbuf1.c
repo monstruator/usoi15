@@ -191,6 +191,8 @@ int HandlerInPack1( struct packet12 *pack, int size )
    struct form199 *f199;
    struct form18 *f18;
    struct form18a *f18a;
+   struct form18b *f18b;
+
    struct form_reo *freo;
 
    unsigned fsa;
@@ -292,6 +294,8 @@ int HandlerInPack1( struct packet12 *pack, int size )
                fs->nf, fs->kvi, fsa, fsp, fsr, fsv, fsn );
             printf( "SVCH1: MODE scan=%d rli=%d addr=%d.\n",
                mode.scan1, mode.rli1, mode.addr1 );
+          for (i=0;i<size;i++) printf(" %04x ",pack->wf[i]);printf("\n");
+
          }
 //         if( ( fsa != mode.addr1 ) || !mode.scan1 ) {
 /*         if( fsa != mode.addr1 ) {
@@ -319,7 +323,7 @@ int HandlerInPack1( struct packet12 *pack, int size )
 					outpack0.svch1_rli.nword += fsn-6; //добавляем только строки (подыгрыш) //было 21
 					//outpack0.svch1.nword += fsn; //добавляем только строки (реальное РЛИ)
 				}
-				printf("до %d пакет рли1. fsn=%d\n",outpack0.svch1_rli.num,fsn);
+				printf(" %d пакет рли1. fsn=%d\n",outpack0.svch1_rli.num,fsn);
 
 	            memcpy( &outpack0.svch1_rli.form6[outpack0.svch1_rli.num*203],(char *)fs+sizeof(struct sac) + 14 , 406); //form6 //44
 	            memcpy( &outpack0.svch1_rli.form5, (char *)fs+sizeof(struct sac) + 2 , 12); //form5
@@ -352,8 +356,8 @@ int HandlerInPack1( struct packet12 *pack, int size )
 			            //for (i=6;i<32;i++) printf(" %04x ",*(pack->wf+i));printf("\n");
 
 			            f18 = (struct form18 *)fs;
-						printf(" fsn= %x \n ",f18->fsn);
-						//printf(" form_num= %x \n ",f18->cf1[0]>>11);
+						printf(" fsn= %d \n ",f18->fsn);
+						printf(" form_num= %x \n ",f18->cf1[0]>>11);
 						//printf(" form_num= %x \n ",f18->cf2[0]>>11);
 						//printf(" form_num= %x \n ",f18->cf3[0]);
 
@@ -376,6 +380,7 @@ int HandlerInPack1( struct packet12 *pack, int size )
 									printf("est' form123 %d \n",outpack0.svch1.nword); 
 									for(i=0;i<f18->fsn - 15;i++) 
 										outpack0.svch1.word[outpack0.svch1.nword+i]=f18->cf3[i];
+									printf("\nx=%x y=%x\n",f18->cf3[2],f18->cf3[3]);
 									outpack0.svch1_no.nword += f18->fsn-15; //
 								}	
 							}
@@ -389,10 +394,30 @@ int HandlerInPack1( struct packet12 *pack, int size )
 
 									for(i=0;i<f18->fsn - 10;i++) 
 										outpack0.svch1.word[outpack0.svch1.nword+i]=f18a->cf3[i];
-									outpack0.svch1_no.nword += f18->fsn-10; //							
+									outpack0.svch1_no.nword += f18->fsn-10; //	
+									printf("\nx=%x y=%x\n",f18a->cf3[2],f18a->cf3[3]);
+						
 								}
 							}
 						}
+						else
+							if (f18->cf1[0]>>11 == 3) // est' Form3 bez Form2
+							{
+									f18b = (struct form18b *)fs;
+								
+								printf("est' form3 bez form12 %d \n",outpack0.svch1.nword);
+								if (outpack0.svch1_no.form2[0]>>11 == 2) // bil Form2
+								{
+									f18b = (struct form18b *)fs;
+
+									for(i=0;i<f18->fsn;i++) 
+										outpack0.svch1.word[outpack0.svch1.nword+i]=f18b->cf3[i];
+									outpack0.svch1_no.nword += f18->fsn; //	
+									printf("\nx=%x y=%x\n",f18b->cf3[2],f18b->cf3[3]);
+						
+								}
+							}
+ 
 						printf("nword=%d no kvi=5 recieve\n",outpack0.svch1_no.nword);					
 												
 						break;					
@@ -425,6 +450,8 @@ int HandlerInPack1( struct packet12 *pack, int size )
 						printf(" fsn_reo= %x \n ",freo->fsn);
 
 						for(i=0;i<10;i++) outpack0.svch1_reo.form1[i]=freo->cf1[i];
+						for(i=0;i<10;i++) printf(" %x ",outpack0.svch1_reo.form1[i]);printf("\n");
+						
 						if (outpack0.svch1_no.nword==0) 
 							outpack0.svch1_no.nword += 10; 
 
@@ -707,7 +734,8 @@ int SendOutPack1( void )
 			//SetHeader12( h12 );
 	        printf( "SendOutPack1: size=%d cmd=%08x kvi=%d kzo=%d.\n", 
             outpack1.buf[i].size, outpack1.buf[i].cmd, h12->kvi, h12->kzo );
-			//for(i1=0;i1<7;i1++) printf("%x ",outpack1.buf[i].data[i1+j]);
+			for(i1=10;i1<90;i1++) printf("%02x ",outpack1.buf[i].data[i1+j]);
+			printf("\n");
       }
       if( outpack1.buf[i].cmd & BUF3KIT_CMD_BLK0 ) {
          outpack1.blk |= BUF3KIT_BLK0;

@@ -661,8 +661,8 @@
 
    struct form193 {
       struct sac s;
-      unsigned short t1: 8;
-      unsigned short t2: 8;
+      unsigned short t1: 8; // 0x00
+      unsigned short t2: 8; // 0x1d
       unsigned short pn: 8;
       unsigned short kfs: 8;
       unsigned short v1_0: 4;
@@ -741,6 +741,13 @@
       unsigned short cf1[10];  //слова 1-10 чф1
       unsigned short cf3[1100];  //слова 1-11 чф3
    };
+
+   struct form18b {
+      struct sac s;  			//6 short
+	  short fsn; //kol-vo slov v soowenii
+      unsigned short cf3[1100];  //слова 1-10 чф3
+   };
+
 
    struct form_reo {
       struct sac s;  			//6 short
