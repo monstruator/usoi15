@@ -166,7 +166,7 @@ int HandlerInPack4( struct packet34 *pack, int size )
    struct sostrts *sr;
    struct errusoi *ko;
 
-   if( verbose > 0 ) {
+   if( verbose > 1 ) {
       printf( "HandlerInPack4: size=%d pream=%04x code=%02x", 
          size, pack->head.pream, pack->head.code );
       for( i = 0; i < size - sizeof(struct header34); i++ ) {

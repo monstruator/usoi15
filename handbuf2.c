@@ -205,7 +205,7 @@ int HandlerInPack2( struct packet12 *pack, int size )
    int i;
    char b[sizeof(struct form199)];
 
-   if( verbose > 0 ) {
+   if( verbose > 1 ) {
       printf( "HandlerInPack2: size=%d kzo=%d kss=%d kvi=%d ps=%d\n",
          size, pack->head.kzo, pack->head.kss, pack->head.kvi, pack->head.ps );
       printf( "HandlerInPack2: wf= %04x %04x %04x %04x %04x %04x %04x\n",
@@ -268,12 +268,15 @@ int HandlerInPack2( struct packet12 *pack, int size )
             outpack0.kzv = 1;
             ko->cpp1 = 1;
          }
+		if (verbose >1 )	
+		{
 			printf("prd=%d prm=%d 9pr=%d s1tr=%d s1m=%d s1rp=%d s1vr=%d \n",
-	         sk->s2prd,sk->s2prm,sk->s9pream,sk->s1fk,sk->s1fm,sk->s1prm,sk->s1rab);
-		printf("s6upr=%d sk->s6inf=%d sk->s6prd=%d \n",
-         sk->s6upr, 
-         sk->s6inf,  
-         sk->s6prd);
+	        	 sk->s2prd,sk->s2prm,sk->s9pream,sk->s1fk,sk->s1fm,sk->s1prm,sk->s1rab);
+			printf("s6upr=%d sk->s6inf=%d sk->s6prd=%d \n",
+         		sk->s6upr, 
+         		sk->s6inf,  
+         		sk->s6prd);
+		}
 			if ((mode.rli2) || (mode.scan2))
 			{
 				kzo7_2();	
