@@ -12,7 +12,6 @@
    #include "handbuf5.h"
    #include "handbuf6.h"
    #include "handtout.h"
-   #include "handcmd32.h"
    #include "handcmd3a.h"
    #include "led.h"
 

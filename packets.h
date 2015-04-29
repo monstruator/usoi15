@@ -45,6 +45,10 @@
       unsigned int mn1: 1;
       unsigned int scan1: 1;
       unsigned int scan2: 1;
+
+      unsigned int scan_p1: 1; //passive
+      unsigned int scan_p2: 1; //passive
+
 	  unsigned int rli1: 1;
       unsigned int rli2: 1;
       unsigned int recv3: 1;
@@ -83,8 +87,12 @@
 		short prd1; //chastota 1 cpp pereda4a
 		short prd2; //chastota 2 cpp
 	  
-		short n_rli1; //chastota 2 cpp
-		short n_rli2; //chastota 2 cpp
+		short n_rli1; //kol-vo oprsov po rli1
+		short n_rli2; //
+
+		short n_scan1; //
+		short n_scan2; //
+
 
    };
 
@@ -650,39 +658,6 @@
       unsigned short v3: 4;
    };
  
- struct sac_dmv {
-      unsigned short ps: 1;
-      unsigned short vr: 1;
-      unsigned short rez1: 1;
-      unsigned short kvi: 4;
-      unsigned short rez2: 1;
-      unsigned short nf: 8;
-
-      unsigned short a0: 4;
-      unsigned short v1: 4;
-      unsigned short a2: 4;
-      unsigned short v3: 4;
-
-      unsigned short p4: 4;
-      unsigned short a5: 4;
-      unsigned short p0: 4;
-      unsigned short r1: 4;
-
-      unsigned short v2: 4;
-      unsigned short r3: 4;
-      unsigned short a4: 4;
-      unsigned short p5: 4;
-
-      unsigned short r0: 4;
-      unsigned short p1: 4;
-      unsigned short r2: 4;
-      unsigned short p3: 4;
-
-      unsigned short v0: 4;
-      unsigned short a1: 4;
-      unsigned short p2: 4;
-      unsigned short a3: 4;
-   };
 
    struct form193 {
       struct sac s;
@@ -712,7 +687,7 @@
       unsigned short r20: 16;
    };
 
-/*   struct form199 {
+   struct form199_dmv {
       struct sac s;  			//6 short
       unsigned short t1: 8;
       unsigned short t2: 8;
@@ -744,7 +719,7 @@
       unsigned short r20: 16;
       unsigned short f1[8];
    };
-*/
+
    struct form199 {
       struct sac s;  			//6 short
       unsigned short f193[6];  //слова 7-12 ф193

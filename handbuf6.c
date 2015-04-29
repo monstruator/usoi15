@@ -134,13 +134,13 @@ int HandlerInPack6( const void *buf, unsigned len )
    unsigned n;
    struct sac *s;
    struct sac *f27;
-   struct form199 *f199;
+   struct form199_dmv *f199;
    unsigned sa;
    unsigned sp;
    unsigned sr;
    unsigned sv;
    unsigned sn;
-   char b[sizeof(struct form199)];
+   char b[sizeof(struct form199_dmv)];
 
    if( verbose > 0 ) {
       printf( "HandlerInPack6(%d):", len );
@@ -275,8 +275,8 @@ int HandlerInPack6( const void *buf, unsigned len )
          }
       }
       if( s->nf == 193 ) {
-         f199 = (struct form199 *)b;
-         memset( f199, 0, sizeof(struct form199) );
+         f199 = (struct form199_dmv *)b;
+         memset( f199, 0, sizeof(struct form199_dmv) );
          memcpy( f199, s, sizeof(struct form193) );
          f199->s.ps = 1;
          f199->s.vr = 0;
@@ -299,11 +299,11 @@ int HandlerInPack6( const void *buf, unsigned len )
          f199->s.p3 = s->a3;
          f199->s.p4 = s->a4;
          f199->s.p5 = s->a5;
-         WriteC2( f199, sizeof(struct form199) );
+         WriteC2( f199, sizeof(struct form199_dmv) );
          count.out6++;
       }
       if( s->nf == 199 ) {
-         f199 = (struct form199 *)s;
+         f199 = (struct form199_dmv *)s;
          switch(f199->kfs) {
          case 34:
          case 39:
@@ -319,8 +319,8 @@ int HandlerInPack6( const void *buf, unsigned len )
          }
       }
       if( s->nf == 203 ) {
-         f199 = (struct form199 *)b;
-         memset( f199, 0, sizeof(struct form199) );
+         f199 = (struct form199_dmv *)b;
+         memset( f199, 0, sizeof(struct form199_dmv) );
          f199->s.ps = 1;
          f199->s.vr = 0;
          f199->s.kvi = 2;
@@ -345,7 +345,7 @@ int HandlerInPack6( const void *buf, unsigned len )
          f199->t1 = 0x00;
          f199->t2 = 0x1d;
          f199->kfs = 34;
-         WriteC2( f199, sizeof(struct form199) );
+         WriteC2( f199, sizeof(struct form199_dmv) );
          count.out6++;
       }
       break;

@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <errno.h>
 #include <sys/time.h>
@@ -40,6 +39,10 @@ int HandlerInBuf0( void )
 void HandlerInPack0( void )
 {
    static unsigned short cr_com = 0;
+   struct header12 *h12;
+   struct form11 *f11;
+
+	int i;
 
    if( inpack0.pr_bearing ) {
       mode.kar = GetKAR( &inpack0.p, &inpack0.k );
@@ -66,15 +69,93 @@ void HandlerInPack0( void )
       outpack0.ended_loop = 0;
       outpack0.krk = 0;
       outpack0.link = 0;
+
+      ResetBuffers();
+
+		if ((mode.rli2)||(mode.scan2))
+		{
+			//otklu4enie priema
+			printf("\nPRM2-OFF\n");
+		   i = outpack2.nsave;
+		   h12 = (struct header12 *)outpack2.buf[i].data;
+		   SetHeader12( h12 );
+		   h12->npol = 1;
+		   h12->nspol = 1;  
+		   h12->kss = sizeof(struct form11) / 2;
+		   h12->kvi = 1;
+		   h12->ps = 1;
+		   h12->kzo = 5;
+		   f11 = (struct form11 *)(outpack2.buf[i].data + sizeof(struct header12));
+		   memcpy( (char *)f11, (char *)&form11k2, sizeof(struct form11) );
+		   f11->ku9z0 = 1;
+		   f11->ku9z1 = 1;
+		   f11->ku9z2 = 1;
+		   f11->ku9z3 = 1;
+		   f11->ku9z4 = 1;
+		   f11->ku9z5 = 1;
+		   f11->ku9z6 = 1;
+		   f11->ku9z7 = 1;
+		   f11->ku9z8 = 1;
+		   f11->ku9z9 = 1;
+		   f11->ku1=0;
+		   f11->ku2=0;
+		   f11->ku9z10 = 1;
+		//   f11->ku10 = 1;
+		   memcpy( (char *)&form11k2, (char *)f11, sizeof(struct form11) );
+		   outpack2.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
+		   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
+		   outpack2.nsave++;
+		   SendOutPack2();
+		}
+
+		if ((mode.rli1)||(mode.scan1))
+		{
+			printf("\nPRM1-OFF\n");
+			//otklu4enie priema
+		   i = outpack1.nsave;
+		   h12 = (struct header12 *)outpack1.buf[i].data;
+		   SetHeader12( h12 );
+		   h12->npol = 1;
+		   h12->nspol = 1;  
+		   h12->kss = sizeof(struct form11) / 2;
+		   h12->kvi = 1;
+		   h12->ps = 1;
+		   h12->kzo = 5;
+		   f11 = (struct form11 *)(outpack1.buf[i].data + sizeof(struct header12));
+		   memcpy( (char *)f11, (char *)&form11k1, sizeof(struct form11) );
+		   f11->ku9z0 = 1;
+		   f11->ku9z1 = 1;
+		   f11->ku9z2 = 1;
+		   f11->ku9z3 = 1;
+		   f11->ku9z4 = 1;
+		   f11->ku9z5 = 1;
+		   f11->ku9z6 = 1;
+		   f11->ku9z7 = 1;
+		   f11->ku9z8 = 1;
+		   f11->ku9z9 = 1;
+		   f11->ku1=0;
+		   f11->ku2=0;
+		   f11->ku9z10 = 1;
+		//   f11->ku10 = 1;
+		   memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
+		   outpack1.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
+		   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
+		   outpack1.nsave++;
+		   SendOutPack1();
+		}
+
 	  stat.link=mode.scan1=mode.scan2=0; //отключение сканирование с приходом новой команды	
 	  mode.rli1=mode.rli2=0; //отключение сканирование с приходом новой команды	
 	  mode.n_rli1=mode.n_rli2=0;	
+	  mode.n_scan1=mode.n_scan2=0;	
+	  mode.scan_p1=mode.scan_p2=0;	
+
 
 	  memset(&outpack0.svch1,0,sizeof(outpack0.svch1));	
 	  memset(&outpack0.svch2,0,sizeof(outpack0.svch2));	
 
 		
-      ResetBuffers();
+//      ResetBuffers();
       ControlLed5( 0 );
 
       switch( outpack0.num_com ) {
@@ -84,7 +165,6 @@ void HandlerInPack0( void )
       case 1:
          switch( mode.pr ) {
          case 0:
-            HandlerCmd1pr32( inpack0.a_params[0] );
             break;
          case 1:
             HandlerCmd1mo3a( inpack0.a_params[0] );
@@ -98,7 +178,6 @@ void HandlerInPack0( void )
       case 2:
          switch( mode.pr ) {
          case 0:
-            HandlerCmd2pr32( inpack0.a_params[0] );
             break;
          case 1:
             HandlerCmd2mo3a( inpack0.a_params[0] );
@@ -128,7 +207,6 @@ void HandlerInPack0( void )
       case 5:
          switch( mode.pr ) {
          case 0:
-            HandlerCmd5pr32( inpack0.a_params[0] );
             break;
          case 1:
             HandlerCmd5mo3a( inpack0.a_params[0] );
@@ -153,7 +231,6 @@ void HandlerInPack0( void )
       case 7:
          switch( mode.pr ) {
          case 0:
-            HandlerCmd7pr32( inpack0.a_params[0] );
             break;
          case 1:
             HandlerCmd7mo3a( inpack0.a_params[0] );
@@ -178,8 +255,6 @@ void HandlerInPack0( void )
       case 9:
          switch( mode.pr ) {
          case 0:
-            HandlerCmd9pr32( inpack0.a_params[0], inpack0.a_params[1], 
-               inpack0.a_params[2] );
             break;
          case 1:
             HandlerCmd9mo3a( inpack0.a_params[0], inpack0.a_params[1], 
@@ -194,7 +269,6 @@ void HandlerInPack0( void )
       case 10:
          switch( mode.pr ) {
          case 0:
-            HandlerCmd10pr32( inpack0.a_params[0], inpack0.a_params[1] );
             break;
          case 1:
             HandlerCmd10mo3a( inpack0.a_params[0], inpack0.a_params[1] );
@@ -208,7 +282,6 @@ void HandlerInPack0( void )
       case 11:
          switch( mode.pr ) {
          case 0:
-            HandlerCmd11pr32( inpack0.a_params[0], inpack0.a_params[1] );
             break;
          case 1:
             HandlerCmd11mo3a( inpack0.a_params[0], inpack0.a_params[1] );
@@ -222,7 +295,6 @@ void HandlerInPack0( void )
       case 12:
          switch( mode.pr ) {
          case 0:
-            HandlerCmd12pr32( inpack0.a_params[0] );
             break;
          case 1:
             HandlerCmd12mo3a( inpack0.a_params[0] );
@@ -247,7 +319,6 @@ void HandlerInPack0( void )
       case 14:
          switch( mode.pr ) {
          case 0:
-            HandlerCmd14pr32( inpack0.a_params[0] );
             break;
          case 1:
             HandlerCmd14mo3a( inpack0.a_params[0] );
@@ -277,7 +348,6 @@ void HandlerInPack0( void )
       case 18:
          switch( mode.pr ) {
          case 0:
-            HandlerCmd18pr32( inpack0.a_params[0], inpack0.a_params[1] );
             break;
          case 1:
             HandlerCmd18mo3a( inpack0.a_params[0], inpack0.a_params[1] );
@@ -291,7 +361,6 @@ void HandlerInPack0( void )
       case 19:
          switch( mode.pr ) {
          case 0:
-            HandlerCmd19pr32( inpack0.a_params[0], inpack0.a_params[1] );
             break;
          case 1:
             HandlerCmd19mo3a( inpack0.a_params[0], inpack0.a_params[1] );
@@ -305,7 +374,6 @@ void HandlerInPack0( void )
       case 20:
          switch( mode.pr ) {
          case 0:
-            HandlerCmd20pr32( inpack0.a_params[0] );
             break;
          case 1:
             HandlerCmd20mo3a( inpack0.a_params[0] );
@@ -319,7 +387,6 @@ void HandlerInPack0( void )
       case 21:
          switch( mode.pr ) {
          case 0:
-            HandlerCmd21pr32( inpack0.a_params[0] );
             break;
          case 1:
             HandlerCmd21mo3a( inpack0.a_params[0] );
@@ -347,7 +414,6 @@ void HandlerInPack0( void )
       case 30:
          switch( mode.pr ) {
          case 0:
-            HandlerCmd30pr32( inpack0.a_params[0] );
             break;
          case 1:
             HandlerCmd30mo3a( inpack0.a_params[0] );
@@ -361,7 +427,6 @@ void HandlerInPack0( void )
       case 31:
          switch( mode.pr ) {
          case 0:
-            HandlerCmd31pr32( inpack0.a_params[0] );
             break;
          case 1:
             HandlerCmd31mo3a( inpack0.a_params[0] );
@@ -375,7 +440,6 @@ void HandlerInPack0( void )
       case 32:
          switch( mode.pr ) {
          case 0:
-            HandlerCmd32pr32( inpack0.a_params[0] );
             break;
          case 1:
             HandlerCmd32mo3a( inpack0.a_params[0] );
@@ -389,7 +453,6 @@ void HandlerInPack0( void )
       case 33:
          switch( mode.pr ) {
          case 0:
-            HandlerCmd33pr32( inpack0.a_params[0] );
             break;
          case 1:
             HandlerCmd33mo3a( inpack0.a_params[0] );
@@ -465,7 +528,6 @@ void HandlerInPack0( void )
       case 50:
          switch( mode.pr ) {
          case 0:
-            HandlerCmd50pr32();
             break;
          case 1:
             HandlerCmd50mo3a();
@@ -491,7 +553,6 @@ void HandlerInPack0( void )
       case 60:
          switch( mode.pr ) {
          case 0:
-            HandlerCmd60pr32();
             break;
          case 1:
             HandlerCmd60mo3a();
@@ -505,7 +566,6 @@ void HandlerInPack0( void )
       case 61:
          switch( mode.pr ) {
          case 0:
-            HandlerCmd61pr32();
             break;
          case 1:
             HandlerCmd61mo3a();
@@ -523,7 +583,6 @@ void HandlerInPack0( void )
       case 63:
          switch( mode.pr ) {
          case 0:
-            HandlerCmd63pr32();
             break;
          case 1:
             HandlerCmd63mo3a();
@@ -537,7 +596,6 @@ void HandlerInPack0( void )
       case 64:
          switch( mode.pr ) {
          case 0:
-            HandlerCmd64pr32();
             break;
          case 1:
             HandlerCmd64mo3a();
@@ -551,7 +609,6 @@ void HandlerInPack0( void )
       case 65:
          switch( mode.pr ) {
          case 0:
-            HandlerCmd65pr32( inpack0.a_params[0] );
             break;
          case 1:
             HandlerCmd65mo3a( inpack0.a_params[0] );
@@ -638,7 +695,6 @@ void HandlerInPack0( void )
       case 80:
          switch( mode.pr ) {
          case 0:
-            HandlerCmd80pr32( inpack0.a_params[0] );
             break;
          case 1:
             HandlerCmd80mo3a( inpack0.a_params[0] );
@@ -656,7 +712,6 @@ void HandlerInPack0( void )
       case 82:
          switch( mode.pr ) {
          case 0:
-            HandlerCmd82pr32();
             break;
          case 1:
             HandlerCmd82mo3a();
@@ -670,7 +725,6 @@ void HandlerInPack0( void )
       case 83:
          switch( mode.pr ) {
          case 0:
-            HandlerCmd83pr32();
             break;
          case 1:
             HandlerCmd83mo3a();
@@ -693,7 +747,6 @@ void HandlerInPack0( void )
       case 90:
          switch( mode.pr ) {
          case 0:
-            HandlerCmd90pr32();
             break;
          case 1:
             HandlerCmd90mo3a();
@@ -707,7 +760,6 @@ void HandlerInPack0( void )
       case 91:
          switch( mode.pr ) {
          case 0:
-            HandlerCmd91pr32();
             break;
          case 1:
             HandlerCmd91mo3a();
@@ -721,7 +773,6 @@ void HandlerInPack0( void )
       case 92:
          switch( mode.pr ) {
          case 0:
-            HandlerCmd92pr32( inpack0.a_params[0] );
             break;
          case 1:
             HandlerCmd92mo3a( inpack0.a_params[0] );
@@ -735,8 +786,6 @@ void HandlerInPack0( void )
       case 93:
          switch( mode.pr ) {
          case 0:
-            HandlerCmd93pr32( inpack0.a_params[0], inpack0.a_params[1],
-               inpack0.a_params[2], inpack0.a_params[3], inpack0.a_params[4] );
             break;
          case 1:
             HandlerCmd93mo3a( inpack0.a_params[0], inpack0.a_params[1],
@@ -751,7 +800,6 @@ void HandlerInPack0( void )
       case 94:
          switch( mode.pr ) {
          case 0:
-            HandlerCmd94pr32( inpack0.a_params[0], inpack0.a_params[1] );
             break;
          case 1:
             HandlerCmd94mo3a( inpack0.a_params[0], inpack0.a_params[1] );
@@ -765,7 +813,6 @@ void HandlerInPack0( void )
       case 95:
          switch( mode.pr ) {
          case 0:
-            HandlerCmd95pr32( inpack0.a_params[0], inpack0.a_params[1] );
             break;
          case 1:
             HandlerCmd95mo3a( inpack0.a_params[0], inpack0.a_params[1] );
@@ -779,7 +826,6 @@ void HandlerInPack0( void )
       case 96:
          switch( mode.pr ) {
          case 0:
-            HandlerCmd96pr32( inpack0.a_params[0], inpack0.a_params[1] );
             break;
          case 1:
             HandlerCmd96mo3a( inpack0.a_params[0], inpack0.a_params[1] );

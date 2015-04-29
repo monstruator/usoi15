@@ -1024,17 +1024,17 @@ int HandlerCmd14mo3a( int param )
       f11->ku1 = 0; //PRD-OFF
       f11->ku2 = 0; //PRM-OFF
       f11->ku8 = 0; //FK-O
-      f11->ku9z0 = 0; //ZAPROS-0-NONE
-      f11->ku9z1 = 0; //ZAPROS-1-NONE
-      f11->ku9z2 = 0; //ZAPROS-2-NONE
-      f11->ku9z3 = 0; //ZAPROS-3-NONE
-      f11->ku9z4 = 0; //ZAPROS-4-NONE
-      f11->ku9z5 = 0; //ZAPROS-5-NONE
-      f11->ku9z6 = 0; //ZAPROS-6-NONE
-      f11->ku9z7 = 0; //ZAPROS-7-NONE
-      f11->ku9z8 = 0; //ZAPROS-8-NONE
-      f11->ku9z9 = 0; //ZAPROS-9-NONE
-      f11->ku9z10 = 0; //ZAPROS-10-NONE
+      f11->ku9z0 = 1; //ZAPROS-0-NONE
+      f11->ku9z1 = 1; //ZAPROS-1-NONE
+      f11->ku9z2 = 1; //ZAPROS-2-NONE
+      f11->ku9z3 = 1; //ZAPROS-3-NONE
+      f11->ku9z4 = 1; //ZAPROS-4-NONE
+      f11->ku9z5 = 1; //ZAPROS-5-NONE
+      f11->ku9z6 = 1; //ZAPROS-6-NONE
+      f11->ku9z7 = 1; //ZAPROS-7-NONE
+      f11->ku9z8 = 1; //ZAPROS-8-NONE
+      f11->ku9z9 = 1; //ZAPROS-9-NONE
+      f11->ku9z10 = 1; //ZAPROS-10-NONE
    }
    memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
    outpack1.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
@@ -1056,8 +1056,8 @@ int HandlerCmd14mo3a( int param )
 
 //--------------- Other (Cmd14) ---------------
 
-   if( param )  mode.scan1 = 1;
-   else         mode.scan1 = 0;
+   if( param )  {mode.scan1 = mode.scan_p1=1;}
+   else         {mode.scan1 = mode.scan_p1=0;}
    
 //   stat.cmd |= CMD_READ_KASRT1;
    return( 0 );
@@ -1116,17 +1116,17 @@ ControlLed2( 1 );
       f11->ku1 = 0; //PRD-OFF
       f11->ku2 = 0; //PRM-OFF
       f11->ku8 = 0; //FK-OFF
-      f11->ku9z0 = 0; //ZAPROS-0-NONE
-      f11->ku9z1 = 0; //ZAPROS-1-NONE
-      f11->ku9z2 = 0; //ZAPROS-2-NONE
-      f11->ku9z3 = 0; //ZAPROS-3-NONE
-      f11->ku9z4 = 0; //ZAPROS-4-NONE
-      f11->ku9z5 = 0; //ZAPROS-5-NONE
-      f11->ku9z6 = 0; //ZAPROS-6-NONE
-      f11->ku9z7 = 0; //ZAPROS-7-NONE
-      f11->ku9z8 = 0; //ZAPROS-8-NONE
-      f11->ku9z9 = 0; //ZAPROS-9-NONE
-      f11->ku9z10 = 0; //ZAPROS-10-NONE
+      f11->ku9z0 = 1; //ZAPROS-0-NONE
+      f11->ku9z1 = 1; //ZAPROS-1-NONE
+      f11->ku9z2 = 1; //ZAPROS-2-NONE
+      f11->ku9z3 = 1; //ZAPROS-3-NONE
+      f11->ku9z4 = 1; //ZAPROS-4-NONE
+      f11->ku9z5 = 1; //ZAPROS-5-NONE
+      f11->ku9z6 = 1; //ZAPROS-6-NONE
+      f11->ku9z7 = 1; //ZAPROS-7-NONE
+      f11->ku9z8 = 1; //ZAPROS-8-NONE
+      f11->ku9z9 = 1; //ZAPROS-9-NONE
+      f11->ku9z10 = 1; //ZAPROS-10-NONE
    }
    memcpy( (char *)&form11k2, (char *)f11, sizeof(struct form11) );
    outpack2.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
@@ -1147,8 +1147,8 @@ ControlLed2( 1 );
 
    //--------------- Other ---------------
 
-   if( param )   mode.scan2 = 1;
-   else          mode.scan2 = 0;
+   if( param )  {mode.scan2 = mode.scan_p2=1;}
+   else         {mode.scan2 = mode.scan_p2=0;}
    
 //   stat.cmd |= CMD_READ_KASRT2;
    return( 0 );
@@ -3480,6 +3480,8 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
       f11->ku9z8 = 1; //ZAPROS-8
       f11->ku9z9 = 1; //ZAPROS-9
       f11->ku9z10 = 1; //ZAPROS-10
+      f11->ku2 = 1; //perevod bloka v priem
+	
       memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
       outpack1.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
@@ -3505,7 +3507,7 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
       memcpy( (char *)f11, (char *)&form11k1, sizeof(struct form11) );
       f11->ku0 = 0; //RAB
       f11->ku1 = 1; //PRD-ON
-      f11->ku2 = 0; //PRM-OFF
+  //    f11->ku2 = 0; //PRM-OFF
       f11->ku3 = 0; //TKI
       f11->ku4 = 1; //FM1
 //      f11->ku5 = 1; //PRD-M1
@@ -3708,6 +3710,8 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
       f11->ku9z8 = 1; //ZAPROS-8
       f11->ku9z9 = 1; //ZAPROS-9
       f11->ku9z10 = 1; //ZAPROS-10
+      f11->ku2 = 1; //perevod bloka v priem
+
       memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
       outpack2.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
@@ -3733,7 +3737,7 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
       memcpy( (char *)f11, (char *)&form11k1, sizeof(struct form11) );
       f11->ku0 = 0; //RAB
       f11->ku1 = 1; //PRD-ON
-      f11->ku2 = 0; //PRM-OFF
+ //     f11->ku2 = 0; //PRM-OFF
       f11->ku3 = 0; //TKI
       f11->ku4 = 1; //FM1
 //      f11->ku5 = 1; //PRD-M1
@@ -4056,7 +4060,10 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
       outpack6.nsave++;
       count.out6++;
 
-      BLKT(6);
+      i = outpack6.nsave;
+      outpack6.buf[i].size = 0;
+      outpack6.buf[i].cmd = BUF3KIT_CMD_BLKT;
+      outpack6.nsave++;
 
       i = outpack6.nsave;
       p56 = (struct packet56 *)outpack6.buf[i].data;
@@ -4076,6 +4083,27 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
 //      outpack6.buf[i].size = 0;
 //      outpack6.buf[i].cmd = BUF3KIT_CMD_END;
 //      outpack6.nsave++;
+	  i = outpack6.nsave;
+      outpack6.buf[i].size = 0;
+      outpack6.buf[i].cmd = BUF3KIT_CMD_BLKT;
+      outpack6.nsave++;
+
+	  i = outpack6.nsave;
+      p56 = (struct packet56 *)outpack6.buf[i].data;
+      p56->head.code = 0xc0;
+      p56->data[0] = r999cfg.sp;
+      outpack6.buf[i].size = sizeof(struct header56) + 1;
+      outpack6.buf[i].cmd = BUF3KIT_CMD_BLK6;
+      outpack6.nsave++;
+
+      i = outpack6.nsave;
+      p56 = (struct packet56 *)outpack6.buf[i].data;
+      p56->head.code = 0xb0;
+      p56->data[0] = 0x00;
+      p56->data[1] = 0x30;
+      outpack6.buf[i].size = sizeof(struct header56) + 2;
+      outpack6.buf[i].cmd = BUF3KIT_CMD_BLK6;
+      outpack6.nsave++;
 
       stat.out |= FLAG_BUF6;
       stat.link |= FLAG_BUF6;
@@ -4194,6 +4222,8 @@ int HandlerCmd94mo3a( int param0, int param1 )
       f11->ku9z8 = 1; //ZAPROS-8
       f11->ku9z9 = 1; //ZAPROS-9
       f11->ku9z10 = 1; //ZAPROS-10
+      f11->ku2 = 1; //perevod bloka v priem
+
       memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
       outpack1.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
@@ -4219,7 +4249,7 @@ int HandlerCmd94mo3a( int param0, int param1 )
       memcpy( (char *)f11, (char *)&form11k1, sizeof(struct form11) );
       f11->ku0 = 0; //RAB
       f11->ku1 = 1; //PRD-ON
-      f11->ku2 = 0; //PRM-OFF
+//      f11->ku2 = 0; //PRM-OFF
       f11->ku3 = 0; //TKI
 //      f11->ku4 = 1; //FM1
 //      f11->ku5 = 1; //PRD-M1
@@ -4401,6 +4431,8 @@ int HandlerCmd94mo3a( int param0, int param1 )
       f11->ku9z8 = 1; //ZAPROS-8
       f11->ku9z9 = 1; //ZAPROS-9
       f11->ku9z10 = 1; //ZAPROS-10
+      f11->ku2 = 1; //perevod bloka v priem
+
       memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
       outpack2.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
@@ -4426,7 +4458,7 @@ int HandlerCmd94mo3a( int param0, int param1 )
       memcpy( (char *)f11, (char *)&form11k1, sizeof(struct form11) );
       f11->ku0 = 0; //RAB
       f11->ku1 = 1; //PRD-ON
-      f11->ku2 = 0; //PRM-OFF
+//      f11->ku2 = 0; //PRM-OFF
       f11->ku3 = 0; //TKI
 //      f11->ku4 = 1; //FM1
 //      f11->ku5 = 1; //PRD-M1
@@ -4538,7 +4570,7 @@ int HandlerCmd94mo3a( int param0, int param1 )
       outpack2.nsave++;
 
       stat.out |= FLAG_BUF2;
-      stat.link |= FLAG_BUF2;
+//      stat.link |= FLAG_BUF2;
       ControlLed2( 1 );
    }
 
@@ -4834,6 +4866,8 @@ int HandlerCmd95mo3a( int param0, int param1 )
       f11->ku9z8 = 1; //ZAPROS-8
       f11->ku9z9 = 1; //ZAPROS-9
       f11->ku9z10 = 1; //ZAPROS-10
+      f11->ku2 = 1; //perevod bloka v priem
+
       memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
       outpack1.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
@@ -4859,7 +4893,7 @@ int HandlerCmd95mo3a( int param0, int param1 )
       memcpy( (char *)f11, (char *)&form11k1, sizeof(struct form11) );
       f11->ku0 = 0; //RAB
       f11->ku1 = 1; //PRD-ON
-      f11->ku2 = 0; //PRM-OFF
+//      f11->ku2 = 0; //PRM-OFF
       f11->ku3 = 0; //TKI
       f11->ku4 = 1; //FM1
 //      f11->ku5 = 1; //PRD-M1
@@ -5046,6 +5080,8 @@ int HandlerCmd95mo3a( int param0, int param1 )
       f11->ku9z8 = 1; //ZAPROS-8
       f11->ku9z9 = 1; //ZAPROS-9
       f11->ku9z10 = 1; //ZAPROS-10
+      f11->ku2 = 1; //perevod bloka v priem
+
       memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
       outpack2.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
@@ -5071,7 +5107,7 @@ int HandlerCmd95mo3a( int param0, int param1 )
       memcpy( (char *)f11, (char *)&form11k1, sizeof(struct form11) );
       f11->ku0 = 0; //RAB
       f11->ku1 = 1; //PRD-ON
-      f11->ku2 = 0; //PRM-OFF
+//      f11->ku2 = 0; //PRM-OFF
       f11->ku3 = 0; //TKI
       f11->ku4 = 1; //FM1
 //      f11->ku5 = 1; //PRD-M1
@@ -5474,6 +5510,8 @@ int HandlerCmd96mo3a( int param0, int param1 )
       f11->ku9z8 = 1; //ZAPROS-8
       f11->ku9z9 = 1; //ZAPROS-9
       f11->ku9z10 = 1; //ZAPROS-10
+      f11->ku2 = 1; //perevod bloka v priem
+
       memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
       outpack1.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
@@ -5499,7 +5537,7 @@ int HandlerCmd96mo3a( int param0, int param1 )
       memcpy( (char *)f11, (char *)&form11k1, sizeof(struct form11) );
       f11->ku0 = 0; //RAB
       f11->ku1 = 1; //PRD-ON
-      f11->ku2 = 0; //PRM-OFF
+//      f11->ku2 = 0; //PRM-OFF
       f11->ku3 = 0; //TKI
       f11->ku4 = 1; //FM1
 //      f11->ku5 = 1; //PRD-M1
@@ -5684,6 +5722,8 @@ int HandlerCmd96mo3a( int param0, int param1 )
       f11->ku9z8 = 1; //ZAPROS-8
       f11->ku9z9 = 1; //ZAPROS-9
       f11->ku9z10 = 1; //ZAPROS-10
+      f11->ku2 = 1; //perevod bloka v priem
+
       memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
       outpack2.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
@@ -5709,7 +5749,7 @@ int HandlerCmd96mo3a( int param0, int param1 )
       memcpy( (char *)f11, (char *)&form11k1, sizeof(struct form11) );
       f11->ku0 = 0; //RAB
       f11->ku1 = 1; //PRD-ON
-      f11->ku2 = 0; //PRM-OFF
+//      f11->ku2 = 0; //PRM-OFF
       f11->ku3 = 0; //TKI
       f11->ku4 = 1; //FM1
 //      f11->ku5 = 1; //PRD-M1
@@ -6111,6 +6151,7 @@ int HandlerCmd101mo3a( int param0, int param1 )
       f11->ku9z10 = 1; //ZAPROS-10
       f11->ku5=mode.prd1;
       f11->ku6=mode.prm1;
+      f11->ku2 = 1; //perevod bloka v priem
 
 		f11->ku3=0; //!!!!!!!!!!
       memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
@@ -6138,7 +6179,7 @@ int HandlerCmd101mo3a( int param0, int param1 )
       memcpy( (char *)f11, (char *)&form11k1, sizeof(struct form11) );
       f11->ku0 = 0; //RAB
       f11->ku1 = 1; //PRD-ON
-      f11->ku2 = 0; //PRM-OFF
+//      f11->ku2 = 0; //PRM-OFF
       f11->ku3 = 0; //TKI
       f11->ku4 = 1; //FM1
 //      f11->ku5 = 1; //PRD-M1
@@ -6342,6 +6383,8 @@ int HandlerCmd101mo3a( int param0, int param1 )
       f11->ku9z9 = 1; //ZAPROS-9
       f11->ku9z10 = 1; //ZAPROS-10
 		f11->ku3=0; //!!!!!!!!!!
+      f11->ku2 = 1; //perevod bloka v priem
+
       memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
       outpack2.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
@@ -6367,7 +6410,7 @@ int HandlerCmd101mo3a( int param0, int param1 )
       memcpy( (char *)f11, (char *)&form11k1, sizeof(struct form11) );
       f11->ku0 = 0; //RAB
       f11->ku1 = 1; //PRD-ON
-      f11->ku2 = 0; //PRM-OFF
+//      f11->ku2 = 0; //PRM-OFF
       f11->ku3 = 0; //TKI
       f11->ku4 = 1; //FM1
 //      f11->ku5 = 1; //PRD-M1
@@ -6780,6 +6823,8 @@ int HandlerCmd102mo3a( int param0, int param1 )
       f11->ku9z8 = 1; //ZAPROS-8
       f11->ku9z9 = 1; //ZAPROS-9
       f11->ku9z10 = 1; //ZAPROS-10
+      f11->ku2 = 1; //perevod bloka v priem
+
       memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
       outpack1.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
@@ -6805,7 +6850,7 @@ int HandlerCmd102mo3a( int param0, int param1 )
       memcpy( (char *)f11, (char *)&form11k1, sizeof(struct form11) );
       f11->ku0 = 0; //RAB
       f11->ku1 = 1; //PRD-ON
-      f11->ku2 = 0; //PRM-OFF
+//      f11->ku2 = 0; //PRM-OFF
       f11->ku3 = 0; //TKI
       f11->ku4 = 1; //FM1
 //      f11->ku5 = 1; //PRD-M1
@@ -6993,6 +7038,8 @@ int HandlerCmd102mo3a( int param0, int param1 )
       f11->ku9z8 = 1; //ZAPROS-8
       f11->ku9z9 = 1; //ZAPROS-9
       f11->ku9z10 = 1; //ZAPROS-10
+      f11->ku2 = 1; //perevod bloka v priem
+
       memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
       outpack2.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
@@ -7018,7 +7065,7 @@ int HandlerCmd102mo3a( int param0, int param1 )
       memcpy( (char *)f11, (char *)&form11k1, sizeof(struct form11) );
       f11->ku0 = 0; //RAB
       f11->ku1 = 1; //PRD-ON
-      f11->ku2 = 0; //PRM-OFF
+//      f11->ku2 = 0; //PRM-OFF
       f11->ku3 = 0; //TKI
       f11->ku4 = 1; //FM1
 //      f11->ku5 = 1; //PRD-M1
@@ -7430,6 +7477,8 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
       f11->ku9z8 = 1; //ZAPROS-8
       f11->ku9z9 = 1; //ZAPROS-9
       f11->ku9z10 = 1; //ZAPROS-10
+      f11->ku2 = 1; //perevod bloka v priem
+
       memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
       outpack1.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
@@ -7455,7 +7504,7 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
       memcpy( (char *)f11, (char *)&form11k1, sizeof(struct form11) );
       f11->ku0 = 0; //RAB
       f11->ku1 = 1; //PRD-ON
-      f11->ku2 = 0; //PRM-OFF
+//      f11->ku2 = 0; //PRM-OFF
       f11->ku3 = 0; //TKI
       f11->ku4 = 1; //FM1
 //      f11->ku5 = 1; //PRD-M1
@@ -7644,6 +7693,8 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
       f11->ku9z8 = 1; //ZAPROS-8
       f11->ku9z9 = 1; //ZAPROS-9
       f11->ku9z10 = 1; //ZAPROS-10
+      f11->ku2 = 1; //perevod bloka v priem
+
       memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
       outpack2.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
@@ -7669,7 +7720,7 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
       memcpy( (char *)f11, (char *)&form11k1, sizeof(struct form11) );
       f11->ku0 = 0; //RAB
       f11->ku1 = 1; //PRD-ON
-      f11->ku2 = 0; //PRM-OFF
+//      f11->ku2 = 0; //PRM-OFF
       f11->ku3 = 0; //TKI
       f11->ku4 = 1; //FM1
 //      f11->ku5 = 1; //PRD-M1
@@ -8101,7 +8152,10 @@ int HandlerCmd104mo3a( int param0, int param1, int param2 )
    outpack6.nsave++;
    count.out6++;
 
-		BLKT(6);
+		i = outpack6.nsave;
+      outpack6.buf[i].size = 0;
+      outpack6.buf[i].cmd = BUF3KIT_CMD_BLKT;
+      outpack6.nsave++;
 
       i = outpack6.nsave;
       p56 = (struct packet56 *)outpack6.buf[i].data;
@@ -8110,14 +8164,30 @@ int HandlerCmd104mo3a( int param0, int param1, int param2 )
       outpack6.buf[i].cmd = BUF3KIT_CMD_BLK6;
       outpack6.nsave++;
 
-      for( j = 0; j < 18; j++ ) BLKT(6);
-	  
-      i = outpack6.nsave;
+	  i = outpack6.nsave;
       outpack6.buf[i].size = 0;
-      outpack6.buf[i].cmd = BUF3KIT_CMD_END;
+      outpack6.buf[i].cmd = BUF3KIT_CMD_BLKT;
       outpack6.nsave++;
 
-		stat.link |= FLAG_BUF6;
+	  i = outpack6.nsave;
+      p56 = (struct packet56 *)outpack6.buf[i].data;
+      p56->head.code = 0xc0;
+      p56->data[0] = r999cfg.sp;
+      outpack6.buf[i].size = sizeof(struct header56) + 1;
+      outpack6.buf[i].cmd = BUF3KIT_CMD_BLK6;
+      outpack6.nsave++;
+
+      i = outpack6.nsave;
+      p56 = (struct packet56 *)outpack6.buf[i].data;
+      p56->head.code = 0xb0;
+      p56->data[0] = 0x00;
+      p56->data[1] = 0x30;
+      outpack6.buf[i].size = sizeof(struct header56) + 2;
+      outpack6.buf[i].cmd = BUF3KIT_CMD_BLK6;
+      outpack6.nsave++;
+      
+
+		//stat.link |= FLAG_BUF6;
 		stat.out |= FLAG_BUF6;
 		ControlLed4( 1 );
 
