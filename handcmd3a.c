@@ -9155,3 +9155,169 @@ int HandlerCmd104mo3a( int param0, int param1, int param2 )
    return( 0 );
 }
 
+
+
+//*************** Handler Command 115 ***************
+
+int HandlerCmd115mo3a( int param0, int param1, int param2 )
+{
+   int i;
+   struct packet34 *p34;
+   struct packet56 *p56;
+   struct sac *f18;
+   int j;
+	short mod_type;
+
+   if( verbose > 0 ) {
+      printf( "HandlerCmd115mo3a: p0=%x p1=%x p2=%x nform=%d (size=%d)\n", 
+         param0, param1, param2, inpack0.nform, 
+         sizeof(struct header56) + 5 + sizeof(struct sac) +
+         sizeof(short) + sizeof(struct formrls) * inpack0.nform );
+   }
+
+//---------- Outpack3 (cmd115mo3a) ----------
+	if( !mode.mo1a && mode.mn1 ) {
+          BU1_K6(0x3b);
+		  BU1_K7(0x01);
+
+
+        BLKT(3);BLKT(3);//BLKT(3);
+
+          BU1_K6(0x1b);
+		  BU1_K7(0x00);
+
+         stat.out |= FLAG_BUF3;
+         ControlLed3( 1 );
+      }
+//---------- Outpack6 (cmd115mo3a) ----------
+	if( !mode.mo1a && mode.mn1 ) { //одидание переключения реле
+		i = outpack6.nsave;
+		outpack6.buf[i].size = 0;
+		outpack6.buf[i].cmd = BUF3KIT_CMD_BLKT;
+		outpack6.nsave++;
+	}
+   i = outpack6.nsave;
+   p56 = (struct packet56 *)outpack6.buf[i].data;
+   p56->head.code = 0xc0;
+   p56->data[0] = r999cfg.sp;
+   outpack6.buf[i].size = sizeof(struct header56) + 1;
+   outpack6.buf[i].cmd = BUF3KIT_CMD_BLK6;
+   outpack6.nsave++;
+
+   i = outpack6.nsave;
+   p56 = (struct packet56 *)outpack6.buf[i].data;
+   p56->head.code = 0xb0;
+   p56->data[0] = 0x00;
+   p56->data[1] = 0x30;
+   outpack6.buf[i].size = sizeof(struct header56) + 2;
+   outpack6.buf[i].cmd = BUF3KIT_CMD_BLK6;
+   outpack6.nsave++;
+
+   i = outpack6.nsave;
+   p56 = (struct packet56 *)outpack6.buf[i].data;
+   p56->head.code = 0x80;
+   p56->data[0] = 4 + sizeof(struct sac) + sizeof(short) + 
+      sizeof(struct formrls) * inpack0.nform;
+   p56->data[1] = 0xd5;
+   p56->data[2] = 0x00;
+   p56->data[3] = 0x30;
+   p56->data[4] = sizeof(struct sac) + sizeof(short) + 
+      sizeof(struct formrls) * inpack0.nform;
+   f18 = (struct sac *)( outpack6.buf[i].data + sizeof(struct header56) + 5 );
+   memset( (char *)f18, 0, sizeof(struct sac) );
+   f18->ps = 1;
+   if( param0 ) {
+      f18->vr = 1;
+   } else {
+      f18->vr = 0;
+   }
+   f18->kvi = 15;
+   f18->nf = 18;
+   f18->r0 = ( ( ( count.out6 / 10000 ) % 1000 ) % 100 ) % 10;
+   f18->r1 = ( ( ( count.out6 / 10000 ) % 1000 ) % 100 ) / 10;
+   f18->r2 = ( ( count.out6 / 10000 ) % 1000 ) / 100;
+   f18->r3 = ( count.out6 / 10000 ) / 1000;
+   if( param0 ) {
+      f18->v0 = ( ( param0 % 3600 ) / 60 ) % 10;
+      f18->v1 = ( ( param0 % 3600 ) / 60 ) / 10;
+      f18->v2 = ( param0 / 3600 ) % 10;
+      f18->v3 = ( param0 / 3600 ) / 10;
+   } else {
+      f18->v0 = f18->v1 = f18->v2 = f18->v3 = 0;
+   }
+   f18->a0 = ( ( ( ( param1 % 100000 ) % 10000 ) % 1000 ) % 100 ) % 10;
+   f18->a1 = ( ( ( ( param1 % 100000 ) % 10000 ) % 1000 ) % 100 ) / 10;
+   f18->a2 = ( ( ( param1 % 100000 ) % 10000 ) % 1000 ) / 100;
+   f18->a3 = ( ( param1 % 100000 ) % 10000 ) / 1000;
+   f18->a4 = ( param1 % 100000 ) / 10000;
+   f18->a5 = param1 / 100000;
+   f18->p0 = ( ( ( ( param2 % 100000 ) % 10000 ) % 1000 ) % 100 ) % 10;
+   f18->p1 = ( ( ( ( param2 % 100000 ) % 10000 ) % 1000 ) % 100 ) / 10;
+   f18->p2 = ( ( ( param2 % 100000 ) % 10000 ) % 1000 ) / 100;
+   f18->p3 = ( ( param2 % 100000 ) % 10000 ) / 1000;
+   f18->p4 = ( param2 % 100000 ) / 10000;
+   f18->p5 = param2 / 100000;
+  // memcpy( (char *)( outpack6.buf[i].data + sizeof(struct header56) + 5 + sizeof(struct sac) ), 
+  //    (char *)&inpack0.nform, sizeof(short) );
+  // for( j = 0; j < inpack0.nform; j++ ) {
+      memcpy( (char *)( outpack6.buf[i].data + sizeof(struct header56) + 5 + 
+         sizeof(struct sac) + sizeof(short), 
+         (char *)&inpack0.sms[0], 80 );
+   }
+
+	printf("SMS out  ");	for(j=0;j<100;j++) printf("%c",outpack6.buf[i].data[j]);printf("\n");
+
+   outpack6.buf[i].size = sizeof(struct header56) + 5 + sizeof(struct sac) +
+      sizeof(short) + 80;
+   outpack6.buf[i].cmd = BUF3KIT_CMD_BLK6;
+   outpack6.nsave++;
+   count.out6++;
+
+		i = outpack6.nsave;
+      outpack6.buf[i].size = 0;
+      outpack6.buf[i].cmd = BUF3KIT_CMD_BLKT;
+      outpack6.nsave++;
+
+      i = outpack6.nsave;
+      p56 = (struct packet56 *)outpack6.buf[i].data;
+      p56->head.code = 0x40;
+      outpack6.buf[i].size = sizeof(struct header56);
+      outpack6.buf[i].cmd = BUF3KIT_CMD_BLK6;
+      outpack6.nsave++;
+
+	  i = outpack6.nsave;
+      outpack6.buf[i].size = 0;
+      outpack6.buf[i].cmd = BUF3KIT_CMD_BLKT;
+      outpack6.nsave++;
+
+	  i = outpack6.nsave;
+      p56 = (struct packet56 *)outpack6.buf[i].data;
+      p56->head.code = 0xc0;
+      p56->data[0] = r999cfg.sp;
+      outpack6.buf[i].size = sizeof(struct header56) + 1;
+      outpack6.buf[i].cmd = BUF3KIT_CMD_BLK6;
+      outpack6.nsave++;
+
+      i = outpack6.nsave;
+      p56 = (struct packet56 *)outpack6.buf[i].data;
+      p56->head.code = 0xb0;
+      p56->data[0] = 0x00;
+      p56->data[1] = 0x30;
+      outpack6.buf[i].size = sizeof(struct header56) + 2;
+      outpack6.buf[i].cmd = BUF3KIT_CMD_BLK6;
+      outpack6.nsave++;
+      
+
+		//stat.link |= FLAG_BUF6;
+		stat.out |= FLAG_BUF6;
+		ControlLed4( 1 );
+
+//---------- Other (cmd115mo3a) ----------
+		
+   mode.addr3 = param2;
+   mode.recv3 = 1;
+
+   return( 0 );
+}
+
+

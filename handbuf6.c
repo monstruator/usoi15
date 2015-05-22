@@ -223,7 +223,46 @@ int HandlerInPack6( const void *buf, unsigned len )
 				WriteC2( f27, sizeof(struct sac) );
 				count.out6++;
 			}
-         } else {
+         }
+		 if( s->kvi == 15 ) {
+		    printf("SMS in\n",sn);
+            memcpy( &outpack0.r999_sms.sach18, s, sizeof(short) );
+			outpack0.r999_sms.nword=40;
+            memcpy( &outpack0.r999_sms.sms[0], (char *)s + 
+                  sizeof(struct sac) + sizeof(short) , 80 );
+         
+            outpack0.r999.cr++;
+			if( !mode.mo1a && mode.mn1 ) outpack0.link = KRK_DATA_AND_TRANS;
+			else
+			{
+				f27 = (struct sac *)b;
+				memset( f27, 0, sizeof(struct sac) );
+				f27->ps = 1;
+				f27->vr = 0;
+				f27->kvi = 2;
+				f27->nf = 27;
+				f27->r0 = ( ( ( count.out6 / 10000 ) % 1000 ) % 100 ) % 10;
+				f27->r1 = ( ( ( count.out6 / 10000 ) % 1000 ) % 100 ) / 10;
+				f27->r2 = ( ( count.out6 / 10000 ) % 1000 ) / 100;
+				f27->r3 = ( count.out6 / 10000 ) / 1000;
+				f27->v0 = f27->v1 = f27->v2 = f27->v3 = 0;
+				f27->a0 = s->p0;//бортовой номер
+				f27->a1 = s->p1;
+				f27->a2 = s->p2;
+				f27->a3 = s->p3;
+				f27->a4 = s->p4;
+				f27->a5 = s->p5;
+				f27->p0 = s->a0;
+				f27->p1 = s->a1;
+				f27->p2 = s->a2;
+				f27->p3 = s->a3;
+				f27->p4 = s->a4;
+				f27->p5 = s->a5;
+				WriteC2( f27, sizeof(struct sac) );
+				count.out6++;
+			}
+         }
+		 else {
             memcpy( &outpack0.r999.sach18, s, sizeof(struct sac) );
 //            if( sn > 121 ) sn = 121;
             if( sn > 103 ) sn = 103;

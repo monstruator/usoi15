@@ -220,6 +220,7 @@
       float k;
       short nform;
       struct formrls form[3];
+	  char sms[80];
    };
 
    struct packusoi {
@@ -342,6 +343,12 @@
             short nform;
             struct formrls form[3];
          } r999_cu2;
+		 struct {
+            unsigned short cr;
+            short sach18[6];
+            unsigned short nword;
+            char sms[80];           
+         } r999_sms;
       };
    };
 

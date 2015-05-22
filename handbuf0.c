@@ -900,6 +900,20 @@ void HandlerInPack0( void )
             break;
          }
          break;
+	  case 115:
+         switch( mode.pr ) {
+         case 1:
+            HandlerCmd104mo3a( inpack0.a_params[0], inpack0.a_params[1], 
+               inpack0.a_params[2] );
+            break;
+         default:
+            outpack0.kzv = 1;
+            outpack0.cr_com++;
+            break;
+         }
+         break;
+		    
+
       default:
          outpack0.kzv = 1;
          outpack0.cr_com++;
