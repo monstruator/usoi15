@@ -239,7 +239,7 @@ int HandlerInPack6( const void *buf, unsigned len )
 				memset( f27, 0, sizeof(struct sac) );
 				f27->ps = 1;
 				f27->vr = 0;
-				f27->kvi = 2;
+				f27->kvi = 15;
 				f27->nf = 27;
 				f27->r0 = ( ( ( count.out6 / 10000 ) % 1000 ) % 100 ) % 10;
 				f27->r1 = ( ( ( count.out6 / 10000 ) % 1000 ) % 100 ) / 10;
@@ -307,7 +307,8 @@ int HandlerInPack6( const void *buf, unsigned len )
 		}
       }
       if( s->nf == 27 ) {
-         outpack0.link = KRK_LINK_OK;
+		if( s->kvi == 15 ) outpack0.link = KRK_SMS_OK;
+		else outpack0.link = KRK_LINK_OK;
          if( stat.link ) {
             ResetBuffers();
             outpack0.cr_com++;

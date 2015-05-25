@@ -109,6 +109,7 @@
 	#define KRK_LINK_OK 8
 	#define KRK_SWITCH_TRANS 9
 	#define KRK_DATA_AND_TRANS 10
+	#define KRK_SMS_OK 15
 
 //-------------------- Buffers -------------------
 
@@ -347,7 +348,7 @@
             unsigned short cr;
             short sach18[6];
             unsigned short nword;
-            char sms[80];           
+            char sms[100];           
          } r999_sms;
       };
    };
