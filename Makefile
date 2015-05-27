@@ -2,15 +2,15 @@
 #  Makefile for USOI driver
 #
 
-all: MO3AK
+all: USOI
 
-MO3AK: main.o globals.o tcpip.o device.o handbuf0.o handbuf1.o handbuf2.o \
+USOI: main.o globals.o tcpip.o device.o handbuf0.o handbuf1.o handbuf2.o \
 		handbuf3.o handbuf4.o handbuf5.o handbuf6.o handtout.o \
         handcmd.o handcmd3a.o led.o
-	cc -ms -o MO3AK main.o globals.o tcpip.o device.o handbuf0.o handbuf1.o \
+	cc -ms -o USOI main.o globals.o tcpip.o device.o handbuf0.o handbuf1.o \
         handbuf2.o handbuf3.o handbuf4.o handbuf5.o handbuf6.o handtout.o \
         handcmd.o handcmd3a.o led.o
-	usemsg MO3AK usemsg
+	usemsg USOI usemsg
 
 main.o: main.c globals.h
 	cc -ms -c -o main.o main.c
@@ -61,5 +61,5 @@ clean:
 	rm -f *.o *.err *.i
 
 spotless: clean
-	rm -f MO3AK
+	rm -f USOI
 

@@ -208,7 +208,7 @@ void BU2_K7( int kod ) //гЇа ў«Ґ­ЁҐ аҐ«Ґ Є7 ў Ѓ“2
 
       p34->data[0] = 0xff;
       p34->data[1] = kod;		//ЉЋ„
-	  printf(" kod_bu2_k7=%x \n\n",kod);
+//	  printf(" kod_bu2_k7=%x \n\n",kod);
       p34->data[2] = Sum2( (unsigned char *)p34, sizeof(struct header34) + 2 );
       outpack4.buf[i].size = sizeof(struct header34) + 3;
       outpack4.buf[i].cmd = BUF3KIT_CMD_BLK4;
@@ -9162,9 +9162,11 @@ int HandlerCmd104mo3a( int param0, int param1, int param2 )
 int HandlerCmd115mo3a( int param0, int param1, int param2 )
 {
    int i;
-   struct packet34 *p34;
+   //struct packet34 *p34;
    struct packet56 *p56;
-   struct sac *f18;
+   struct sac *f18, *f27;
+   short b[sizeof(struct form199_dmv)];
+
    int j;
 	short mod_type;
 
@@ -9172,7 +9174,7 @@ int HandlerCmd115mo3a( int param0, int param1, int param2 )
       printf( "HandlerCmd115mo3a: p0=%x p1=%x p2=%x nform=%d (size=%d)\n", 
          param0, param1, param2, inpack0.nform, 
          sizeof(struct header56) + 5 + sizeof(struct sac) +
-         sizeof(short) + sizeof(struct formrls) * inpack0.nform );
+         sizeof(short) + 80 );
    }
 
 //---------- Outpack3 (cmd115mo3a) ----------
@@ -9216,13 +9218,11 @@ int HandlerCmd115mo3a( int param0, int param1, int param2 )
    i = outpack6.nsave;
    p56 = (struct packet56 *)outpack6.buf[i].data;
    p56->head.code = 0x80;
-   p56->data[0] = 4 + sizeof(struct sac) + sizeof(short) + 
-      sizeof(struct formrls) * inpack0.nform;
+   p56->data[0] = 4 + sizeof(struct sac) + sizeof(short) + 80;
    p56->data[1] = 0xd5;
    p56->data[2] = 0x00;
    p56->data[3] = 0x30;
-   p56->data[4] = sizeof(struct sac) + sizeof(short) + 
-      sizeof(struct formrls) * inpack0.nform;
+   p56->data[4] = sizeof(struct sac) + sizeof(short) + 80;
    f18 = (struct sac *)( outpack6.buf[i].data + sizeof(struct header56) + 5 );
    memset( (char *)f18, 0, sizeof(struct sac) );
    f18->ps = 1;
@@ -9261,12 +9261,44 @@ int HandlerCmd115mo3a( int param0, int param1, int param2 )
   //    (char *)&inpack0.nform, sizeof(short) );
   // for( j = 0; j < inpack0.nform; j++ ) {
       memcpy( (char *)( outpack6.buf[i].data + sizeof(struct header56) + 5 + 
-         sizeof(struct sac) + sizeof(short), 
+         sizeof(struct sac) + sizeof(short)), 
          (char *)&inpack0.sms[0], 80 );
-   }
+   //}
 
-	printf("SMS out  ");	for(j=0;j<100;j++) printf("%c",outpack6.buf[i].data[j]);printf("\n");
-
+//	printf("SMS out:");	for(j=0;j<100;j++) printf("%02x ",outpack6.buf[i].data[j+20]);printf("\n");
+//	printf("SMS out:");	for(j=0;j<80;j++) printf("%c ",inpack0.sms[j]);printf("\n");
+//------------------
+/*  
+    memcpy(&outpack0.r999_sms.sms[0],(char *)&inpack0.sms[0], 80 );
+				
+				f27 = (struct sac *)b;
+				memset( f27, 0, sizeof(struct sac) );
+				f27->ps = 1;
+				f27->vr = 0;
+				f27->kvi = 15;
+				f27->nf = 27;
+				f27->r0 = ( ( ( count.out6 / 10000 ) % 1000 ) % 100 ) % 10;
+				f27->r1 = ( ( ( count.out6 / 10000 ) % 1000 ) % 100 ) / 10;
+				f27->r2 = ( ( count.out6 / 10000 ) % 1000 ) / 100;
+				f27->r3 = ( count.out6 / 10000 ) / 1000;
+				f27->v0 = f27->v1 = f27->v2 = f27->v3 = 0;
+				f27->a0 = f18->p0;
+				f27->a1 = f18->p1;
+				f27->a2 = f18->p2;
+				f27->a3 = f18->p3;
+				f27->a4 = f18->p4;
+				f27->a5 = f18->p5;
+				f27->p0 = f18->a0;
+				f27->p1 = f18->a1;
+				f27->p2 = f18->a2;
+				f27->p3 = f18->a3;
+				f27->p4 = f18->a4;
+				f27->p5 = f18->a5;
+		printf("\nSACH:");
+	  for(j=0;j<6;j++)  {outpack0.r999_sms.sach18[j]=b[j];printf("%04x ",b[j]);}printf("\n");
+      outpack0.r999.cr++;
+*/
+//------------------
    outpack6.buf[i].size = sizeof(struct header56) + 5 + sizeof(struct sac) +
       sizeof(short) + 80;
    outpack6.buf[i].cmd = BUF3KIT_CMD_BLK6;

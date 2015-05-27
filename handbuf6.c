@@ -127,7 +127,7 @@ int DataInBuf6( unsigned short *nd )
 
 int HandlerInPack6( const void *buf, unsigned len )
 {
-   int i;
+   int i,j;
    struct packet56 *pack;
    struct sostrts *srts;
    struct errusoi *ko;
@@ -225,12 +225,15 @@ int HandlerInPack6( const void *buf, unsigned len )
 			}
          }
 		 if( s->kvi == 15 ) {
-		    printf("SMS in\n",sn);
-            memcpy( &outpack0.r999_sms.sach18, s, sizeof(short) );
+		    printf("SMS in\n");
+            memcpy( &outpack0.r999_sms.sach18[0], s, sizeof (struct sac) );
 			outpack0.r999_sms.nword=40;
             memcpy( &outpack0.r999_sms.sms[0], (char *)s + 
                   sizeof(struct sac) + sizeof(short) , 80 );
          
+			//for(j=0;j<80;j++) printf("%02x ",outpack0.r999_sms.sms[j]);printf("\n");
+			//for(j=0;j<6;j++) printf("%04x ",outpack0.r999_sms.sach18[j]);printf("\n");
+
             outpack0.r999.cr++;
 			if( !mode.mo1a && mode.mn1 ) outpack0.link = KRK_DATA_AND_TRANS;
 			else
@@ -307,7 +310,7 @@ int HandlerInPack6( const void *buf, unsigned len )
 		}
       }
       if( s->nf == 27 ) {
-		if( s->kvi == 15 ) outpack0.link = KRK_SMS_OK;
+		if( s->kvi == 15 ) {outpack0.link = KRK_SMS_OK;}//printf("SMS OK\n\n");}
 		else outpack0.link = KRK_LINK_OK;
          if( stat.link ) {
             ResetBuffers();

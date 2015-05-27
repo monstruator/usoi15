@@ -903,7 +903,7 @@ void HandlerInPack0( void )
 	  case 115:
          switch( mode.pr ) {
          case 1:
-            HandlerCmd104mo3a( inpack0.a_params[0], inpack0.a_params[1], 
+            HandlerCmd115mo3a( inpack0.a_params[0], inpack0.a_params[1], 
                inpack0.a_params[2] );
             break;
          default:
