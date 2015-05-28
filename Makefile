@@ -42,7 +42,7 @@ handbuf4.o: handbuf4.c globals.h
 handbuf5.o: handbuf5.c globals.h
 	cc -ms -c -o handbuf5.o handbuf5.c
 
-handbuf6.o: handbuf6.c globals.h
+handbuf6.o: handbuf6.c globals.h aes.h
 	cc -ms -c -o handbuf6.o handbuf6.c
 
 handtout.o: handtout.c globals.h
@@ -51,7 +51,7 @@ handtout.o: handtout.c globals.h
 handcmd.o: handcmd.c globals.h
 	cc -ms -c -o handcmd.o handcmd.c
 
-handcmd3a.o: handcmd3a.c globals.h
+handcmd3a.o: handcmd3a.c globals.h aes.h
 	cc -ms -c -o handcmd3a.o handcmd3a.c
 
 led.o: led.c globals.h

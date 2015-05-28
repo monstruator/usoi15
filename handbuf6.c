@@ -2,6 +2,7 @@
 #include <errno.h>
 #include <sys/time.h>
 #include "globals.h"
+#include "aes.h"
 
 extern int verbose;
 
@@ -127,7 +128,7 @@ int DataInBuf6( unsigned short *nd )
 
 int HandlerInPack6( const void *buf, unsigned len )
 {
-   int i,j;
+   int i,j,j1;
    struct packet56 *pack;
    struct sostrts *srts;
    struct errusoi *ko;
@@ -231,6 +232,13 @@ int HandlerInPack6( const void *buf, unsigned len )
             memcpy( &outpack0.r999_sms.sms[0], (char *)s + 
                   sizeof(struct sac) + sizeof(short) , 80 );
          
+			for(j=0;j<5;j++) 
+			{
+				for(j1=0;j1<16;j1++) in_aes[j1]=outpack0.r999_sms.sms[j1+j*16];
+				InvCipher();
+				for(j1=0;j1<16;j1++) outpack0.r999_sms.sms[j1+j*16]=out_aes[j1];		
+			}
+
 			//for(j=0;j<80;j++) printf("%02x ",outpack0.r999_sms.sms[j]);printf("\n");
 			//for(j=0;j<6;j++) printf("%04x ",outpack0.r999_sms.sach18[j]);printf("\n");
 

@@ -1,6 +1,9 @@
 //вопрос по k15 //k65 //k70 //k74 //k75 //90 //92
 #include <time.h>
 #include "globals.h"
+//#include "aes.h"
+extern unsigned char in_aes[16], out_aes[16], state[4][4];
+
 
 extern int verbose;
 
@@ -44,6 +47,7 @@ BLKT(int N_Chan)
 
 kzo7_1()
 {
+
 /*	int i;
    struct header12 *h12;
    struct form11 *f11;
@@ -262,6 +266,7 @@ int HandlerCmd1mo3a( int param )
 
    stat.out |= FLAG_BUF1;
    ControlLed1( 1 );
+
 
 //---------- Outpack4 (cmd1) ----------
 
@@ -9161,14 +9166,13 @@ int HandlerCmd104mo3a( int param0, int param1, int param2 )
 
 int HandlerCmd115mo3a( int param0, int param1, int param2 )
 {
-   int i;
+   int i,j1,j;
    //struct packet34 *p34;
    struct packet56 *p56;
    struct sac *f18, *f27;
    short b[sizeof(struct form199_dmv)];
 
-   int j;
-	short mod_type;
+//	short mod_type;
 
    if( verbose > 0 ) {
       printf( "HandlerCmd115mo3a: p0=%x p1=%x p2=%x nform=%d (size=%d)\n", 
@@ -9257,13 +9261,16 @@ int HandlerCmd115mo3a( int param0, int param1, int param2 )
    f18->p3 = ( ( param2 % 100000 ) % 10000 ) / 1000;
    f18->p4 = ( param2 % 100000 ) / 10000;
    f18->p5 = param2 / 100000;
-  // memcpy( (char *)( outpack6.buf[i].data + sizeof(struct header56) + 5 + sizeof(struct sac) ), 
-  //    (char *)&inpack0.nform, sizeof(short) );
-  // for( j = 0; j < inpack0.nform; j++ ) {
-      memcpy( (char *)( outpack6.buf[i].data + sizeof(struct header56) + 5 + 
-         sizeof(struct sac) + sizeof(short)), 
-         (char *)&inpack0.sms[0], 80 );
-   //}
+
+	for(j=0;j<5;j++) 
+	{
+		for(j1=0;j1<16;j1++) in_aes[j1]=inpack0.sms[j1+j*16];
+		Cipher();
+		for(j1=0;j1<16;j1++) inpack0.sms[j1+j*16]=out_aes[j1];		
+	}
+
+   memcpy( (char *)( outpack6.buf[i].data + sizeof(struct header56) + 5 + 
+      sizeof(struct sac) + sizeof(short)), (char *)&inpack0.sms[0], 80 );
 
 //	printf("SMS out:");	for(j=0;j<100;j++) printf("%02x ",outpack6.buf[i].data[j+20]);printf("\n");
 //	printf("SMS out:");	for(j=0;j<80;j++) printf("%c ",inpack0.sms[j]);printf("\n");
