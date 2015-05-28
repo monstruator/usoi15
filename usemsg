@@ -1,0 +1,19 @@
+
+#ifdef __USAGE
+%C - USOI driver (Version: 25)
+15.07.14 Baltiisk v.1.2 starii SAC
+%C [options]
+Options:
+ -A addr:port     USOI address and port (default 194.1.1.8:8204)
+ -0 addr:port     MN3 address and port  (default 194.1.1.5:8204)
+ -1 addr:port     KASRT1 address and port (default 192.168.0.157:4000)
+ -2 addr:port     KASRT2 address and port (default 192.168.2.157:4000)
+ -3 name          BU1 device name (default /dev/pcs1)
+ -4 name          BU2 device name (default /dev/pcs2)
+ -5 name          MSRS0 device name (default /dev/pcs7)
+ -6 name          MSRS1 device name (default /dev/pcs8)
+ -T name          Test file name (default /TInUSOI.txt)
+ -M number        Mode number: 0-pr3.2, 1-mo3a (default 0)
+ -v               Verbose mode (default off)
+#endif
+
