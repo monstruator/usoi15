@@ -143,7 +143,7 @@ int HandlerInPack6( const void *buf, unsigned len )
    unsigned sn;
    char b[sizeof(struct form199_dmv)];
 
-   if( verbose > 0 ) {
+   if( verbose > 1 ) {
       printf( "HandlerInPack6(%d):", len );
       for( i = 0; i < len; i++ ) printf( " %02x", *( (char *)buf + i ) );
       printf( "\n" ); 
@@ -455,7 +455,7 @@ int WriteC2( const void *buf, unsigned len )
 		outpack6.nsave++;
 	}
    
-	for(i1=0;i1<2;i1++)
+	//for(i1=0;i1<2;i1++)
 	{
 		i = outpack6.nsave;
 		outpack6.buf[i].data[0] = 0xc0;
@@ -504,6 +504,12 @@ int WriteC2( const void *buf, unsigned len )
       outpack6.buf[i].size = 0;
       outpack6.buf[i].cmd = BUF3KIT_CMD_BLKT;
       outpack6.nsave++;
+
+	  i = outpack6.nsave;
+      outpack6.buf[i].size = 0;
+      outpack6.buf[i].cmd = BUF3KIT_CMD_BLKT;
+      outpack6.nsave++;
+
 
 	  i = outpack6.nsave;
       p56 = (struct packet56 *)outpack6.buf[i].data;

@@ -1,7 +1,7 @@
 
 #ifdef __USAGE
 %C - USOI driver (Version: 25)
-15.07.14 Baltiisk v.1.2 starii SAC
+30.05.15 Baltiisk SMS+AES
 %C [options]
 Options:
  -A addr:port     USOI address and port (default 194.1.1.8:8204)
