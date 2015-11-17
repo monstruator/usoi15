@@ -302,7 +302,7 @@
             short sach18[6];
             unsigned short nword;
             short form1[10];
-            short form4[1100];
+            short form4[1200];
          } svch2_reo;
          struct {
             unsigned short cr;
@@ -348,7 +348,7 @@
             unsigned short cr;
             short sach18[6];
             unsigned short nword;
-            char sms[100];           
+            char sms[80];           
          } r999_sms;
       };
    };
@@ -669,8 +669,8 @@
 
    struct form193 {
       struct sac s;
-      unsigned short t1: 8; // 0x00
-      unsigned short t2: 8; // 0x1d
+      unsigned short t1: 8; 
+      unsigned short t2: 8; 
       unsigned short pn: 8;
       unsigned short kfs: 8;
       unsigned short v1_0: 4;
@@ -696,7 +696,7 @@
    };
 
    struct form199_dmv {
-      struct sac s;  			//6 short
+      struct sac s;  		
       unsigned short t1: 8;
       unsigned short t2: 8;
 
