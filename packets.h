@@ -340,7 +340,7 @@
          } r999_reo;
          struct {
             unsigned short cr;
-            unsigned short sach18;
+            unsigned short sach18[6];
             short nform;
             struct formrls form[3];
          } r999_cu2;

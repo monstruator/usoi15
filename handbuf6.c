@@ -185,7 +185,7 @@ int HandlerInPack6( const void *buf, unsigned len )
       if( ( sa != mode.addr3 ) || !mode.recv3 ) { if( verbose > 0 ) printf( "R999: Ignore packet.\n" );  break;  }
       if( s->nf == 18 ) {
          if( s->kvi == 10 ) {
-            memcpy( &outpack0.r999_cu2.sach18, s, sizeof(short) );
+            memcpy( &outpack0.r999_cu2.sach18, s, sizeof(struct sac) );
             if( sn > 3 ) sn = 3;
             outpack0.r999_cu2.nform = sn;
 			printf("nform=%d to Danya\n",sn);
@@ -448,6 +448,7 @@ int WriteC2( const void *buf, unsigned len )
 	if( verbose > 0 ) printf( "WriteC2: %d bytes.\n", len );
 	//if( !mode.mo1a && mode.mn1 ) col=4;
 	for(i1=0;i1<col;i1++)
+		
 	{
 		i = outpack6.nsave;
 		outpack6.buf[i].size = 0;
