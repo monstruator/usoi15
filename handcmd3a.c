@@ -45,6 +45,28 @@ BLKT(int N_Chan)
 	}
 }
 
+SpeedR999()
+{
+	int i;
+	struct packet56 *p56;
+	i = outpack6.nsave;
+    p56 = (struct packet56 *)outpack6.buf[i].data;
+    p56->head.code = 0xc0;
+    p56->data[0] = r999cfg.sp;
+    outpack6.buf[i].size = sizeof(struct header56) + 1;
+    outpack6.buf[i].cmd = BUF3KIT_CMD_BLK6;
+    outpack6.nsave++;
+
+    i = outpack6.nsave;
+    p56 = (struct packet56 *)outpack6.buf[i].data;
+    p56->head.code = 0xb0;
+    p56->data[0] = 0x00;
+    p56->data[1] = 0x30;
+    outpack6.buf[i].size = sizeof(struct header56) + 2;
+    outpack6.buf[i].cmd = BUF3KIT_CMD_BLK6;
+    outpack6.nsave++;	
+}
+
 kzo7_1()
 {
 
@@ -845,8 +867,8 @@ int HandlerCmd11mo3a( int param0, int param1 )
    p56 = (struct packet56 *)outpack5.buf[i].data;
    p56->head.code = 0x40;
    p56->data[0] = 0x1f;
-   p56->data[1] = ( param1 % 10 ) & 0x0f;
-   p56->data[1] |= ( param1 / 10 ) << 4;;
+   p56->data[1] = ( param0 % 10 ) & 0x0f;
+   p56->data[1] |= ( param0 / 10 ) << 4;;
    p56->data[2] = ( param1 - 1 ) & 0x03;
    p56->data[2] |= 0x30;
    p56->data[3] = 0x22;
@@ -9065,11 +9087,8 @@ int HandlerCmd104mo3a( int param0, int param1, int param2 )
    f18 = (struct sac *)( outpack6.buf[i].data + sizeof(struct header56) + 5 );
    memset( (char *)f18, 0, sizeof(struct sac) );
    f18->ps = 1;
-   if( param0 ) {
-      f18->vr = 1;
-   } else {
-      f18->vr = 0;
-   }
+   if( param0 )	f18->vr = 1;
+   else 		f18->vr = 0;
    f18->kvi = 10;
    f18->nf = 18;
    f18->r0 = ( ( ( count.out6 / 10000 ) % 1000 ) % 100 ) % 10;
@@ -9081,9 +9100,7 @@ int HandlerCmd104mo3a( int param0, int param1, int param2 )
       f18->v1 = ( ( param0 % 3600 ) / 60 ) / 10;
       f18->v2 = ( param0 / 3600 ) % 10;
       f18->v3 = ( param0 / 3600 ) / 10;
-   } else {
-      f18->v0 = f18->v1 = f18->v2 = f18->v3 = 0;
-   }
+   } else      f18->v0 = f18->v1 = f18->v2 = f18->v3 = 0;
    f18->a0 = ( ( ( ( param1 % 100000 ) % 10000 ) % 1000 ) % 100 ) % 10;
    f18->a1 = ( ( ( ( param1 % 100000 ) % 10000 ) % 1000 ) % 100 ) / 10;
    f18->a2 = ( ( ( param1 % 100000 ) % 10000 ) % 1000 ) / 100;
@@ -9105,7 +9122,7 @@ int HandlerCmd104mo3a( int param0, int param1, int param2 )
          (char *)&inpack0.form[j], sizeof(struct formrls) );
    }
 
-	printf("form=%d\n",inpack0.nform);	for(j=0;j<194;j++) printf("%x ",outpack6.buf[i].data[j]);printf("\n");
+	//printf("form=%d\n",inpack0.nform);	for(j=0;j<194;j++) printf("%x ",outpack6.buf[i].data[j]);printf("\n");
 
    outpack6.buf[i].size = sizeof(struct header56) + 5 + sizeof(struct sac) +
       sizeof(short) + sizeof(struct formrls) * inpack0.nform;
@@ -9113,10 +9130,7 @@ int HandlerCmd104mo3a( int param0, int param1, int param2 )
    outpack6.nsave++;
    count.out6++;
 
-		i = outpack6.nsave;
-      outpack6.buf[i].size = 0;
-      outpack6.buf[i].cmd = BUF3KIT_CMD_BLKT;
-      outpack6.nsave++;
+	BLKT(6);
 
       i = outpack6.nsave;
       p56 = (struct packet56 *)outpack6.buf[i].data;
