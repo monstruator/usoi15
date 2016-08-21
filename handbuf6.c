@@ -170,9 +170,9 @@ int HandlerInPack6( const void *buf, unsigned len )
       sv = s->v0 + s->v1 * 10 + s->v2 * 100 + s->v3 * 1000;
       sn = *(short *)( (char *)s + sizeof(struct sac) );
       if( verbose > 0 ) {
-		 printf("sa=%d\n",sa);
+		// printf("sa=%d\n",sa);
          printf( "R999(%d): SAC f=%d k=%d a=%d p=%d r=%d v=%d n=%d.\n",  n, s->nf, s->kvi, sa, sp, sr, sv, sn );
-         printf( "R999: MODE recv=%d addr=%d sa=%d .\n",  mode.recv3, mode.addr3, sa );
+        // printf( "R999: MODE recv=%d addr=%d sa=%d .\n",  mode.recv3, mode.addr3, sa );
       }
 		//бортовой номер
 	    mode.a0 = s->p0;		mode.a1 = s->p1;
@@ -401,7 +401,7 @@ int HandlerInPack6( const void *buf, unsigned len )
       }
       break;
    case 0xf0:
-      if( verbose > 0 ) {
+      if( verbose > 1 ) {
          printf( "R999: Input flag (F0).\n" );
       }
       ReadStC2();
@@ -448,7 +448,6 @@ int WriteC2( const void *buf, unsigned len )
 	if( verbose > 0 ) printf( "WriteC2: %d bytes.\n", len );
 	//if( !mode.mo1a && mode.mn1 ) col=4;
 	for(i1=0;i1<col;i1++)
-		
 	{
 		i = outpack6.nsave;
 		outpack6.buf[i].size = 0;

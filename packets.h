@@ -205,6 +205,7 @@
       float targ_bear;
       float bear_sko;
       float targ_vip;
+	  float D_NRLS; //new ???
       float latitude;
       float longitude;
       float course;
