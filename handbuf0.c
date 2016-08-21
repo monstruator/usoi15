@@ -252,20 +252,6 @@ void HandlerInPack0( void )
             break;
          }   
          break;
-      case 9:
-         switch( mode.pr ) {
-         case 0:
-            break;
-         case 1:
-            HandlerCmd9mo3a( inpack0.a_params[0], inpack0.a_params[1], 
-               inpack0.a_params[2] );
-            break;
-         default:
-            outpack0.kzv = 1;
-            outpack0.cr_com++;
-            break;
-         }   
-         break;
       case 10:
          switch( mode.pr ) {
          case 0:
@@ -364,32 +350,6 @@ void HandlerInPack0( void )
             break;
          case 1:
             HandlerCmd19mo3a( inpack0.a_params[0], inpack0.a_params[1] );
-            break;
-         default:
-            outpack0.kzv = 1;
-            outpack0.cr_com++;
-            break;
-         }
-         break;
-      case 20:
-         switch( mode.pr ) {
-         case 0:
-            break;
-         case 1:
-            HandlerCmd20mo3a( inpack0.a_params[0] );
-            break;
-         default:
-            outpack0.kzv = 1;
-            outpack0.cr_com++;
-            break;
-         }
-         break;
-      case 21:
-         switch( mode.pr ) {
-         case 0:
-            break;
-         case 1:
-            HandlerCmd21mo3a( inpack0.a_params[0] );
             break;
          default:
             outpack0.kzv = 1;
