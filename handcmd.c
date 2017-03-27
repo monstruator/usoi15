@@ -117,9 +117,7 @@ int HandlerCmdKasrt27( void )
    static unsigned char nsoob = 0;
    time_t t;
 
-   if( verbose > 0 ) {
-      printf( "HandlerCmdKasrt27: no param\n" );
-   }
+   if( verbose > 0 )    printf( "HandlerCmdKasrt27: no param\n" );
 
    ControlLed2( 1 );
 
@@ -172,7 +170,7 @@ int HandlerCmdScan1( void )
    struct form11 *f11;
 //	static short n_scan1; //кол-во повторов скана
 
-   if( verbose > 0 ) {
+   if( verbose > 1 ) {
       printf( "HandlerCmdScan1: %d\n",mode.n_scan1 );
    }
 	mode.n_scan1++;
@@ -218,8 +216,6 @@ int HandlerCmdScan1( void )
 			return(0);
 		} //завершение после 80 опросов
    ControlLed1( 1 );
-
-	kzo13_1();
 
    i = outpack1.nsave;
    h12 = (struct header12 *)outpack1.buf[i].data;
@@ -304,8 +300,6 @@ int HandlerCmdRli1( void )
 			return(0);
 		}
    ControlLed1( 1 );
-
-	kzo13_1();	
 
    i = outpack1.nsave;
    h12 = (struct header12 *)outpack1.buf[i].data;
@@ -394,8 +388,6 @@ int HandlerCmdRli2( void )
 			return(0);
 		}
    ControlLed2( 1 );
-
-	kzo13_2();	
 
    i = outpack2.nsave;
    h12 = (struct header12 *)outpack2.buf[i].data;
@@ -490,8 +482,6 @@ int HandlerCmdScan2( void )
 	} //завершение после 80 опросов
    ControlLed2( 1 );
 
-	kzo13_2();
-
    i = outpack2.nsave;
    h12 = (struct header12 *)outpack2.buf[i].data;
    SetHeader12( h12 );
@@ -522,8 +512,6 @@ int HandlerCmdScan2( void )
    outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
    outpack2.nsave++;
 
-/* kzo7_2(); */
    return( 0 );
-
 }
 

@@ -67,96 +67,6 @@ SpeedR999()
     outpack6.nsave++;	
 }
 
-kzo7_1()
-{
-
-/*	int i;
-   struct header12 *h12;
-   struct form11 *f11;
-   struct packet34 *p34;
-   struct packet56 *p56;
-
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss =   h12->kvi =   h12->ps = 0;
-   h12->kzo = 7;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
-*/
-}
-
-kzo7_2()
-{
-/*	int i;
-   struct header12 *h12;
-   struct form11 *f11;
-   struct packet34 *p34;
-   struct packet56 *p56;
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss =  h12->kvi = h12->ps = 0;
-   h12->kzo = 7;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
-*/
-}
-
-kzo13_1()
-{
-/*   struct header12 *h12;
-
-	int i;
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss =  h12->kvi = h12->ps = 0;
-   h12->kzo = 1;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
-
-   i = outpack1.nsave;
-   h12 = (struct header12 *)outpack1.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss =  h12->kvi = h12->ps = 0;
-   h12->kzo = 3;
-   outpack1.buf[i].size = sizeof(struct header12);
-   outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-   outpack1.nsave++;
-*/
-}
-
-
-kzo13_2()
-{
-  /* struct header12 *h12;
-
-	int i;
-
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss =  h12->kvi = h12->ps = 0;
-   h12->kzo = 1;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
-
-   i = outpack2.nsave;
-   h12 = (struct header12 *)outpack2.buf[i].data;
-   SetHeader12( h12 );
-   h12->kss =  h12->kvi = h12->ps = 0;
-   h12->kzo = 3;
-   outpack2.buf[i].size = sizeof(struct header12);
-   outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-   outpack2.nsave++;
-*/
-}
-
 void BU1_K6( int kod ) //гЇа ў«Ґ­ЁҐ аҐ«Ґ Є6 ў Ѓ“1
 {
 	int i;
@@ -250,13 +160,9 @@ int HandlerCmd1mo3a( int param )
    struct packet34 *p34;
    struct packet56 *p56;
 
-   if( verbose > 0 ) {
-      printf( "HandlerCmd1mo3a: param=%08x\n", param );
-   }
+   if( verbose > 0 )      printf( "HandlerCmd1mo3a: param=%08x\n", param );
 
 //---------- Outpack1 (cmd1) ----------
-
-   kzo13_1();
 
    i = outpack1.nsave;
    h12 = (struct header12 *)outpack1.buf[i].data;
@@ -284,18 +190,13 @@ int HandlerCmd1mo3a( int param )
    outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
    outpack1.nsave++;
 
-	kzo7_1();
-
    stat.out |= FLAG_BUF1;
    ControlLed1( 1 );
-
-
 //---------- Outpack4 (cmd1) ----------
 
 	if( param ) {
 		BU2_K6(0x11);
       	BU2_K7(0x01);
-	
         stat.out |= FLAG_BUF4;
       ControlLed3( 1 );
 	}
@@ -367,13 +268,9 @@ int HandlerCmd2mo3a( int param )
    struct packet34 *p34;
    struct packet56 *p56;
 
-   if( verbose > 0 ) {
-      printf( "HandlerCmd2mo3a: param=%08x\n", param );
-   }
+   if( verbose > 0 )       printf( "HandlerCmd2mo3a: param=%08x\n", param );
 
 //---------- Outpack2 (cmd2) ----------
-
- kzo13_2();
 
    i = outpack2.nsave;
    h12 = (struct header12 *)outpack2.buf[i].data;
@@ -410,25 +307,15 @@ int HandlerCmd2mo3a( int param )
    outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
    outpack2.nsave++;
 
-	kzo7_2();
-
    stat.out |= FLAG_BUF2;
    ControlLed2( 1 );
 
 //---------- Outpack3 (cmd2) ----------
-
-//   i = outpack3.nsave;
-         	
    if( param ) 
       if( mode.mo1a ) BU1_K6(0x15);
       else       	  BU1_K6(0x1b);
     else       		  BU1_K6(0x00);
    
-//   p34->data[2] = Sum2( (unsigned char *)p34, sizeof(struct header34) + 2 );
-//   outpack3.buf[i].size = sizeof(struct header34) + 3;
-//   outpack3.buf[i].cmd = BUF3KIT_CMD_BLK3;
-//   outpack3.nsave++;
-
    stat.out |= FLAG_BUF3;
    ControlLed3( 1 );
 
@@ -524,13 +411,9 @@ int HandlerCmd5mo3a( int param )
    struct header12 *h12;
    struct form11 *f11;
 
-   if( verbose > 0 ) {
-      printf( "HandlerCmd5mo3a: param=%08x\n", param );
-   }
+   if( verbose > 0 )       printf( "HandlerCmd5mo3a: param=%08x\n", param );
 
 //---------- Outpack1 (cmd5) ----------
-
- kzo13_1();
 
    i = outpack1.nsave;
    h12 = (struct header12 *)outpack1.buf[i].data;
@@ -553,8 +436,6 @@ int HandlerCmd5mo3a( int param )
    outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
    outpack1.nsave++;
 
-	kzo7_1();
-
    stat.out |= FLAG_BUF1;
    ControlLed1( 1 );
    return( 0 );
@@ -568,13 +449,9 @@ int HandlerCmd6mo3a( int param )
    struct header12 *h12;
    struct form11 *f11;
  
-   if( verbose > 0 ) {
-      printf( "HandlerCmd6mo3a: param=%08x\n", param );
-   }
-
+   if( verbose > 0 )       printf( "HandlerCmd6mo3a: param=%08x\n", param );
+   
 //---------- Outpack2 (cmd6) ----------
-
-  kzo13_2();
 
    i = outpack2.nsave;
    h12 = (struct header12 *)outpack2.buf[i].data;
@@ -597,12 +474,8 @@ int HandlerCmd6mo3a( int param )
    outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
    outpack2.nsave++;
 
-	kzo7_2();
-
    stat.out |= FLAG_BUF2;
    ControlLed2( 1 );
-
-
    return( 0 );
 }
 
@@ -614,14 +487,9 @@ int HandlerCmd7mo3a( int param )
    struct header12 *h12;
    struct form11 *f11;
 
-   if( verbose > 0 ) {
-      printf( "HandlerCmd7mo3a: param=%08x\n", param );
-   }
+   if( verbose > 0 )       printf( "HandlerCmd7mo3a: param=%08x\n", param );
 
 //---------- Outpack1 (cmd7) ----------
-
- kzo13_1();
-
    i = outpack1.nsave;
    h12 = (struct header12 *)outpack1.buf[i].data;
    SetHeader12( h12 );
@@ -645,11 +513,8 @@ int HandlerCmd7mo3a( int param )
    outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
    outpack1.nsave++;
 
-	kzo7_1();
-
    stat.out |= FLAG_BUF1;
    ControlLed1( 1 );
-
    return( 0 );
 }
 
@@ -661,14 +526,9 @@ int HandlerCmd8mo3a( int param )
    struct header12 *h12;
    struct form11 *f11;
  
-   if( verbose > 0 ) {
-      printf( "HandlerCmd8mo3a: param=%08x\n", param );
-   }
-
+   if( verbose > 0 )       printf( "HandlerCmd8mo3a: param=%08x\n", param );
+   
 //---------- Outpack2 (cmd8) ----------
-
-   kzo13_2();
-
    i = outpack2.nsave;
    h12 = (struct header12 *)outpack2.buf[i].data;
    SetHeader12( h12 );
@@ -691,11 +551,8 @@ int HandlerCmd8mo3a( int param )
    outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
    outpack2.nsave++;
 
-	kzo7_2();
-
    stat.out |= FLAG_BUF2;
    ControlLed2( 1 );
-
    return( 0 );
 }
 
@@ -828,14 +685,9 @@ int HandlerCmd12mo3a( int param )
    struct header12 *h12;
    struct form11 *f11;
 
-   if( verbose > 0 ) {
-      printf( "HandlerCmd12mo3a: param=%08x\n", param );
-   }
-
+   if( verbose > 0 )      printf( "HandlerCmd12mo3a: param=%08x\n", param );
+ 
 //---------- Outpack1 (cmd12) ----------
-
-  kzo13_1();
-
    i = outpack1.nsave;
    h12 = (struct header12 *)outpack1.buf[i].data;
    SetHeader12( h12 );
@@ -858,11 +710,8 @@ int HandlerCmd12mo3a( int param )
    outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
    outpack1.nsave++;
 
-	kzo7_1();
-
    stat.out |= FLAG_BUF1;
    ControlLed1( 1 );
-
    return( 0 );
 }
 
@@ -874,14 +723,9 @@ int HandlerCmd13mo3a( int param )
    struct header12 *h12;
    struct form11 *f11;
  
-   if( verbose > 0 ) {
-      printf( "HandlerCmd13mo3a: param=%08x\n", param );
-   }
+   if( verbose > 0 )       printf( "HandlerCmd13mo3a: param=%08x\n", param );
 
 //---------- Outpack2 (cmd13) ----------
-
-   kzo13_2();
-
    i = outpack2.nsave;
    h12 = (struct header12 *)outpack2.buf[i].data;
    SetHeader12( h12 );
@@ -904,12 +748,8 @@ int HandlerCmd13mo3a( int param )
    outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
    outpack2.nsave++;
 
-	kzo7_2();
-
    stat.out |= FLAG_BUF2;
    ControlLed2( 1 );
-
-
    return( 0 );
 }
 
@@ -922,15 +762,10 @@ int HandlerCmd14mo3a( int param )
    struct form11 *f11;
    struct packet34 *p34;
 
-   if( verbose > 0 ) {
-      printf( "HandlerCmd14mo3a: param=0x%08x\n", param );
-   }
-
+   if( verbose > 0 )      printf( "HandlerCmd14mo3a: param=0x%08x\n", param );
+   
 //---------- Outpack1 (cmd14) ----------
-
   ControlLed1( 1 );
-
-	kzo13_1();
 
    i = outpack1.nsave;
    h12 = (struct header12 *)outpack1.buf[i].data;
@@ -982,13 +817,8 @@ int HandlerCmd14mo3a( int param )
    outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
    outpack1.nsave++;
 
-	kzo7_1();
-
    stat.out |= FLAG_BUF1;
-
-
 //---------- Outpack4 (cmd14) ----------
-
    if( param ) {
     BU2_K6(0x11);
     ControlLed3( 1 );
@@ -999,7 +829,6 @@ int HandlerCmd14mo3a( int param )
 
    if( param )  {mode.scan1 = mode.scan_p1=1;}
    else         {mode.scan1 = mode.scan_p1=0;}
-   
 //   stat.cmd |= CMD_READ_KASRT1;
    return( 0 );
 }
@@ -1013,15 +842,10 @@ int HandlerCmd15mo3a( int param )
    struct form11 *f11;
    struct packet34 *p34;
 
-   if( verbose > 0 ) {
-      printf( "HandlerCmd15mo3a: param=0x%08x\n", param );
-   }
+   if( verbose > 0 )       printf( "HandlerCmd15mo3a: param=0x%08x\n", param );
 
 //---------- Outpack2 (cmd15) ----------
-
 ControlLed2( 1 );
-
-	kzo13_2();
 
    i = outpack2.nsave;
    h12 = (struct header12 *)outpack2.buf[i].data;
@@ -1074,10 +898,7 @@ ControlLed2( 1 );
    outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
    outpack2.nsave++;
 
-	kzo7_2();
-
    stat.out |= FLAG_BUF2;
-
 //---------- Outpack3 (cmd15) ----------
 
    if( param ) {
@@ -1087,10 +908,8 @@ ControlLed2( 1 );
    }
 
    //--------------- Other ---------------
-
    if( param )  {mode.scan2 = mode.scan_p2=1;}
    else         {mode.scan2 = mode.scan_p2=0;}
-   
 //   stat.cmd |= CMD_READ_KASRT2;
    return( 0 );
 }
@@ -1241,14 +1060,9 @@ int HandlerCmd30mo3a( int param )
    struct header12 *h12;
    struct form11 *f11;
 
-   if( verbose > 0 ) {
-      printf( "HandlerCmd30mo3a: param=%08x\n", param );
-   }
+   if( verbose > 0 )       printf( "HandlerCmd30mo3a: param=%08x\n", param );
 
 //---------- Outpack1 (cmd30) ----------
-
-  kzo13_1();
-
    i = outpack1.nsave;
    h12 = (struct header12 *)outpack1.buf[i].data;
    SetHeader12( h12 );
@@ -1260,20 +1074,15 @@ int HandlerCmd30mo3a( int param )
    h12->kzo = 5;
    f11 = (struct form11 *)(outpack1.buf[i].data + sizeof(struct header12));
    memcpy( (char *)f11, (char *)&form11k1, sizeof(struct form11) );
-   if( ( param >= 0 ) && ( param <= 10 ) ) {
-      f11->ku7 = param; //PRD-0..10dB
-   }
+   if( ( param >= 0 ) && ( param <= 10 ) )  f11->ku7 = param; //PRD-0..10dB
    f11->ku9z0 = 1; //ZAPROS-0
    memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
    outpack1.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
    outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
    outpack1.nsave++;
 
-	kzo7_1();
-
    stat.out |= FLAG_BUF1;
    ControlLed1( 1 );
-
    return( 0 );
 }
 
@@ -1285,15 +1094,9 @@ int HandlerCmd31mo3a( int param )
    struct header12 *h12;
    struct form11 *f11;
 
-   if( verbose > 0 ) {
-      printf( "HandlerCmd31mo3a: param=%08x\n", param );
-   }
+   if( verbose > 0 )       printf( "HandlerCmd31mo3a: param=%08x\n", param );
 
 //---------- Outpack1 (cmd31) ----------
-
-   
-	kzo13_1();
-
    i = outpack1.nsave;
    h12 = (struct header12 *)outpack1.buf[i].data;
    SetHeader12( h12 );
@@ -1305,22 +1108,16 @@ int HandlerCmd31mo3a( int param )
    h12->kzo = 5;
    f11 = (struct form11 *)(outpack1.buf[i].data + sizeof(struct header12));
    memcpy( (char *)f11, (char *)&form11k1, sizeof(struct form11) );
-   if( param > 1 ) {
-      f11->ku11 = 1;
-   } else {
-      f11->ku11 = 0;
-   }
+   if( param > 1 )    f11->ku11 = 1;
+   else 		      f11->ku11 = 0;
    f11->ku9z0 = 1; //ZAPROS-0
    memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
    outpack1.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
    outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
    outpack1.nsave++;
 
-	kzo7_1();
-
    stat.out |= FLAG_BUF1;
    ControlLed1( 1 );
-
    return( 0 );
 }
 
@@ -1332,14 +1129,9 @@ int HandlerCmd32mo3a( int param )
    struct header12 *h12;
    struct form11 *f11;
 
-   if( verbose > 0 ) {
-      printf( "HandlerCmd32mo3a: param=%08x\n", param );
-   }
+   if( verbose > 0 )     printf( "HandlerCmd32mo3a: param=%08x\n", param );
 
 //---------- Outpack1 (cmd32) ----------
-
-	kzo13_1();
-
    i = outpack1.nsave;
    h12 = (struct header12 *)outpack1.buf[i].data;
    SetHeader12( h12 );
@@ -1361,8 +1153,6 @@ int HandlerCmd32mo3a( int param )
    outpack1.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
    outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
    outpack1.nsave++;
-
-	kzo7_1();
 
    stat.out |= FLAG_BUF1;
    ControlLed1( 1 );
@@ -1377,14 +1167,9 @@ int HandlerCmd33mo3a( int param )
    struct header12 *h12;
    struct form11 *f11;
 
-   if( verbose > 0 ) {
-      printf( "HandlerCmd33mo3a: param=%08x\n", param );
-   }
+   if( verbose > 0 )       printf( "HandlerCmd33mo3a: param=%08x\n", param );
 
 //---------- Outpack1 (cmd33) ----------
-
-  kzo13_1();
-
    i = outpack1.nsave;
    h12 = (struct header12 *)outpack1.buf[i].data;
    SetHeader12( h12 );
@@ -1396,22 +1181,16 @@ int HandlerCmd33mo3a( int param )
    h12->kzo = 5;
    f11 = (struct form11 *)(outpack1.buf[i].data + sizeof(struct header12));
    memcpy( (char *)f11, (char *)&form11k1, sizeof(struct form11) );
-   if( param > 1 ) {
-      f11->ku13 = 1;
-   } else {
-      f11->ku13 = 0;
-   }
+   if( param > 1 )       f11->ku13 = 1;
+   else 		         f11->ku13 = 0;
    f11->ku9z0 = 1; //ZAPROS-0
    memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
    outpack1.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
    outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
    outpack1.nsave++;
 
-	kzo7_1();
-
    stat.out |= FLAG_BUF1;
    ControlLed1( 1 );
-
    return( 0 );
 }
 
@@ -1423,14 +1202,9 @@ int HandlerCmd40mo3a( int param )
    struct header12 *h12;
    struct form11 *f11;
  
-   if( verbose > 0 ) {
-      printf( "HandlerCmd40mo3a: param=%08x\n", param );
-   }
+   if( verbose > 0 )      printf( "HandlerCmd40mo3a: param=%08x\n", param );
 
 //---------- Outpack2 (cmd40) ----------
-
-	kzo13_2();
-
    i = outpack2.nsave;
    h12 = (struct header12 *)outpack2.buf[i].data;
    SetHeader12( h12 );
@@ -1442,20 +1216,15 @@ int HandlerCmd40mo3a( int param )
    h12->kzo = 5;
    f11 = (struct form11 *)(outpack2.buf[i].data + sizeof(struct header12));
    memcpy( (char *)f11, (char *)&form11k2, sizeof(struct form11) );
-   if( ( param >= 0 ) && ( param <= 10 ) ) {
-      f11->ku7 = param; //PRD-0..10dB
-   }
+   if( ( param >= 0 ) && ( param <= 10 ) )       f11->ku7 = param; //PRD-0..10dB
    f11->ku9z0 = 1; //ZAPROS-0
    memcpy( (char *)&form11k2, (char *)f11, sizeof(struct form11) );
    outpack2.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
    outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
    outpack2.nsave++;
 
-	kzo7_2();
-
    stat.out |= FLAG_BUF2;
    ControlLed2( 1 );
-
    return( 0 );
 }
 
@@ -1467,14 +1236,8 @@ int HandlerCmd41mo3a( int param )
    struct header12 *h12;
    struct form11 *f11;
  
-   if( verbose > 0 ) {
-      printf( "HandlerCmd41mo3a: param=%08x\n", param );
-   }
-
+   if( verbose > 0 )       printf( "HandlerCmd41mo3a: param=%08x\n", param );
 //---------- Outpack2 (cmd41) ----------
-
-  kzo13_2();
-
    i = outpack2.nsave;
    h12 = (struct header12 *)outpack2.buf[i].data;
    SetHeader12( h12 );
@@ -1486,22 +1249,16 @@ int HandlerCmd41mo3a( int param )
    h12->kzo = 5;
    f11 = (struct form11 *)(outpack2.buf[i].data + sizeof(struct header12));
    memcpy( (char *)f11, (char *)&form11k2, sizeof(struct form11) );
-   if( param > 1 ) {
-      f11->ku11 = 1;
-   } else {
-      f11->ku11 = 0;
-   }
+   if( param > 1 )       f11->ku11 = 1;
+   else				     f11->ku11 = 0;
    f11->ku9z0 = 1; //ZAPROS-0
    memcpy( (char *)&form11k2, (char *)f11, sizeof(struct form11) );
    outpack2.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
    outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
    outpack2.nsave++;
 
-	kzo7_2();
-
    stat.out |= FLAG_BUF2;
    ControlLed2( 1 );
-
    return( 0 );
 }
 
@@ -1513,14 +1270,9 @@ int HandlerCmd42mo3a( int param )
    struct header12 *h12;
    struct form11 *f11;
  
-   if( verbose > 0 ) {
-      printf( "HandlerCmd42mo3a: param=%08x\n", param );
-   }
+   if( verbose > 0 )       printf( "HandlerCmd42mo3a: param=%08x\n", param );
 
 //---------- Outpack2 (cmd42) ----------
-
- kzo13_2();
-
    i = outpack2.nsave;
    h12 = (struct header12 *)outpack2.buf[i].data;
    SetHeader12( h12 );
@@ -1532,22 +1284,16 @@ int HandlerCmd42mo3a( int param )
    h12->kzo = 5;
    f11 = (struct form11 *)(outpack2.buf[i].data + sizeof(struct header12));
    memcpy( (char *)f11, (char *)&form11k2, sizeof(struct form11) );
-   if( param > 1 ) {
-      f11->ku12 = 1;
-   } else {
-      f11->ku12 = 0;
-   }
+   if( param > 1 )       f11->ku12 = 1;
+   else 			     f11->ku12 = 0;
    f11->ku9z0 = 1; //ZAPROS-0
    memcpy( (char *)&form11k2, (char *)f11, sizeof(struct form11) );
    outpack2.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
    outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
    outpack2.nsave++;
 
-	kzo7_2();
-
    stat.out |= FLAG_BUF2;
    ControlLed2( 1 );
-
    return( 0 );
 }
 
@@ -1559,14 +1305,9 @@ int HandlerCmd43mo3a( int param )
    struct header12 *h12;
    struct form11 *f11;
  
-   if( verbose > 0 ) {
-      printf( "HandlerCmd43mo3a: param=%08x\n", param );
-   }
+   if( verbose > 0 )      printf( "HandlerCmd43mo3a: param=%08x\n", param );
 
 //---------- Outpack2 (cmd43) ----------
-
-  kzo13_2();
-
    i = outpack2.nsave;
    h12 = (struct header12 *)outpack2.buf[i].data;
    SetHeader12( h12 );
@@ -1578,22 +1319,16 @@ int HandlerCmd43mo3a( int param )
    h12->kzo = 5;
    f11 = (struct form11 *)(outpack2.buf[i].data + sizeof(struct header12));
    memcpy( (char *)f11, (char *)&form11k2, sizeof(struct form11) );
-   if( param > 1 ) {
-      f11->ku13 = 1;
-   } else {
-      f11->ku13 = 0;
-   }
+   if( param > 1 )      f11->ku13 = 1;
+   else 			    f11->ku13 = 0;
    f11->ku9z0 = 1; //ZAPROS-0
    memcpy( (char *)&form11k2, (char *)f11, sizeof(struct form11) );
    outpack2.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
    outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
    outpack2.nsave++;
 
-	kzo7_2();
-
    stat.out |= FLAG_BUF2;
    ControlLed2( 1 );
-
    return( 0 );
 }
 
@@ -1601,15 +1336,12 @@ int HandlerCmd43mo3a( int param )
 
 int HandlerCmd50mo3a( void )
 {
-   int i;
+   int i,n;
    struct packet56 *p56;
    time_t t;
    struct tm *tm;
-   int n;
 
-   if( verbose > 0 ) {
-      printf( "HandlerCmd50mo3a: no param.\n" );
-   }
+   if( verbose > 0 )       printf( "HandlerCmd50mo3a: no param.\n" );
 
 //---------- Outpack5 (cmd50) ----------
 
@@ -1646,7 +1378,6 @@ int HandlerCmd50mo3a( void )
 
    stat.out |= FLAG_BUF5;
    ControlLed4( 1 );
-
    return( 0 );
 }
 
@@ -1659,13 +1390,9 @@ int HandlerCmd60mo3a( void )
    struct form11 *f11;
    struct packet34 *p34;
 
-   if( verbose > 0 ) {
-      printf( "HandlerCmd60mo3a\n" );
-   }
+   if( verbose > 0 )       printf( "HandlerCmd60mo3a\n" );
 
 //---------- Outpack1 (cmd60) ----------
-	kzo13_1();
-
    i = outpack1.nsave;
    h12 = (struct header12 *)outpack1.buf[i].data;
    SetHeader12( h12 );
@@ -1692,8 +1419,6 @@ int HandlerCmd60mo3a( void )
    outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
    outpack1.nsave++;
 
-	kzo7_1();
-
    stat.out |= FLAG_BUF1;
    ControlLed1( 1 );
 //---------- Outpack4 (cmd60) ----------
@@ -1717,7 +1442,6 @@ int HandlerCmd60mo3a( void )
 
    stat.out |= FLAG_BUF4;
    ControlLed3( 1 );
-
    return( 0 );
 }
 
@@ -1729,14 +1453,9 @@ int HandlerCmd61mo3a( void )
    struct header12 *h12;
    struct form11 *f11;
 
-   if( verbose > 0 ) {
-      printf( "HandlerCmd61mo3a\n" );
-   }
+   if( verbose > 0 )       printf( "HandlerCmd61mo3a\n" );
 
 //---------- Outpack1 (cmd61) ----------
-
- kzo13_1();
-
    i = outpack1.nsave;
    h12 = (struct header12 *)outpack1.buf[i].data;
    SetHeader12( h12 );
@@ -1764,8 +1483,6 @@ int HandlerCmd61mo3a( void )
    outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
    outpack1.nsave++;
 
-	kzo7_1();
-
    stat.out |= FLAG_BUF1;
    ControlLed1( 1 );
    return( 0 );
@@ -1780,14 +1497,9 @@ int HandlerCmd63mo3a( void )
    struct form11 *f11;
    struct packet34 *p34;
 
-   if( verbose > 0 ) {
-      printf( "HandlerCmd63mo3a\n" );
-   }
+   if( verbose > 0 )       printf( "HandlerCmd63mo3a\n" );
 
 //---------- Outpack1 (cmd63) ----------
-
-   kzo13_1();
-
    i = outpack1.nsave;
    h12 = (struct header12 *)outpack1.buf[i].data;
    SetHeader12( h12 );
@@ -1814,11 +1526,8 @@ int HandlerCmd63mo3a( void )
    outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
    outpack1.nsave++;
 
-	kzo7_1();
-
    stat.out |= FLAG_BUF1;
    ControlLed1( 1 );
-   
    return( 0 );
 }
 
@@ -1831,14 +1540,9 @@ int HandlerCmd64mo3a( void )
    struct form11 *f11;
    struct packet34 *p34;
 
-   if( verbose > 0 ) {
-      printf( "HandlerCmd64mo3a\n" );
-   }
+   if( verbose > 0 )       printf( "HandlerCmd64mo3a\n" );
 
 //---------- Outpack1 (cmd64) ----------
-
-	kzo13_1();
-
    i = outpack1.nsave;
    h12 = (struct header12 *)outpack1.buf[i].data;
    SetHeader12( h12 );
@@ -1865,8 +1569,6 @@ int HandlerCmd64mo3a( void )
    outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
    outpack1.nsave++;
 
-	kzo7_1();
-
    stat.out |= FLAG_BUF1;
    ControlLed1( 1 );
 
@@ -1891,7 +1593,6 @@ int HandlerCmd64mo3a( void )
    
    stat.out |= FLAG_BUF4;
    ControlLed3( 1 );
-
    return( 0 );
 }
 
@@ -1904,14 +1605,9 @@ int HandlerCmd65mo3a( int param )
    struct form11 *f11;
    struct packet34 *p34;
 
-   if( verbose > 0 ) {
-      printf( "HandlerCmd65mo3a: param=%08x\n", param );
-   }
+   if( verbose > 0 )       printf( "HandlerCmd65mo3a: param=%08x\n", param );
 
 //---------- Outpack1 (cmd65) ----------
-
-  kzo13_1();
-
    i = outpack1.nsave;
    h12 = (struct header12 *)outpack1.buf[i].data;
    SetHeader12( h12 );
@@ -1968,8 +1664,6 @@ int HandlerCmd65mo3a( int param )
    outpack1.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
    outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
    outpack1.nsave++;
-
-	kzo7_1();
 
    stat.out |= FLAG_BUF1;
    ControlLed1( 1 );
@@ -2043,14 +1737,9 @@ int HandlerCmd70mo3a( void )
    struct form11 *f11;
    struct packet34 *p34;
 
-   if( verbose > 0 ) {
-      printf( "HandlerCmd70mo3a\n" );
-   }
+   if( verbose > 0 )       printf( "HandlerCmd70mo3a\n" );
 
 //---------- Outpack2 (cmd70) ----------
-
-kzo13_2();
-
    i = outpack2.nsave;
    h12 = (struct header12 *)outpack2.buf[i].data;
    SetHeader12( h12 );
@@ -2076,8 +1765,6 @@ kzo13_2();
    outpack2.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
    outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
    outpack2.nsave++;
-
-	kzo7_2();
 
    stat.out |= FLAG_BUF2;
    ControlLed2( 1 );
@@ -2113,7 +1800,6 @@ kzo13_2();
 
    stat.out |= FLAG_BUF3;
    ControlLed3( 1 );
-
    return( 0 );
 }
 
@@ -2125,14 +1811,9 @@ int HandlerCmd71mo3a( void )
    struct header12 *h12;
    struct form11 *f11;
 
-   if( verbose > 0 ) {
-      printf( "HandlerCmd71mo3a\n" );
-   }
+   if( verbose > 0 )       printf( "HandlerCmd71mo3a\n" );
 
 //---------- Outpack2 (cmd71) ----------
-
-   kzo13_2();
-
    i = outpack2.nsave;
    h12 = (struct header12 *)outpack2.buf[i].data;
    SetHeader12( h12 );
@@ -2160,11 +1841,8 @@ int HandlerCmd71mo3a( void )
    outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
    outpack2.nsave++;
 
-	kzo7_2();
-
    stat.out |= FLAG_BUF2;
    ControlLed2( 1 );
-   
    return( 0 );
 }
 
@@ -2176,14 +1854,9 @@ int HandlerCmd73mo3a( void )
    struct header12 *h12;
    struct form11 *f11;
 
-   if( verbose > 0 ) {
-      printf( "HandlerCmd73mo3a\n" );
-   }
+   if( verbose > 0 )       printf( "HandlerCmd73mo3a\n" );
 
 //---------- Outpack2 (cmd73) ----------
-
-   kzo13_2();
-
    i = outpack2.nsave;
    h12 = (struct header12 *)outpack2.buf[i].data;
    SetHeader12( h12 );
@@ -2210,11 +1883,8 @@ int HandlerCmd73mo3a( void )
    outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
    outpack2.nsave++;
 
-	kzo7_2();
-
    stat.out |= FLAG_BUF2;
    ControlLed2( 1 );
-
    return( 0 );
 }
 
@@ -2227,14 +1897,9 @@ int HandlerCmd74mo3a( void )
    struct form11 *f11;
    struct packet34 *p34;
 
-   if( verbose > 0 ) {
-      printf( "HandlerCmd74mo3a\n" );
-   }
+   if( verbose > 0 )       printf( "HandlerCmd74mo3a\n" );
 
 //---------- Outpack2 (cmd74) ----------
-
-   kzo13_2();
-
    i = outpack2.nsave;
    h12 = (struct header12 *)outpack2.buf[i].data;
    SetHeader12( h12 );
@@ -2261,13 +1926,10 @@ int HandlerCmd74mo3a( void )
    outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
    outpack2.nsave++;
 
-	kzo7_2();
-
    stat.out |= FLAG_BUF2;
    ControlLed2( 1 );
    
 //---------- Outpack3 (cmd74) ----------
-
     BU1_K6(0x00);
 
    i = outpack3.nsave;
@@ -2283,7 +1945,6 @@ int HandlerCmd74mo3a( void )
 
    stat.out |= FLAG_BUF3;
    ControlLed3( 1 );
-
    return( 0 );
 }
 
@@ -2296,14 +1957,9 @@ int HandlerCmd75mo3a( int param )
    struct form11 *f11;
    struct packet34 *p34;
 
-   if( verbose > 0 ) {
-      printf( "HandlerCmd75mo3a: param=%08x\n", param );
-   }
+   if( verbose > 0 )       printf( "HandlerCmd75mo3a: param=%08x\n", param );
 
 //---------- Outpack2 (cmd75) ----------
-
- kzo13_2();
-
    i = outpack2.nsave;
    h12 = (struct header12 *)outpack2.buf[i].data;
    SetHeader12( h12 );
@@ -2356,8 +2012,6 @@ int HandlerCmd75mo3a( int param )
    outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
    outpack2.nsave++;
 
-	kzo7_2();
-
    stat.out |= FLAG_BUF2;
    ControlLed2( 1 );
    
@@ -2404,7 +2058,6 @@ int HandlerCmd75mo3a( int param )
       stat.out |= FLAG_BUF3;
       ControlLed3( 1 );
    }
-
    return( 0 );
 }
 
@@ -2412,13 +2065,10 @@ int HandlerCmd75mo3a( int param )
 
 int HandlerCmd80mo3a( int param )
 {
-   int i;
+   int i,n;
    struct packet56 *p56;
-   int n;
 
-   if( verbose > 0 ) {
-      printf( "HandlerCmd80mo3a: param=%08x\n", param );
-   }
+   if( verbose > 0 )      printf( "HandlerCmd80mo3a: param=%08x\n", param );
 
 //---------- Outpack5 (cmd80) ----------
 
@@ -2469,7 +2119,6 @@ int HandlerCmd80mo3a( int param )
 
    stat.out |= FLAG_BUF5;
    ControlLed4( 1 );
-
    return( 0 );
 }
 
@@ -2477,13 +2126,10 @@ int HandlerCmd80mo3a( int param )
 
 int HandlerCmd82mo3a( void )
 {
-   int i;
+   int i,n;
    struct packet56 *p56;
-   int n;
 
-   if( verbose > 0 ) {
-      printf( "HandlerCmd82mo3a\n");
-   }
+   if( verbose > 0 )       printf( "HandlerCmd82mo3a\n");
 
 //---------- Outpack5 (cmd82) ----------
 
@@ -2521,7 +2167,6 @@ int HandlerCmd82mo3a( void )
 
    stat.out |= FLAG_BUF5;
    ControlLed4( 1 );
-
    return( 0 );
 }
 
@@ -2529,13 +2174,10 @@ int HandlerCmd82mo3a( void )
 
 int HandlerCmd83mo3a( void )
 {
-   int i;
+   int i,n;
    struct packet56 *p56;
-   int n;
 
-   if( verbose > 0 ) {
-      printf( "HandlerCmd83mo3a\n");
-   }
+   if( verbose > 0 )       printf( "HandlerCmd83mo3a\n");
 
 //---------- Outpack5 (cmd83) ----------
 
@@ -2573,7 +2215,6 @@ int HandlerCmd83mo3a( void )
 
    stat.out |= FLAG_BUF5;
    ControlLed4( 1 );
-
    return( 0 );
 }
 
@@ -2586,14 +2227,9 @@ int HandlerCmd90mo3a( void )
    struct form11 *f11;
    struct packet34 *p34;
 
-   if( verbose > 0 ) {
-      printf( "HandlerCmd90mo3a\n");
-   }
+   if( verbose > 0 )       printf( "HandlerCmd90mo3a\n");
 
 //---------- Outpack1 (cmd90) ----------
-
- kzo13_1();
-
    i = outpack1.nsave;
    h12 = (struct header12 *)outpack1.buf[i].data;
    SetHeader12( h12 );
@@ -2620,15 +2256,10 @@ int HandlerCmd90mo3a( void )
    outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
    outpack1.nsave++;
 
-	kzo7_1();
-
    stat.out |= FLAG_BUF1;
    ControlLed1( 1 );
 
 //---------- Outpack2 (cmd90) ----------
-
-	kzo13_2();
-
    i = outpack2.nsave;
    h12 = (struct header12 *)outpack2.buf[i].data;
    SetHeader12( h12 );
@@ -2655,8 +2286,6 @@ int HandlerCmd90mo3a( void )
    outpack2.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
    outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
    outpack2.nsave++;
-
-	kzo7_2();
 
    stat.out |= FLAG_BUF2;
    ControlLed2( 1 );
@@ -2726,7 +2355,6 @@ int HandlerCmd90mo3a( void )
 
    stat.out |= FLAG_BUF4;
    ControlLed3( 1 );
-
    return( 0 );
 }
 
@@ -2734,20 +2362,14 @@ int HandlerCmd90mo3a( void )
 
 int HandlerCmd91mo3a( void )
 {
-   int i;
+   int i,n;
    struct header12 *h12;
    struct form11 *f11;
    struct packet56 *p56;
-   int n;
 
-   if( verbose > 0 ) {
-      printf( "HandlerCmd91mo3a\n");
-   }
+   if( verbose > 0 )      printf( "HandlerCmd91mo3a\n");
 
 //---------- Outpack1 (cmd91) ----------
-
-   kzo13_1();
-
    i = outpack1.nsave;
    h12 = (struct header12 *)outpack1.buf[i].data;
    SetHeader12( h12 );
@@ -2775,15 +2397,10 @@ int HandlerCmd91mo3a( void )
    outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
    outpack1.nsave++;
 
-	kzo7_1();
-
    stat.out |= FLAG_BUF1;
    ControlLed1( 1 );
 
 //---------- Outpack2 (cmd91) ----------
-
-	kzo13_2();
-
    i = outpack2.nsave;
    h12 = (struct header12 *)outpack2.buf[i].data;
    SetHeader12( h12 );
@@ -2811,8 +2428,6 @@ int HandlerCmd91mo3a( void )
    outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
    outpack2.nsave++;
 
-	kzo7_2();
-
    stat.out |= FLAG_BUF2;
    ControlLed2( 1 );
 
@@ -2836,7 +2451,6 @@ int HandlerCmd91mo3a( void )
 
    stat.out |= FLAG_BUF5;
    ControlLed4( 1 );
-
    return( 0 );
 }
 
@@ -2844,23 +2458,16 @@ int HandlerCmd91mo3a( void )
 
 int HandlerCmd92mo3a( int param )
 {
-   int i;
+   int i,n;
    struct header12 *h12;
    struct form11 *f11;
    struct packet34 *p34;
    struct packet56 *p56;
-   int n;
 
-   if( verbose > 0 ) {
-      printf( "HandlerCmd92mo3a: param=%x\n", param );
-   }
+   if( verbose > 0 )      printf( "HandlerCmd92mo3a: param=%x\n", param );
 
 //---------- Outpack1 (cmd92) ----------
-
     if( ( param == 1 ) || ( param == 3 ) || ( param == 5 ) || ( param == 9 ) ) {
-	
-		kzo13_1();
-
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
       SetHeader12( h12 );
@@ -2929,8 +2536,6 @@ int HandlerCmd92mo3a( int param )
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
       outpack1.nsave++;
 
-	kzo7_1();
-
       stat.out |= FLAG_BUF1;
       ControlLed1( 1 );
    }
@@ -2938,9 +2543,6 @@ int HandlerCmd92mo3a( int param )
 //---------- Outpack2 (cmd92) ----------
 
    if( ( param == 2 ) || ( param == 4 ) || ( param == 6 ) || ( param == 10 ) ) {
-	
-		kzo13_2();
-
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
       SetHeader12( h12 );
@@ -3008,8 +2610,6 @@ int HandlerCmd92mo3a( int param )
       outpack2.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
       outpack2.nsave++;
-
-	kzo7_2();
 
       stat.out |= FLAG_BUF2;
       ControlLed2( 1 );
@@ -3185,7 +2785,6 @@ int HandlerCmd92mo3a( int param )
       outpack0.cr_com++;
       stat.out = stat.in = 0;
    }
-
    return( 0 );
 }
 
@@ -3193,60 +2792,46 @@ int HandlerCmd92mo3a( int param )
 
 int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
 {
-   int i;
+   int i,j,ii=0;
    struct header12 *h12;
    struct form11 *f11;
    struct sac *f26;
    struct packet56 *p56;
    struct packet34 *p34;
-   int j;
+   struct form193 *f193;
 
-   if( verbose > 0 ) {
-      printf( "HandlerCmd93mo3a: p0=%x p1=%x p2=%x p3=%x\n", 
-         param0, param1, param2, param3 );
-   }
+   if( verbose > 0 )      printf( "HandlerCmd93mo3a: p0=%x p1=%x p2=%x p3=%x\n",   param0, param1, param2, param3 );
 
 //---------- Outpack1 (cmd93mo3a) ----------
-
-   if( param0 == 0 ) { //SVC-1
+	if( (param0 == 0 )||(param0==3)) { //SVC-1
      //SVC-1 -> Step 1
-
-		kzo13_1();
-
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
       SetHeader12( h12 );
       h12->npol = 1;
       h12->nspol = 1;  
-      h12->kss = sizeof(struct sac) / 2;
+      h12->kss = sizeof(struct form193) / 2;
       h12->kvi = 2;
       h12->ps = 0;
       h12->kzo = 5;
-      f26 = (struct sac *)(outpack1.buf[i].data + sizeof(struct header12));
-      memcpy( (char *)f26, (char *)&form26k1, sizeof(struct sac) );
-      f26->ps = 1;
-      if( param1 ) {
-         f26->vr = 1;
-      } else {
-         f26->vr = 0;
-      }
-      count.out1++;
-      f26->kvi = 2;
-      f26->nf = 26;
-      f26->r0 = ( ( ( count.out1 % 10000 ) % 1000 ) % 100 ) % 10;
-      f26->r1 = ( ( ( count.out1 % 10000 ) % 1000 ) % 100 ) / 10;
-      f26->r2 = ( ( count.out1 % 10000 ) % 1000 ) / 100;
-      f26->r3 = ( count.out1 % 10000 ) / 1000;
+      f193 = (struct form193 *)(outpack1.buf[i].data + 
+         sizeof(struct header12));
+      memset( (char *)f193, 0, sizeof(struct form193) );
 
-	  //printf("\n count.out1=%d r0=%x r1=%x r2=%x r3=%x\n",count.out1,f26->r0,f26->r1,f26->r2,f26->r3);
+//   ---------------------------- zapolnenie f26
+      f26 = (struct sac *)(outpack1.buf[i].data + sizeof(struct header12));
+      f26->ps = 1;
+      if( param1 ) f26->vr = 1;
+      else         f26->vr = 0;
+      
+      count.out1++;
       if( param1 ) {
          f26->v0 = ( ( param1 % 3600 ) / 60 ) % 10;
          f26->v1 = ( ( param1 % 3600 ) / 60 ) / 10;;
          f26->v2 = ( param1 / 3600 ) % 10 ;
          f26->v3 = ( param1 / 3600 ) / 10;
-      } else {
-         f26->v0 = f26->v1 = f26->v2 = f26->v3 = 0;
-      }
+      } else f26->v0 = f26->v1 = f26->v2 = f26->v3 = 0;
+      
       f26->a0 = ( ( ( ( param2 % 100000 ) % 10000 ) % 1000 ) % 100 ) % 10;
       f26->a1 = ( ( ( ( param2 % 100000 ) % 10000 ) % 1000 ) % 100 ) / 10;
       f26->a2 = ( ( ( param2 % 100000 ) % 10000 ) % 1000 ) / 100;
@@ -3260,23 +2845,41 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
       f26->p4 = ( param3 % 100000 ) / 10000;
       f26->p5 = param3 / 100000;
 
-		mode.a0=f26->a0;  //бортовой номер
-		mode.a1=f26->a1;
-		mode.a2=f26->a2;
-		mode.a3=f26->a3;
-		mode.a4=f26->a4;
-		mode.a5=f26->a5;
-		mode.p0=f26->p0;
-		mode.p1=f26->p1;
-		mode.p2=f26->p2;
-		mode.p3=f26->p3;
-		mode.p4=f26->p4;
-		mode.p5=f26->p5;
+		mode.a0=f26->a0;  mode.a1=f26->a1;//Ў®ав®ў®© ­®¬Ґа
+		mode.a2=f26->a2;  mode.a3=f26->a3;
+		mode.a4=f26->a4;  mode.a5=f26->a5;
+		mode.p0=f26->p0;  mode.p1=f26->p1;
+		mode.p2=f26->p2;  mode.p3=f26->p3;
+		mode.p4=f26->p4;  mode.p5=f26->p5;
 
       memcpy( (char *)&form26k1, (char *)f26, sizeof(struct sac) );
-      outpack1.buf[i].size = sizeof(struct header12) + sizeof(struct sac);
+      memcpy( (char *)f193, (char *)&form26k1, sizeof(struct sac) );
+
+      f193->s.kvi = 2;
+      f193->s.nf = 193;
+      count.out1++;
+
+      f193->s.r0 = ( ( ( count.out1 % 10000 ) % 1000 ) % 100 ) % 10;
+      f193->s.r1 = ( ( ( count.out1 % 10000 ) % 1000 ) % 100 ) / 10;
+      f193->s.r2 = ( ( count.out1 % 10000 ) % 1000 ) / 100;
+      f193->s.r3 = ( count.out1 % 10000 ) / 1000;
+      
+	  f193->t1 = 0x00;
+      f193->t2 = 0x1d;
+      f193->kfs = 43;
+	  f193->x = (inpack0.x/614)*(1<<14); 
+	  f193->y = (inpack0.y/614)*(1<<14); 
+	  f193->kurs = (inpack0.k*53.2753/180)*(1<<15); 
+	  f193->speed = (inpack0.speed/512)*(1<<15); 
+
+      outpack1.buf[i].size = sizeof(struct header12) + sizeof(struct form193);
       outpack1.buf[i].cmd = BUF3KIT_CMD_OUT1;
       outpack1.nsave++;
+	  
+	  printf("-----------------193.43--SVC1----------------\n");
+	  for(ii=0;ii<sizeof(struct form193);ii++)  printf("%x ",outpack1.buf[i].data[ii+sizeof(struct header12)]);printf("\n");
+	  //б®еа ­Ёвм в®, зв® ®вЇа ўЁ«Ё ¤«п Їа®ўҐаЄЁ ЇаЁҐ¬ 	 
+	  for(ii=0;ii<20;ii++) mode.f193[ii]=outpack1.buf[i].data[ii+sizeof(struct header12)+sizeof(struct sac)];
 
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
@@ -3302,7 +2905,6 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
       f11->ku9z10 = 1; //ZAPROS-10
       f11->ku5 = mode.prd1; //PRD-M1
       f11->ku6 = mode.prm1; //PRM-M7
-
       f11->ku2 = 1; //perevod bloka v priem
 	
       memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
@@ -3310,12 +2912,9 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
       outpack1.nsave++;
 
-		kzo7_1();
 		BLKT(1);
 
-   //SVC-1 -> Step 2
-
-		kzo13_1();
+		//SVC-1 -> Step 2
 
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
@@ -3359,13 +2958,9 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
       outpack1.nsave++;
 
-		kzo7_1();
-		BLKT(1);
-		//BLKT(1);
+		BLKT(1);		//BLKT(1);
 
    //SVC-1 -> Step 3
-
-		kzo13_1();
 
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
@@ -3407,18 +3002,15 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
 	  {			
       	outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1 | BUF3KIT_CMD_KRK;
       	outpack1.buf[i].param = KRK_SWITCH_RECV;
+		//printf("i=%d\n",i);
 	  }
       outpack1.nsave++;
 
-		kzo7_1();
 		BLKT(1);
-
    //SVC-1 -> Step 4
 
       for( j = 0; j < 14; j++ ) { //14
  
-			kzo13_1();
-
          i = outpack1.nsave;
          h12 = (struct header12 *)outpack1.buf[i].data;
          SetHeader12( h12 );
@@ -3441,18 +3033,16 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
          f11->ku9z8 = 1; //ZAPROS-8
          f11->ku9z9 = 1; //ZAPROS-9
          f11->ku9z10 = 1; //ZAPROS-10
-	      f11->ku10 = 1; 
-      f11->ku5 = mode.prd1; //PRD-M1
-      f11->ku6 = mode.prm1; //PRM-M7
+	     f11->ku10 = 1; 
+		f11->ku5 = mode.prd1; //PRD-M1
+		f11->ku6 = mode.prm1; //PRM-M7
 
          memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
          outpack1.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
          outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
          outpack1.nsave++;
 
-		kzo7_1();
 		BLKT(1);
-
       } //for(j)
 
       i = outpack1.nsave;
@@ -3463,46 +3053,39 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
       stat.out |= FLAG_BUF1;
       stat.link |= FLAG_BUF1;
       ControlLed1( 1 );
-
    }
-//---------- Outpack2 (cmd93mo3a) ----------
+
+   //---------- Outpack2 (cmd93mo3a) ----------
    if( param0 == 1 ) { //SVC-2
      //SVC-2 -> Step 1
-
-		kzo13_2();
 
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
       SetHeader12( h12 );
       h12->npol = 1;
       h12->nspol = 1;  
-      h12->kss = sizeof(struct sac) / 2;
+      h12->kss = sizeof(struct form193) / 2;
       h12->kvi = 2;
       h12->ps = 0;
       h12->kzo = 5;
+      f193 = (struct form193 *)(outpack2.buf[i].data + 
+         sizeof(struct header12));
+      memset( (char *)f193, 0, sizeof(struct form193) );
+
+//   ---------------------------- zapolnenie f26
       f26 = (struct sac *)(outpack2.buf[i].data + sizeof(struct header12));
-      memcpy( (char *)f26, (char *)&form26k1, sizeof(struct sac) );
       f26->ps = 1;
-      if( param1 ) {
-         f26->vr = 1;
-      } else {
-         f26->vr = 0;
-      }
-      f26->kvi = 2;
-      f26->nf = 26;
-      count.out1++;
-      f26->r0 = ( ( ( count.out1 % 10000 ) % 1000 ) % 100 ) % 10;
-      f26->r1 = ( ( ( count.out1 % 10000 ) % 1000 ) % 100 ) / 10;
-      f26->r2 = ( ( count.out1 % 10000 ) % 1000 ) / 100;
-      f26->r3 = ( count.out1 % 10000 ) / 1000;
+      if( param1 ) f26->vr = 1;
+      else         f26->vr = 0;
+      
+      count.out2++;
       if( param1 ) {
          f26->v0 = ( ( param1 % 3600 ) / 60 ) % 10;
          f26->v1 = ( ( param1 % 3600 ) / 60 ) / 10;;
          f26->v2 = ( param1 / 3600 ) % 10 ;
          f26->v3 = ( param1 / 3600 ) / 10;
-      } else {
-         f26->v0 = f26->v1 = f26->v2 = f26->v3 = 0;
-      }
+      } else f26->v0 = f26->v1 = f26->v2 = f26->v3 = 0;
+      
       f26->a0 = ( ( ( ( param2 % 100000 ) % 10000 ) % 1000 ) % 100 ) % 10;
       f26->a1 = ( ( ( ( param2 % 100000 ) % 10000 ) % 1000 ) % 100 ) / 10;
       f26->a2 = ( ( ( param2 % 100000 ) % 10000 ) % 1000 ) / 100;
@@ -3516,24 +3099,41 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
       f26->p4 = ( param3 % 100000 ) / 10000;
       f26->p5 = param3 / 100000;
 
-		mode.a0=f26->a0;  //бортовой номер
-		mode.a1=f26->a1;
-		mode.a2=f26->a2;
-		mode.a3=f26->a3;
-		mode.a4=f26->a4;
-		mode.a5=f26->a5;
-		mode.p0=f26->p0;
-		mode.p1=f26->p1;
-		mode.p2=f26->p2;
-		mode.p3=f26->p3;
-		mode.p4=f26->p4;
-		mode.p5=f26->p5;
-
+		mode.a0=f26->a0;  mode.a1=f26->a1;//Ў®ав®ў®© ­®¬Ґа
+		mode.a2=f26->a2;  mode.a3=f26->a3;
+		mode.a4=f26->a4;  mode.a5=f26->a5;
+		mode.p0=f26->p0;  mode.p1=f26->p1;
+		mode.p2=f26->p2;  mode.p3=f26->p3;
+		mode.p4=f26->p4;  mode.p5=f26->p5;
 
       memcpy( (char *)&form26k1, (char *)f26, sizeof(struct sac) );
-      outpack2.buf[i].size = sizeof(struct header12) + sizeof(struct sac);
+      memcpy( (char *)f193, (char *)&form26k1, sizeof(struct sac) );
+
+      f193->s.kvi = 2;
+      f193->s.nf = 193;
+      count.out1++;
+
+      f193->s.r0 = ( ( ( count.out2 % 10000 ) % 1000 ) % 100 ) % 10;
+      f193->s.r1 = ( ( ( count.out2 % 10000 ) % 1000 ) % 100 ) / 10;
+      f193->s.r2 = ( ( count.out2 % 10000 ) % 1000 ) / 100;
+      f193->s.r3 = ( count.out2 % 10000 ) / 1000;
+      
+	  f193->t1 = 0x00;
+      f193->t2 = 0x1d;
+      f193->kfs = 43;
+	  f193->x = (inpack0.x/614)*(1<<14); 
+	  f193->y = (inpack0.y/614)*(1<<14); 
+	  f193->kurs = (inpack0.k*53.2753/180)*(1<<15); 
+	  f193->speed = (inpack0.speed/512)*(1<<15); 
+
+      outpack2.buf[i].size = sizeof(struct header12) + sizeof(struct form193);
       outpack2.buf[i].cmd = BUF3KIT_CMD_OUT2;
       outpack2.nsave++;
+	  
+	  printf("-----------------193.43--SVC2----------------\n");
+	  for(ii=0;ii<sizeof(struct form193);ii++)  printf("%x ",outpack2.buf[i].data[ii+sizeof(struct header12)]);printf("\n");
+	  //б®еа ­Ёвм в®, зв® ®вЇа ўЁ«Ё ¤«п Їа®ўҐаЄЁ ЇаЁҐ¬ 	 
+	  for(ii=0;ii<20;ii++) mode.f193[ii]=outpack2.buf[i].data[ii+sizeof(struct header12)+sizeof(struct sac)];
 
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
@@ -3566,12 +3166,8 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
       outpack2.nsave++;
 
-		kzo7_2();
 		BLKT(2);
-
    //SVC-2 -> Step 2
-
-		kzo13_2();
 
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
@@ -3588,7 +3184,7 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
       f11->ku1 = 1; //PRD-ON
  //     f11->ku2 = 0; //PRM-OFF
       f11->ku3 = 0; //TKI
-      f11->ku4 = 1; //FM1
+ //     f11->ku4 = 1; //FM1
 //      f11->ku5 = 1; //PRD-M1
 //      f11->ku6 = 7; //PRM-M7
       f11->ku5 = mode.prd2; //PRD-M1
@@ -3614,13 +3210,9 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
       outpack2.nsave++;
 
-		kzo7_2();
-		BLKT(2);
-		//BLKT(2);
+		BLKT(2);		BLKT(2);
 
    //SVC-2 -> Step 3
-
-		kzo13_2();
 
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
@@ -3665,15 +3257,12 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
 	  }
       outpack2.nsave++;
 
-		kzo7_2();
 		BLKT(2);
 
    //SVC-2 -> Step 4
 
       for( j = 0; j < 14; j++ ) { //14
  
-			kzo13_2();
-
          i = outpack2.nsave;
          h12 = (struct header12 *)outpack2.buf[i].data;
          SetHeader12( h12 );
@@ -3705,9 +3294,7 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
          outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
          outpack2.nsave++;
 
-		kzo7_2();
 		BLKT(2);
-
       } //for(j)
 
       i = outpack2.nsave;
@@ -3720,7 +3307,6 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
       ControlLed2( 1 );
 
    }
-
 //---------- Outpack3 (cmd93mo3a) ----------
 
    if( param0 == 1 ) { //SVC-2
@@ -3763,7 +3349,6 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
    }
 
    if( param0 == 2 ) { //DMV (R-999)
-
       if( !mode.mo1a && mode.mn1 ) {
          BU1_K6(0x3b);
 		 BU1_K7(0x01);
@@ -3776,7 +3361,6 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
          stat.out |= FLAG_BUF3;
          ControlLed3( 1 );
       }
-
    }
 
 //---------- Outpack4 (cmd93mo32a) ----------
@@ -3797,7 +3381,6 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
       outpack4.buf[i].size = sizeof(struct header34) + 6;
 //      outpack4.buf[i].cmd = BUF3KIT_CMD_BLK4 | BUF3KIT_CMD_SVC;
       outpack4.buf[i].cmd = BUF3KIT_CMD_BLKT | BUF3KIT_CMD_SVC;
-
       outpack4.nsave++;
 
       BLKT(4);BLKT(4);//BLKT(4);
@@ -3841,7 +3424,6 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
       outpack5.nsave++;
 
       stat.out |= FLAG_BUF5;
-
    }
 
 //---------- Outpack6 (cmd93mo3a) ----------
@@ -3865,11 +3447,8 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
          sizeof(struct header56) + 5 );
       memcpy( (char *)f26, (char *)&form26k3, sizeof(struct sac) );
       f26->ps = 1;
-      if( param1 ) {
-         f26->vr = 1;
-      } else {
-         f26->vr = 0;
-      }
+      if( param1 )          f26->vr = 1;
+      else 			        f26->vr = 0;
       f26->kvi = 2;
       f26->nf = 26;
       f26->r0 = ( ( ( count.out6 / 10000 ) % 1000 ) % 100 ) % 10;
@@ -3934,7 +3513,6 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
    }
 
 //---------- Other (cmd93mo3a) ----------
-
    switch( param0 ) {
    case 0:
       mode.addr1 = param3;
@@ -3964,102 +3542,80 @@ int HandlerCmd93mo3a( int param0, int param1, int param2, int param3 )
 
 int HandlerCmd94mo3a( int param0, int param1 )
 {
-   int i;
+   int i,j,ii;
    struct header12 *h12;
    struct form11 *f11;
    struct sac *f203;
    struct packet56 *p56;
    struct packet34 *p34;
-   int j;
-
-   if( verbose > 0 ) {
-      printf( "HandlerCmd94mo3a: p0=%x p1=%x\n", 
-         param0, param1 );
-   }
-
+   struct form193 *f193;
+  
+   if( verbose > 0 )       printf( "HandlerCmd94mo3a: p0=%x p1=%x\n",      param0, param1 );
 	
 //---------- Outpack1 (cmd94mo3a) ----------
-
-   if( param0 == 0 ) { //SVC-1
+  if( (param0 == 0) || (param0==3)) { //SVC-1
    //SVC-1 -> Step 1
-
 	mode.no_num1=0;
+    //-------------------------------------------------------------------------
+	i = outpack1.nsave;
+    h12 = (struct header12 *)outpack1.buf[i].data;
+    SetHeader12( h12 );
+    h12->npol = 1;
+    h12->nspol = 1;  
+    h12->kss = sizeof(struct form193) / 2;
+    h12->kvi = 2;
+    h12->ps = 0;
+    h12->kzo = 5;
+    f193 = (struct form193 *)(outpack1.buf[i].data + sizeof(struct header12));
+    memset( (char *)f193, 0, sizeof(struct form193) );
 
-  kzo13_1();
+    f193->s.ps = 1;
+    if( param1 ) f193->s.vr = 1;
+    else  	     f193->s.vr = 0;
+   
+    if( param1 ) {
+         f193->s.v0 = ( ( param1 % 3600 ) / 60 ) % 10;
+         f193->s.v1 = ( ( param1 % 3600 ) / 60 ) / 10;;
+         f193->s.v2 = ( param1 / 3600 ) % 10 ;
+         f193->s.v3 = ( param1 / 3600 ) / 10;
+    } else f193->s.v0 = f193->s.v1 = f193->s.v2 = f193->s.v3 = 0;
 
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->npol = 1;
-      h12->nspol = 1;  
-      h12->kss = sizeof(struct sac) / 2;
-      h12->kvi = 2;
-      h12->ps = 0;
-      h12->kzo = 5;
-      f203 = (struct sac *)(outpack1.buf[i].data + sizeof(struct header12));
-      memcpy( (char *)f203, (char *)&form26k1, sizeof(struct sac) );
-      f203->ps = 1;
-      if( param1 ) {
-         f203->vr = 1;
-      } else {
-         f203->vr = 0;
-      }
-      f203->kvi = 2;
-      f203->nf = 203;
-	  count.out1++;
-      f203->r0 = ( ( ( count.out1 % 10000 ) % 1000 ) % 100 ) % 10;
-      f203->r1 = ( ( ( count.out1 % 10000 ) % 1000 ) % 100 ) / 10;
-      f203->r2 = ( ( count.out1 % 10000 ) % 1000 ) / 100;
-      f203->r3 = ( count.out1 % 10000 ) / 1000;
-      if( param1 ) {
-         f203->v0 = ( ( param1 % 3600 ) / 60 ) % 10;
-         f203->v1 = ( ( param1 % 3600 ) / 60 ) / 10;;
-         f203->v2 = ( param1 / 3600 ) % 10 ;
-         f203->v3 = ( param1 / 3600 ) / 10;
-      } else {
-         f203->v0 = f203->v1 = f203->v2 = f203->v3 = 0;
-      }
-      outpack1.buf[i].size = sizeof(struct header12) + sizeof(struct sac);
+	f193->s.a0 = mode.a0;	f193->s.a1 = mode.a1;				//Ў®ав®ў®© ­®¬Ґа
+	f193->s.a2 = mode.a2;	f193->s.a3 = mode.a3;
+	f193->s.a4 = mode.a4;	f193->s.a5 = mode.a5;
+	f193->s.p0 = mode.p0;	f193->s.p1 = mode.p1;
+	f193->s.p2 = mode.p2;	f193->s.p3 = mode.p3;
+	f193->s.p4 = mode.p4;	f193->s.p5 = mode.p5;
+	  
+      memcpy( (char *)f193, (char *)&form26k1, sizeof(struct sac) );
+
+      f193->s.kvi = 2;
+      f193->s.nf = 193;
+      count.out1++;
+
+      f193->s.r0 = ( ( ( count.out1 % 10000 ) % 1000 ) % 100 ) % 10;
+      f193->s.r1 = ( ( ( count.out1 % 10000 ) % 1000 ) % 100 ) / 10;
+      f193->s.r2 = ( ( count.out1 % 10000 ) % 1000 ) / 100;
+      f193->s.r3 = ( count.out1 % 10000 ) / 1000;
+      
+      f193->t2 = 0x1d;
+      f193->kfs = 34;
+	  f193->x = (inpack0.x/614)*(1<<14); 
+	  f193->y = (inpack0.y/614)*(1<<14); 
+	  f193->kurs = (inpack0.k*53.2753/180)*(1<<15); 
+	  f193->speed = (inpack0.speed/512)*(1<<15); 
+
+      outpack1.buf[i].size = sizeof(struct header12) + sizeof(struct form193);
       outpack1.buf[i].cmd = BUF3KIT_CMD_OUT1;
       outpack1.nsave++;
-
-      i = outpack1.nsave;
-      h12 = (struct header12 *)outpack1.buf[i].data;
-      SetHeader12( h12 );
-      h12->npol = 1;
-      h12->nspol = 1;  
-      h12->kss = sizeof(struct form11) / 2;
-      h12->kvi = 1;
-      h12->ps = 1;
-      h12->kzo = 5;
-      f11 = (struct form11 *)(outpack1.buf[i].data + sizeof(struct header12));
-      memcpy( (char *)f11, (char *)&form11k1, sizeof(struct form11) );
-      f11->ku9z0 = 1; //ZAPROS-0
-      f11->ku9z1 = 1; //ZAPROS-1
-      f11->ku9z2 = 1; //ZAPROS-2
-      f11->ku9z3 = 1; //ZAPROS-3
-      f11->ku9z4 = 1; //ZAPROS-4
-      f11->ku9z5 = 1; //ZAPROS-5
-      f11->ku9z6 = 1; //ZAPROS-6
-      f11->ku9z7 = 1; //ZAPROS-7
-      f11->ku9z8 = 1; //ZAPROS-8
-      f11->ku9z9 = 1; //ZAPROS-9
-      f11->ku9z10 = 1; //ZAPROS-10
-      f11->ku2 = 1; //perevod bloka v priem
-      f11->ku5 = mode.prd1; //PRD-M1
-      f11->ku6 = mode.prm1; //PRM-M7
-
-      memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
-      outpack1.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
-      outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
-      outpack1.nsave++;
-
-		kzo7_1();
+	  
+	  printf("-----------------193.34-----SVC1------------\n");
+	  for(ii=0;ii<sizeof(struct form193);ii++)  printf("%x ",outpack1.buf[i].data[ii+sizeof(struct header12)]);printf("\n");
+	  //б®еа ­Ёвм в®, зв® ®вЇа ўЁ«Ё ¤«п Їа®ўҐаЄЁ ЇаЁҐ¬ 	 
+	  for(ii=0;ii<20;ii++) mode.f193[ii]=outpack1.buf[i].data[ii+sizeof(struct header12)+sizeof(struct sac)];
+	//-------------------------------------------------------------------------
 		BLKT(1);
-
    //SVC-1 -> Step 2
-
-		kzo13_1();
 
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
@@ -4100,13 +3656,8 @@ int HandlerCmd94mo3a( int param0, int param1 )
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
       outpack1.nsave++;
 
-		kzo7_1();
-		BLKT(1);
-		//BLKT(1);
-
+		BLKT(1);	//BLKT(1);
    //SVC-1 -> Step 3
-
-		kzo13_1();
 
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
@@ -4145,15 +3696,10 @@ int HandlerCmd94mo3a( int param0, int param1 )
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
       outpack1.nsave++;
 
-		kzo7_1();
 		BLKT(1);
-
    //SVC-1 -> Step 4
 
       for( j = 0; j < 14; j++ ) {
- 
-			kzo13_1();
-
          i = outpack1.nsave;
          h12 = (struct header12 *)outpack1.buf[i].data;
          SetHeader12( h12 );
@@ -4185,9 +3731,7 @@ int HandlerCmd94mo3a( int param0, int param1 )
          outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
          outpack1.nsave++;
 
-			kzo7_1();
 			BLKT(1);
-
       } //for(j)
 
       i = outpack1.nsave;
@@ -4196,90 +3740,77 @@ int HandlerCmd94mo3a( int param0, int param1 )
       outpack1.nsave++;
 
       stat.out |= FLAG_BUF1;
-     // stat.link |= FLAG_BUF1;
+      stat.link |= FLAG_BUF1;
+      //stat.rli |= FLAG_BUF1;
       ControlLed1( 1 );
    }
 
 //---------- Outpack2 (cmd94mo3a) ----------
    if( param0 == 1 ) { //SVC-2
    //SVC-2 -> Step 1
+	mode.no_num1=0;
 
-  kzo13_2();
+    //-------------------------------------------------------------------------
+	i = outpack2.nsave;
+    h12 = (struct header12 *)outpack2.buf[i].data;
+    SetHeader12( h12 );
+    h12->npol = 1;
+    h12->nspol = 1;  
+    h12->kss = sizeof(struct form193) / 2;
+    h12->kvi = 2;
+    h12->ps = 0;
+    h12->kzo = 5;
+    f193 = (struct form193 *)(outpack2.buf[i].data + sizeof(struct header12));
+    memset( (char *)f193, 0, sizeof(struct form193) );
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->npol = 1;
-      h12->nspol = 1;  
-      h12->kss = sizeof(struct sac) / 2;
-      h12->kvi = 2;
-      h12->ps = 0;
-      h12->kzo = 5;
-      f203 = (struct sac *)(outpack2.buf[i].data + sizeof(struct header12));
-      memcpy( (char *)f203, (char *)&form26k1, sizeof(struct sac) );
-      f203->ps = 1;
-      if( param1 ) {
-         f203->vr = 1;
-      } else {
-         f203->vr = 0;
-      }
-      f203->kvi = 2;
-      f203->nf = 203;
-	  count.out1++;
+    f193->s.ps = 1;
+    if( param1 ) f193->s.vr = 1;
+    else  	     f193->s.vr = 0;
+   
+    if( param1 ) {
+         f193->s.v0 = ( ( param1 % 3600 ) / 60 ) % 10;
+         f193->s.v1 = ( ( param1 % 3600 ) / 60 ) / 10;;
+         f193->s.v2 = ( param1 / 3600 ) % 10 ;
+         f193->s.v3 = ( param1 / 3600 ) / 10;
+    } else f193->s.v0 = f193->s.v1 = f193->s.v2 = f193->s.v3 = 0;
 
-      f203->r0 = ( ( ( count.out1 % 10000 ) % 1000 ) % 100 ) % 10;
-      f203->r1 = ( ( ( count.out1 % 10000 ) % 1000 ) % 100 ) / 10;
-      f203->r2 = ( ( count.out1 % 10000 ) % 1000 ) / 100;
-      f203->r3 = ( count.out1 % 10000 ) / 1000;
-      if( param1 ) {
-         f203->v0 = ( ( param1 % 3600 ) / 60 ) % 10;
-         f203->v1 = ( ( param1 % 3600 ) / 60 ) / 10;;
-         f203->v2 = ( param1 / 3600 ) % 10 ;
-         f203->v3 = ( param1 / 3600 ) / 10;
-      } else {
-         f203->v0 = f203->v1 = f203->v2 = f203->v3 = 0;
-      }
-      outpack2.buf[i].size = sizeof(struct header12) + sizeof(struct sac);
+	f193->s.a0 = mode.a0;	f193->s.a1 = mode.a1;				//Ў®ав®ў®© ­®¬Ґа
+	f193->s.a2 = mode.a2;	f193->s.a3 = mode.a3;
+	f193->s.a4 = mode.a4;	f193->s.a5 = mode.a5;
+	f193->s.p0 = mode.p0;	f193->s.p1 = mode.p1;
+	f193->s.p2 = mode.p2;	f193->s.p3 = mode.p3;
+	f193->s.p4 = mode.p4;	f193->s.p5 = mode.p5;
+	  
+      memcpy( (char *)f193, (char *)&form26k1, sizeof(struct sac) );
+
+      f193->s.kvi = 2;
+      f193->s.nf = 193;
+      count.out2++;
+
+      f193->s.r0 = ( ( ( count.out2 % 10000 ) % 1000 ) % 100 ) % 10;
+      f193->s.r1 = ( ( ( count.out2 % 10000 ) % 1000 ) % 100 ) / 10;
+      f193->s.r2 = ( ( count.out2 % 10000 ) % 1000 ) / 100;
+      f193->s.r3 = ( count.out2 % 10000 ) / 1000;
+      
+      f193->t2 = 0x1d;
+      f193->kfs = 34;
+	  f193->x = (inpack0.x/614)*(1<<14); 
+	  f193->y = (inpack0.y/614)*(1<<14); 
+	  f193->kurs = (inpack0.k*53.2753/180)*(1<<15); 
+	  f193->speed = (inpack0.speed/512)*(1<<15); 
+
+      outpack2.buf[i].size = sizeof(struct header12) + sizeof(struct form193);
       outpack2.buf[i].cmd = BUF3KIT_CMD_OUT2;
       outpack2.nsave++;
+	  
+	  printf("-----------------193.34---SVC2--------------\n");
+	  for(ii=0;ii<sizeof(struct form193);ii++)  printf("%x ",outpack2.buf[i].data[ii+sizeof(struct header12)]);printf("\n");
+	  //б®еа ­Ёвм в®, зв® ®вЇа ўЁ«Ё ¤«п Їа®ўҐаЄЁ ЇаЁҐ¬ 	 
+	  for(ii=0;ii<20;ii++) mode.f193[ii]=outpack2.buf[i].data[ii+sizeof(struct header12)+sizeof(struct sac)];
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->npol = 1;
-      h12->nspol = 1;  
-      h12->kss = sizeof(struct form11) / 2;
-      h12->kvi = 1;
-      h12->ps = 1;
-      h12->kzo = 5;
-      f11 = (struct form11 *)(outpack2.buf[i].data + sizeof(struct header12));
-      memcpy( (char *)f11, (char *)&form11k1, sizeof(struct form11) );
-      f11->ku9z0 = 1; //ZAPROS-0
-      f11->ku9z1 = 1; //ZAPROS-1
-      f11->ku9z2 = 1; //ZAPROS-2
-      f11->ku9z3 = 1; //ZAPROS-3
-      f11->ku9z4 = 1; //ZAPROS-4
-      f11->ku9z5 = 1; //ZAPROS-5
-      f11->ku9z6 = 1; //ZAPROS-6
-      f11->ku9z7 = 1; //ZAPROS-7
-      f11->ku9z8 = 1; //ZAPROS-8
-      f11->ku9z9 = 1; //ZAPROS-9
-      f11->ku9z10 = 1; //ZAPROS-10
-      f11->ku2 = 1; //perevod bloka v priem
-      f11->ku5 = mode.prd2; //PRD-M1
-      f11->ku6 = mode.prm2; //PRM-M7
-
-      memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
-      outpack2.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
-		kzo7_2();
 		BLKT(2);
 
    //SVC-2 -> Step 2
-
-		kzo13_2();
 
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
@@ -4320,12 +3851,9 @@ int HandlerCmd94mo3a( int param0, int param1 )
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
       outpack2.nsave++;
 
-		kzo7_2();
 		BLKT(2);BLKT(2);
 
    //SVC-2 -> Step 3
-
-		kzo13_2();
 
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
@@ -4364,15 +3892,10 @@ int HandlerCmd94mo3a( int param0, int param1 )
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
       outpack2.nsave++;
 
-		kzo7_2();
 		BLKT(2);
 
    //SVC-1 -> Step 4
-
       for( j = 0; j < 14; j++ ) {
- 
-			kzo13_2();
-
          i = outpack2.nsave;
          h12 = (struct header12 *)outpack2.buf[i].data;
          SetHeader12( h12 );
@@ -4404,9 +3927,7 @@ int HandlerCmd94mo3a( int param0, int param1 )
          outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
          outpack2.nsave++;
 
-			kzo7_2();
 			BLKT(2);
-
       } //for(j)
 
       i = outpack2.nsave;
@@ -4415,7 +3936,7 @@ int HandlerCmd94mo3a( int param0, int param1 )
       outpack2.nsave++;
 
       stat.out |= FLAG_BUF2;
-//      stat.link |= FLAG_BUF2;
+      stat.link |= FLAG_BUF2;
       ControlLed2( 1 );
    }
 
@@ -4439,8 +3960,7 @@ int HandlerCmd94mo3a( int param0, int param1 )
       outpack3.buf[i].cmd = BUF3KIT_CMD_BLK3 | BUF3KIT_CMD_SVC;
       outpack3.nsave++;
 
-      BLKT(3);BLKT(3);
-		//BLKT(3);
+      BLKT(3);BLKT(3);	//BLKT(3);
 
       i = outpack3.nsave;
       p34 = (struct packet34 *)outpack3.buf[i].data;
@@ -4496,8 +4016,7 @@ int HandlerCmd94mo3a( int param0, int param1 )
       outpack4.buf[i].cmd = BUF3KIT_CMD_BLKT | BUF3KIT_CMD_SVC;
       outpack4.nsave++;
 
-      BLKT(4);BLKT(4);
-		//BLKT(4);
+      BLKT(4);BLKT(4);	//BLKT(4);
 
       i = outpack4.nsave;
       p34 = (struct packet34 *)outpack4.buf[i].data;
@@ -4537,11 +4056,8 @@ int HandlerCmd94mo3a( int param0, int param1 )
          sizeof(struct header56) + 5 );
       memcpy( (char *)f203, (char *)&form26k3, sizeof(struct sac) );
       f203->ps = 1;
-      if( param1 ) {
-         f203->vr = 1;
-      } else {
-         f203->vr = 0;
-      }
+	  if( param1 )     f203->vr = 1;
+      else             f203->vr = 0;
       f203->kvi = 2;
       f203->nf = 203;
       f203->r0 = ( ( ( count.out6 / 10000 ) % 1000 ) % 100 ) % 10;
@@ -4600,7 +4116,6 @@ int HandlerCmd94mo3a( int param0, int param1 )
       outpack0.kzv = 1;
       stat.out = stat.in = stat.link = 0;
    }
-
    return( 0 );
 }
 
@@ -4608,27 +4123,20 @@ int HandlerCmd94mo3a( int param0, int param1 )
 
 int HandlerCmd95mo3a( int param0, int param1 )
 {
-   int i;
+   int i,ii,j;
    struct header12 *h12;
    struct form11 *f11;
    struct form193 *f193;
    struct packet56 *p56;
    struct packet34 *p34;
-   int j;
 
-   if( verbose > 0 ) {
-      printf( "HandlerCmd95mo3a: p0=%x p1=%x\n", 
-         param0, param1 );
-   }
+   if( verbose > 0 )   printf( "HandlerCmd95mo3a: p0=%x p1=%x\n",  param0, param1 );
 
 //---------- Outpack1 (cmd95mo3a) ----------
 
   if( param0 == 0 ) { //SVC-1
 
-
    //SVC-1 -> Step 1
-
-		kzo13_1();
 
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
@@ -4636,8 +4144,6 @@ int HandlerCmd95mo3a( int param0, int param1 )
       h12->npol = 1;
       h12->nspol = 1;  
       h12->kss = sizeof(struct form193) / 2;
-//      h12->kss = ( sizeof(struct form193) / 2 ) & 0xf; //Temp!!!
-  //    h12->kss2 = ( sizeof(struct form193) / 2 ) >> 4; //Temp!!!
       h12->kvi = 2;
       h12->ps = 0;
       h12->kzo = 5;
@@ -4646,11 +4152,9 @@ int HandlerCmd95mo3a( int param0, int param1 )
       memset( (char *)f193, 0, sizeof(struct form193) );
       memcpy( (char *)f193, (char *)&form26k1, sizeof(struct sac) );
       f193->s.ps = 1;
-      if( param1 ) {
-         f193->s.vr = 1;
-      } else {
-         f193->s.vr = 0;
-      }
+      if( param1 ) f193->s.vr = 1;
+      else         f193->s.vr = 0;
+      
       f193->s.kvi = 2;
       f193->s.nf = 193;
       count.out1++;
@@ -4664,9 +4168,8 @@ int HandlerCmd95mo3a( int param0, int param1 )
          f193->s.v1 = ( ( param1 % 3600 ) / 60 ) / 10;;
          f193->s.v2 = ( param1 / 3600 ) % 10 ;
          f193->s.v3 = ( param1 / 3600 ) / 10;
-      } else {
-         f193->s.v0 = f193->s.v1 = f193->s.v2 = f193->s.v3 = 0;
-      }
+      } else f193->s.v0 = f193->s.v1 = f193->s.v2 = f193->s.v3 = 0;
+      
       f193->t1 = 0x00;
       f193->t2 = 0x1d;
       f193->kfs = 39;
@@ -4674,6 +4177,11 @@ int HandlerCmd95mo3a( int param0, int param1 )
       outpack1.buf[i].cmd = BUF3KIT_CMD_OUT1;
       outpack1.nsave++;
 
+	  printf("-----------------193.39--SVC1----------------\n");
+	  for(ii=0;ii<sizeof(struct form193);ii++)  printf("%x ",outpack1.buf[i].data[ii+sizeof(struct header12)]);printf("\n");
+	  //б®еа ­Ёвм в®, зв® ®вЇа ўЁ«Ё ¤«п Їа®ўҐаЄЁ ЇаЁҐ¬ 	 
+	  for(ii=0;ii<20;ii++) mode.f193[ii]=outpack1.buf[i].data[ii+sizeof(struct header12)+sizeof(struct sac)];
+	  
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
       SetHeader12( h12 );
@@ -4705,13 +4213,9 @@ int HandlerCmd95mo3a( int param0, int param1 )
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
       outpack1.nsave++;
 
-		kzo7_1();
 		BLKT(1);
 
    //SVC-1 -> Step 2
-
-		kzo13_1();
-
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
       SetHeader12( h12 );
@@ -4751,14 +4255,9 @@ int HandlerCmd95mo3a( int param0, int param1 )
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
       outpack1.nsave++;
 
-		kzo7_1();
-		BLKT(1);	
-		//	BLKT(1);
+		BLKT(1);	//	BLKT(1);
 
    //SVC-1 -> Step 3
-
-		kzo13_1();
-
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
       SetHeader12( h12 );
@@ -4796,15 +4295,11 @@ int HandlerCmd95mo3a( int param0, int param1 )
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
       outpack1.nsave++;
 
-		kzo7_1();
 		BLKT(1);
 
    //SVC-1 -> Step 4
 
       for( j = 0; j < 14; j++ ) {
- 
-			kzo13_1();
-
          i = outpack1.nsave;
          h12 = (struct header12 *)outpack1.buf[i].data;
          SetHeader12( h12 );
@@ -4836,9 +4331,7 @@ int HandlerCmd95mo3a( int param0, int param1 )
          outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
          outpack1.nsave++;
 
-			kzo7_1();
 			BLKT(1);
-
       } //for(j)
 
       stat.out |= FLAG_BUF1;
@@ -4850,20 +4343,12 @@ int HandlerCmd95mo3a( int param0, int param1 )
 
    if( param0 == 1 ) { //SVC-2
 
-	mode.no_num2=0;
-
-   //SVC-2 -> Step 1
-
-		kzo13_2();
-
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
       SetHeader12( h12 );
       h12->npol = 1;
       h12->nspol = 1;  
       h12->kss = sizeof(struct form193) / 2;
-//      h12->kss = ( sizeof(struct form193) / 2 ) & 0xf; //Temp!!!
-//      h12->kss2 = ( sizeof(struct form193) / 2 ) >> 4; //Temp!!!
       h12->kvi = 2;
       h12->ps = 0;
       h12->kzo = 5;
@@ -4872,26 +4357,24 @@ int HandlerCmd95mo3a( int param0, int param1 )
       memset( (char *)f193, 0, sizeof(struct form193) );
       memcpy( (char *)f193, (char *)&form26k1, sizeof(struct sac) );
       f193->s.ps = 1;
-      if( param1 ) {
-         f193->s.vr = 1;
-      } else {
-         f193->s.vr = 0;
-      }
+      if( param1 ) f193->s.vr = 1;
+      else         f193->s.vr = 0;
+      
       f193->s.kvi = 2;
       f193->s.nf = 193;
-      count.out1++;
-      f193->s.r0 = ( ( ( count.out1 % 10000 ) % 1000 ) % 100 ) % 10;
-      f193->s.r1 = ( ( ( count.out1 % 10000 ) % 1000 ) % 100 ) / 10;
-      f193->s.r2 = ( ( count.out1 % 10000 ) % 1000 ) / 100;
-      f193->s.r3 = ( count.out1 % 10000 ) / 1000;
+      count.out2++;
+
+      f193->s.r0 = ( ( ( count.out2 % 10000 ) % 1000 ) % 100 ) % 10;
+      f193->s.r1 = ( ( ( count.out2 % 10000 ) % 1000 ) % 100 ) / 10;
+      f193->s.r2 = ( ( count.out2 % 10000 ) % 1000 ) / 100;
+      f193->s.r3 = ( count.out2 % 10000 ) / 1000;
       if( param1 ) {
          f193->s.v0 = ( ( param1 % 3600 ) / 60 ) % 10;
          f193->s.v1 = ( ( param1 % 3600 ) / 60 ) / 10;;
          f193->s.v2 = ( param1 / 3600 ) % 10 ;
          f193->s.v3 = ( param1 / 3600 ) / 10;
-      } else {
-         f193->s.v0 = f193->s.v1 = f193->s.v2 = f193->s.v3 = 0;
-      }
+      } else f193->s.v0 = f193->s.v1 = f193->s.v2 = f193->s.v3 = 0;
+      
       f193->t1 = 0x00;
       f193->t2 = 0x1d;
       f193->kfs = 39;
@@ -4899,43 +4382,14 @@ int HandlerCmd95mo3a( int param0, int param1 )
       outpack2.buf[i].cmd = BUF3KIT_CMD_OUT2;
       outpack2.nsave++;
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->npol = 1;
-      h12->nspol = 1;  
-      h12->kss = sizeof(struct form11) / 2;
-      h12->kvi = 1;
-      h12->ps = 1;
-      h12->kzo = 5;
-      f11 = (struct form11 *)(outpack2.buf[i].data + sizeof(struct header12));
-      memcpy( (char *)f11, (char *)&form11k1, sizeof(struct form11) );
-      f11->ku9z0 = 1; //ZAPROS-0
-      f11->ku9z1 = 1; //ZAPROS-1
-      f11->ku9z2 = 1; //ZAPROS-2
-      f11->ku9z3 = 1; //ZAPROS-3
-      f11->ku9z4 = 1; //ZAPROS-4
-      f11->ku9z5 = 1; //ZAPROS-5
-      f11->ku9z6 = 1; //ZAPROS-6
-      f11->ku9z7 = 1; //ZAPROS-7
-      f11->ku9z8 = 1; //ZAPROS-8
-      f11->ku9z9 = 1; //ZAPROS-9
-      f11->ku9z10 = 1; //ZAPROS-10
-      f11->ku2 = 1; //perevod bloka v priem
-      f11->ku5 = mode.prd2; //PRD-M1
-      f11->ku6 = mode.prm2; //PRM-M7
-
-      memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
-      outpack2.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
-		kzo7_2();
+	  printf("-----------------193.39--SVC2----------------\n");
+	  for(ii=0;ii<sizeof(struct form193);ii++)  printf("%x ",outpack2.buf[i].data[ii+sizeof(struct header12)]);printf("\n");
+	  //б®еа ­Ёвм в®, зв® ®вЇа ўЁ«Ё ¤«п Їа®ўҐаЄЁ ЇаЁҐ¬ 	 
+	  for(ii=0;ii<20;ii++) mode.f193[ii]=outpack2.buf[i].data[ii+sizeof(struct header12)+sizeof(struct sac)];
+	  
 		BLKT(2);
 
    //SVC-2 -> Step 2
-
-		kzo13_2();
 
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
@@ -4976,14 +4430,9 @@ int HandlerCmd95mo3a( int param0, int param1 )
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
       outpack2.nsave++;
 
-		kzo7_2();
-		BLKT(2);
-		//BLKT(2);
+		BLKT(2);	//BLKT(2);
 
    //SVC-2 -> Step 3
-
-		kzo13_2();
-
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
       SetHeader12( h12 );
@@ -5021,15 +4470,10 @@ int HandlerCmd95mo3a( int param0, int param1 )
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
       outpack2.nsave++;
 
-		kzo7_2();
 		BLKT(2);
 
    //SVC-2 -> Step 4
-
       for( j = 0; j < 14; j++ ) {
- 
-			kzo13_2();
-
          i = outpack2.nsave;
          h12 = (struct header12 *)outpack2.buf[i].data;
          SetHeader12( h12 );
@@ -5061,9 +4505,7 @@ int HandlerCmd95mo3a( int param0, int param1 )
          outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
          outpack2.nsave++;
 
-			kzo7_2();
 			BLKT(2);
-
       } //for(j)
 
       stat.out |= FLAG_BUF2;
@@ -5071,6 +4513,7 @@ int HandlerCmd95mo3a( int param0, int param1 )
       ControlLed2( 1 );
    }
    
+  
 //---------- Outpack3 (cmd95mo3a) ----------
 
    if( param0 == 1 ) { //SVC-2
@@ -5148,8 +4591,7 @@ int HandlerCmd95mo3a( int param0, int param1 )
       outpack4.buf[i].cmd = BUF3KIT_CMD_BLKT | BUF3KIT_CMD_SVC;
       outpack4.nsave++;
 
-      BLKT(4);BLKT(4);
-		//BLKT(4);
+      BLKT(4);BLKT(4);	//BLKT(4);
 
       i = outpack4.nsave;
       p34 = (struct packet34 *)outpack4.buf[i].data;
@@ -5190,11 +4632,8 @@ int HandlerCmd95mo3a( int param0, int param1 )
       memset( (char *)f193, 0, sizeof(struct form193) );
       memcpy( (char *)f193, (char *)&form26k3, sizeof(struct sac) );
       f193->s.ps = 1;
-      if( param1 ) {
-         f193->s.vr = 1;
-      } else {
-         f193->s.vr = 0;
-      }
+      if( param1 )   f193->s.vr = 1;
+      else           f193->s.vr = 0;
       f193->s.kvi = 2;
       f193->s.nf = 193;
       f193->s.r0 = ( ( ( count.out6 / 10000 ) % 1000 ) % 100 ) % 10;
@@ -5261,25 +4700,19 @@ int HandlerCmd95mo3a( int param0, int param1 )
 
 int HandlerCmd96mo3a( int param0, int param1 )
 {
-   int i;
+   int i,j;
    struct header12 *h12;
    struct form11 *f11;
    struct form193 *f193;
    struct packet56 *p56;
    struct packet34 *p34;
-   int j;
 
-   if( verbose > 0 ) {
-      printf( "HandlerCmd96mo3a: p0=%x p1=%x\n", param0, param1 );
-   }
+   if( verbose > 0 )    printf( "HandlerCmd96mo3a: p0=%x p1=%x\n", param0, param1 );
 
 //---------- Outpack1 (cmd96mo3a) ----------
 
-  if( param0 == 0 ) { //SVC-1
-
+    if( param0 == 0 ) { //SVC-1
    //SVC-1 -> Step 1
-
-		kzo13_1();
 
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
@@ -5287,8 +4720,6 @@ int HandlerCmd96mo3a( int param0, int param1 )
       h12->npol = 1;
       h12->nspol = 1;  
       h12->kss = sizeof(struct form193) / 2;
-//      h12->kss = ( sizeof(struct form193) / 2 ) & 0xf; //Temp!!!
-//      h12->kss2 = ( sizeof(struct form193) / 2 ) >> 4; //Temp!!!
       h12->kvi = 2;
       h12->ps = 0;
       h12->kzo = 5;
@@ -5297,11 +4728,9 @@ int HandlerCmd96mo3a( int param0, int param1 )
       memset( (char *)f193, 0, sizeof(struct form193) );
       memcpy( (char *)f193, (char *)&form26k1, sizeof(struct sac) );
       f193->s.ps = 1;
-      if( param1 ) {
-         f193->s.vr = 1;
-      } else {
-         f193->s.vr = 0;
-      }
+      if( param1 ) f193->s.vr = 1;
+      else         f193->s.vr = 0;
+      
       f193->s.kvi = 2;
       f193->s.nf = 193;
       count.out1++;
@@ -5315,9 +4744,8 @@ int HandlerCmd96mo3a( int param0, int param1 )
          f193->s.v1 = ( ( param1 % 3600 ) / 60 ) / 10;;
          f193->s.v2 = ( param1 / 3600 ) % 10 ;
          f193->s.v3 = ( param1 / 3600 ) / 10;
-      } else {
-         f193->s.v0 = f193->s.v1 = f193->s.v2 = f193->s.v3 = 0;
-      }
+      } else f193->s.v0 = f193->s.v1 = f193->s.v2 = f193->s.v3 = 0;
+     
       f193->t1 = 0x00;
       f193->t2 = 0x1d;
       f193->kfs = 42;
@@ -5356,13 +4784,9 @@ int HandlerCmd96mo3a( int param0, int param1 )
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
       outpack1.nsave++;
 
-		kzo7_1();
 		BLKT(1);
 
    //SVC-1 -> Step 2
-
-		kzo13_1();
-
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
       SetHeader12( h12 );
@@ -5402,13 +4826,9 @@ int HandlerCmd96mo3a( int param0, int param1 )
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
       outpack1.nsave++;
 
-		kzo7_1();
-		BLKT(1);
-		//BLKT(1);
+		BLKT(1);		//BLKT(1);
 
    //SVC-1 -> Step 3
-
-		kzo13_1();
 
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
@@ -5447,15 +4867,11 @@ int HandlerCmd96mo3a( int param0, int param1 )
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
       outpack1.nsave++;
 
-		kzo7_1();
 		BLKT(1);
 
    //SVC-1 -> Step 4
-
       for( j = 0; j < 14; j++ ) {
  
-			kzo13_1();
-
          i = outpack1.nsave;
          h12 = (struct header12 *)outpack1.buf[i].data;
          SetHeader12( h12 );
@@ -5487,9 +4903,7 @@ int HandlerCmd96mo3a( int param0, int param1 )
          outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
          outpack1.nsave++;
 
-			kzo7_1();
 			BLKT(1);
-
       } //for(j)
 
       stat.out |= FLAG_BUF1;
@@ -5502,17 +4916,12 @@ int HandlerCmd96mo3a( int param0, int param1 )
   if( param0 == 1 ) { //SVC-2
 
    //SVC-2 -> Step 1
-
-		kzo13_2();
-
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
       SetHeader12( h12 );
       h12->npol = 1;
       h12->nspol = 1;  
       h12->kss = sizeof(struct form193) / 2;
-//      h12->kss = ( sizeof(struct form193) / 2 ) & 0xf; //Temp!!!
-//      h12->kss2 = ( sizeof(struct form193) / 2 ) >> 4; //Temp!!!
       h12->kvi = 2;
       h12->ps = 0;
       h12->kzo = 5;
@@ -5521,11 +4930,9 @@ int HandlerCmd96mo3a( int param0, int param1 )
       memset( (char *)f193, 0, sizeof(struct form193) );
       memcpy( (char *)f193, (char *)&form26k1, sizeof(struct sac) );
       f193->s.ps = 1;
-      if( param1 ) {
-         f193->s.vr = 1;
-      } else {
-         f193->s.vr = 0;
-      }
+      if( param1 )   f193->s.vr = 1;
+      else       	 f193->s.vr = 0;
+      
       f193->s.kvi = 2;
       f193->s.nf = 193;
       count.out1++;
@@ -5538,9 +4945,8 @@ int HandlerCmd96mo3a( int param0, int param1 )
          f193->s.v1 = ( ( param1 % 3600 ) / 60 ) / 10;;
          f193->s.v2 = ( param1 / 3600 ) % 10 ;
          f193->s.v3 = ( param1 / 3600 ) / 10;
-      } else {
-         f193->s.v0 = f193->s.v1 = f193->s.v2 = f193->s.v3 = 0;
-      }
+      } else f193->s.v0 = f193->s.v1 = f193->s.v2 = f193->s.v3 = 0;
+      
       f193->t1 = 0x00;
       f193->t2 = 0x1d;
       f193->kfs = 42;
@@ -5579,12 +4985,9 @@ int HandlerCmd96mo3a( int param0, int param1 )
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
       outpack2.nsave++;
 
-		kzo7_2();
 		BLKT(2);
 
    //SVC-2 -> Step 2
-
-		kzo13_2();
 
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
@@ -5625,13 +5028,9 @@ int HandlerCmd96mo3a( int param0, int param1 )
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
       outpack2.nsave++;
 
-		kzo7_2();
 		BLKT(2);
 		//BLKT(2);
-
    //SVC-2 -> Step 3
-
-		kzo13_2();
 
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
@@ -5670,15 +5069,11 @@ int HandlerCmd96mo3a( int param0, int param1 )
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
       outpack2.nsave++;
 
-		kzo7_2();
 		BLKT(2);
 
    //SVC-2 -> Step 4
-
       for( j = 0; j < 14; j++ ) {
  
-			kzo13_2();
-
          i = outpack2.nsave;
          h12 = (struct header12 *)outpack2.buf[i].data;
          SetHeader12( h12 );
@@ -5707,9 +5102,7 @@ int HandlerCmd96mo3a( int param0, int param1 )
          outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
          outpack2.nsave++;
 
-			kzo7_2();
 			BLKT(2);
-
       } //for(j)
 
       stat.out |= FLAG_BUF2;
@@ -5836,11 +5229,8 @@ int HandlerCmd96mo3a( int param0, int param1 )
       memset( (char *)f193, 0, sizeof(struct form193) );
       memcpy( (char *)f193, (char *)&form26k3, sizeof(struct sac) );
       f193->s.ps = 1;
-      if( param1 ) {
-         f193->s.vr = 1;
-      } else {
-         f193->s.vr = 0;
-      }
+      if( param1 )    f193->s.vr = 1;
+      else            f193->s.vr = 0;
       f193->s.kvi = 2;
       f193->s.nf = 193;
       f193->s.r0 = ( ( ( count.out6 / 10000 ) % 1000 ) % 100 ) % 10;
@@ -5895,7 +5285,6 @@ int HandlerCmd96mo3a( int param0, int param1 )
 				stat.out = stat.in = stat.link = 0;
 				break;
    }
-
    return( 0 );
 }
 
@@ -5903,26 +5292,20 @@ int HandlerCmd96mo3a( int param0, int param1 )
 
 int HandlerCmd97mo3a( int param0, int param1, int param2 )
 {
-   int i;
+   int i,j;
    struct header12 *h12;
    struct form11 *f11;
    struct form193 *f193;
    struct packet56 *p56;
    struct packet34 *p34;
-   int j;
 
-   if( verbose > 0 ) {
-      printf( "HandlerCmd97mo3a: p0=%x p1=%x p2=%x\n", 
-         param0, param1, param2);
-   }
+   if( verbose > 0 )   printf( "HandlerCmd97mo3a: p0=%x p1=%x p2=%x\n",  param0, param1, param2);
 
 //---------- Outpack1 (cmd97mo3a) ----------
 
     if( param0 == 0 ) { //SVC-1
 
    //SVC-1 -> Step 1
-
-		kzo13_1();
 
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
@@ -5940,11 +5323,8 @@ int HandlerCmd97mo3a( int param0, int param1, int param2 )
       memset( (char *)f193, 0, sizeof(struct form193) );
       memcpy( (char *)f193, (char *)&form26k1, sizeof(struct sac) );
       f193->s.ps = 1;
-      if( param1 ) {
-         f193->s.vr = 1;
-      } else {
-         f193->s.vr = 0;
-      }
+      if( param1 ) f193->s.vr = 1;
+      else         f193->s.vr = 0;
       f193->s.kvi = 2;
       f193->s.nf = 193;
       count.out1++;
@@ -6004,13 +5384,9 @@ int HandlerCmd97mo3a( int param0, int param1, int param2 )
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
       outpack1.nsave++;
 
-		kzo7_1();
 		BLKT(1);
 
    //SVC-1 -> Step 2
-
-		kzo13_1();
-
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
       SetHeader12( h12 );
@@ -6050,14 +5426,9 @@ int HandlerCmd97mo3a( int param0, int param1, int param2 )
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
       outpack1.nsave++;
 
-		kzo7_1();
-		BLKT(1);
-		//BLKT(1);
+		BLKT(1);	//BLKT(1);
 
    //SVC-1 -> Step 3
-
-		kzo13_1();
-
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
       SetHeader12( h12 );
@@ -6092,15 +5463,11 @@ int HandlerCmd97mo3a( int param0, int param1, int param2 )
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
       outpack1.nsave++;
 
-		kzo7_1();
 		BLKT(1);
 
    //SVC-1 -> Step 4
 
       for( j = 0; j < 14; j++ ) {
- 
-			kzo13_1();
-
          i = outpack1.nsave;
          h12 = (struct header12 *)outpack1.buf[i].data;
          SetHeader12( h12 );
@@ -6130,15 +5497,11 @@ int HandlerCmd97mo3a( int param0, int param1, int param2 )
          outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
          outpack1.nsave++;
 
-			kzo7_1();
 			BLKT(1);	
-
       } //for(j)
 
       stat.out |= FLAG_BUF1;
       stat.link |= FLAG_BUF1;
-    //  stat.rli |= FLAG_BUF1;
-
       ControlLed1( 1 );
    }
 
@@ -6147,9 +5510,6 @@ int HandlerCmd97mo3a( int param0, int param1, int param2 )
    if( param0 == 1 ) { //SVC-2
 
    //SVC-2 -> Step 1
-
-		kzo13_2();
-
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
       SetHeader12( h12 );
@@ -6166,11 +5526,8 @@ int HandlerCmd97mo3a( int param0, int param1, int param2 )
       memset( (char *)f193, 0, sizeof(struct form193) );
       memcpy( (char *)f193, (char *)&form26k1, sizeof(struct sac) );
       f193->s.ps = 1;
-      if( param1 ) {
-         f193->s.vr = 1;
-      } else {
-         f193->s.vr = 0;
-      }
+      if( param1 )    f193->s.vr = 1;
+      else            f193->s.vr = 0;
       f193->s.kvi = 2;
       f193->s.nf = 193;
       count.out1++;
@@ -6228,13 +5585,9 @@ int HandlerCmd97mo3a( int param0, int param1, int param2 )
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
       outpack2.nsave++;
 
-		kzo7_2();
 		BLKT(2);
 
    //SVC-2 -> Step 2
-
-		kzo13_2();
-
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
       SetHeader12( h12 );
@@ -6274,14 +5627,9 @@ int HandlerCmd97mo3a( int param0, int param1, int param2 )
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
       outpack2.nsave++;
 
-		kzo7_2();
-		BLKT(2);
-		//BLKT(2);
+		BLKT(2);		//BLKT(2);
 
    //SVC-2 -> Step 3
-
-		kzo13_2();
-
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
       SetHeader12( h12 );
@@ -6316,15 +5664,10 @@ int HandlerCmd97mo3a( int param0, int param1, int param2 )
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
       outpack2.nsave++;
 
-		kzo7_2();
 		BLKT(2);
 
    //SVC-2 -> Step 4
-
       for( j = 0; j < 14; j++ ) {
- 
-			kzo13_2();
-
          i = outpack2.nsave;
          h12 = (struct header12 *)outpack2.buf[i].data;
          SetHeader12( h12 );
@@ -6354,16 +5697,12 @@ int HandlerCmd97mo3a( int param0, int param1, int param2 )
          outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
          outpack2.nsave++;
 
-		kzo7_2();
-		BLKT(2);
-		//BLKT(2);
-
+		BLKT(2);//BLKT(2);
       } //for(j)
 
       stat.out |= FLAG_BUF2;
      stat.link |= FLAG_BUF2;
    //   stat.rli |= FLAG_BUF2;
-
       ControlLed2( 1 );
    }
 
@@ -6483,11 +5822,8 @@ int HandlerCmd97mo3a( int param0, int param1, int param2 )
       memset( (char *)f193, 0, sizeof(struct form193) );
       memcpy( (char *)f193, (char *)&form26k3, sizeof(struct sac) );
       f193->s.ps = 1;
-      if( param1 ) {
-         f193->s.vr = 1;
-      } else {
-         f193->s.vr = 0;
-      }
+      if( param1 )    f193->s.vr = 1;
+      else            f193->s.vr = 0;
       f193->s.kvi = 2;
       f193->s.nf = 193;
       f193->s.r0 = ( ( ( count.out6 / 10000 ) % 1000 ) % 100 ) % 10;
@@ -6533,7 +5869,6 @@ int HandlerCmd97mo3a( int param0, int param1, int param2 )
    }
 
 //---------- Other (cmd97mo3a) ----------
-
    switch( param0 ) {
    case 0:      //mode.scan1 = 1;      
 				break;
@@ -6545,46 +5880,32 @@ int HandlerCmd97mo3a( int param0, int param1, int param2 )
       outpack0.kzv = 1;
       stat.out = stat.in = stat.link = 0;
    }
-
    return( 0 );
 }
 
 
-
-
 //*************** Handler Command 101 ***************
-
-int HandlerCmd101mo3a( int param0, int param1 )
+int HandlerCmd101mo3a( int param0, int param1, int param2)
 {
-   int i;
+   int i,ii,j;
    struct header12 *h12;
    struct form11 *f11;
    struct form193 *f193;
    struct packet56 *p56;
    struct packet34 *p34;
-   int j;
 
-   if( verbose > 0 ) {
-      printf( "HandlerCmd101mo3a: p0=%x p1=%x\n", 
-         param0, param1 );
-   }
+   if( verbose > 0 )     printf( "HandlerCmd101mo3a: p0=%x p1=%x\n",   param0, param1 );
 
 //---------- Outpack1 (cmd101mo3a) ----------
 
- if( param0 == 0 ) { //SVC-1
-
+   if( param0 == 0 ) { //SVC-1
    //SVC-1 -> Step 1
-
-		kzo13_1();
-
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
       SetHeader12( h12 );
       h12->npol = 1;
       h12->nspol = 1;  
       h12->kss = sizeof(struct form193) / 2;
-//      h12->kss = ( sizeof(struct form193) / 2 ) & 0xf; //Temp!!!
- //     h12->kss2 = ( sizeof(struct form193) / 2 ) >> 4; //Temp!!!
       h12->kvi = 2;
       h12->ps = 0; //1
       h12->kzo = 5;
@@ -6593,13 +5914,12 @@ int HandlerCmd101mo3a( int param0, int param1 )
       memset( (char *)f193, 0, sizeof(struct form193) );
       memcpy( (char *)f193, (char *)&form26k1, sizeof(struct sac) );
       f193->s.ps = 1;
-      if( param1 ) {
-         f193->s.vr = 1;
-      } else {
-         f193->s.vr = 0;
-      }
+      if( param1 ) f193->s.vr = 1;
+      else         f193->s.vr = 0;
+      
       f193->s.kvi = 2;
       f193->s.nf = 193;
+	  f193->v1_3=param2+1;
       count.out1++;
 
       f193->s.r0 = ( ( ( count.out1 % 10000 ) % 1000 ) % 100 ) % 10;
@@ -6611,15 +5931,19 @@ int HandlerCmd101mo3a( int param0, int param1 )
          f193->s.v1 = ( ( param1 % 3600 ) / 60 ) / 10;;
          f193->s.v2 = ( param1 / 3600 ) % 10 ;
          f193->s.v3 = ( param1 / 3600 ) / 10;
-      } else {
-         f193->s.v0 = f193->s.v1 = f193->s.v2 = f193->s.v3 = 0;
-      }
+      } else f193->s.v0 = f193->s.v1 = f193->s.v2 = f193->s.v3 = 0;
+    
       f193->t1 = 0x00;
       f193->t2 = 0x1d;
       f193->kfs = 36;
       outpack1.buf[i].size = sizeof(struct header12) + sizeof(struct form193);
       outpack1.buf[i].cmd = BUF3KIT_CMD_OUT1;
       outpack1.nsave++;
+	  
+	  printf("-----------------193.36---SVC1---------------\n");
+	  for(ii=0;ii<sizeof(struct form193);ii++)  printf("%x ",outpack1.buf[i].data[ii+sizeof(struct header12)]);printf("\n");
+	  //б®еа ­Ёвм в®, зв® ®вЇа ўЁ«Ё ¤«п Їа®ўҐаЄЁ ЇаЁҐ¬ 	 
+	  for(ii=0;ii<20;ii++) mode.f193[ii]=outpack1.buf[i].data[ii+sizeof(struct header12)+sizeof(struct sac)];
 
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
@@ -6653,12 +5977,9 @@ int HandlerCmd101mo3a( int param0, int param1 )
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
       outpack1.nsave++;
 
-		kzo7_1();
 		BLKT(1);
 
    //SVC-1 -> Step 2
-
-		kzo13_1();
 
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
@@ -6698,14 +6019,10 @@ int HandlerCmd101mo3a( int param0, int param1 )
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
       outpack1.nsave++;
 
-		kzo7_1();
 		BLKT(1);
 		//BLKT(1);
 	
    //SVC-1 -> Step 3
-
-		kzo13_1();
-
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
       SetHeader12( h12 );
@@ -6738,21 +6055,17 @@ int HandlerCmd101mo3a( int param0, int param1 )
       f11->ku9z8 = 1; //ZAPROS-8
       f11->ku9z9 = 1; //ZAPROS-9
       f11->ku9z10 = 1; //ZAPROS-10
-//			f11->ku10=10; //!!!!!!!!!!! ��  �뫮 � ࠡ ���ᨨ
+//			f11->ku10=10; //!!!!!!!!!!! ?  <? я? ???
 
       memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
       outpack1.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
       outpack1.nsave++;
 
-		kzo7_1();
 		BLKT(1);
 
    //SVC-1 -> Step 4
-
       for( j = 0; j < 14; j++ ) {
- 
-			kzo13_1();
 
          i = outpack1.nsave;
          h12 = (struct header12 *)outpack1.buf[i].data;
@@ -6786,9 +6099,7 @@ int HandlerCmd101mo3a( int param0, int param1 )
          outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
          outpack1.nsave++;
 
-			kzo7_1();
-			BLKT(1);
-
+		BLKT(1);
       } //for(j)
 
 		i=outpack1.nsave;
@@ -6798,26 +6109,20 @@ int HandlerCmd101mo3a( int param0, int param1 )
 			
 
       stat.out |= FLAG_BUF1;
- //     stat.link |= FLAG_BUF1;
+      //stat.link |= FLAG_BUF1;
       stat.rli |= FLAG_BUF1;
       ControlLed1( 1 );
    }
 
 //---------- Outpack2 (cmd101mo3a) ----------
- if( param0 == 1 ) { //SVC-1
-
+ if( param0 == 1 ) { //SVC-2
    //SVC-2 -> Step 1
-
-		kzo13_2();
-
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
       SetHeader12( h12 );
       h12->npol = 1;
       h12->nspol = 1;  
       h12->kss = sizeof(struct form193) / 2;
-//      h12->kss = ( sizeof(struct form193) / 2 ) & 0xf; //Temp!!!
- //     h12->kss2 = ( sizeof(struct form193) / 2 ) >> 4; //Temp!!!
       h12->kvi = 2;
       h12->ps = 0; //1
       h12->kzo = 5;
@@ -6826,71 +6131,39 @@ int HandlerCmd101mo3a( int param0, int param1 )
       memset( (char *)f193, 0, sizeof(struct form193) );
       memcpy( (char *)f193, (char *)&form26k1, sizeof(struct sac) );
       f193->s.ps = 1;
-      if( param1 ) {
-         f193->s.vr = 1;
-      } else {
-         f193->s.vr = 0;
-      }
+      if( param1 ) f193->s.vr = 1;
+      else         f193->s.vr = 0;
+      
       f193->s.kvi = 2;
       f193->s.nf = 193;
-      count.out1++;
+	  f193->v1_3=param2+1;
+      count.out2++;
 
-      f193->s.r0 = ( ( ( count.out1 % 10000 ) % 1000 ) % 100 ) % 10;
-      f193->s.r1 = ( ( ( count.out1 % 10000 ) % 1000 ) % 100 ) / 10;
-      f193->s.r2 = ( ( count.out1 % 10000 ) % 1000 ) / 100;
-      f193->s.r3 = ( count.out1 % 10000 ) / 1000;
+      f193->s.r0 = ( ( ( count.out2 % 10000 ) % 1000 ) % 100 ) % 10;
+      f193->s.r1 = ( ( ( count.out2 % 10000 ) % 1000 ) % 100 ) / 10;
+      f193->s.r2 = ( ( count.out2 % 10000 ) % 1000 ) / 100;
+      f193->s.r3 = ( count.out2 % 10000 ) / 1000;
       if( param1 ) {
          f193->s.v0 = ( ( param1 % 3600 ) / 60 ) % 10;
          f193->s.v1 = ( ( param1 % 3600 ) / 60 ) / 10;;
          f193->s.v2 = ( param1 / 3600 ) % 10 ;
          f193->s.v3 = ( param1 / 3600 ) / 10;
-      } else {
-         f193->s.v0 = f193->s.v1 = f193->s.v2 = f193->s.v3 = 0;
-      }
+      } else f193->s.v0 = f193->s.v1 = f193->s.v2 = f193->s.v3 = 0;
+    
       f193->t1 = 0x00;
       f193->t2 = 0x1d;
       f193->kfs = 36;
       outpack2.buf[i].size = sizeof(struct header12) + sizeof(struct form193);
       outpack2.buf[i].cmd = BUF3KIT_CMD_OUT2;
       outpack2.nsave++;
+	  
+	  printf("-----------------193.36---SVC2---------------\n");
+	  for(ii=0;ii<sizeof(struct form193);ii++)  printf("%x ",outpack2.buf[i].data[ii+sizeof(struct header12)]);printf("\n");
+	  //б®еа ­Ёвм в®, зв® ®вЇа ўЁ«Ё ¤«п Їа®ўҐаЄЁ ЇаЁҐ¬ 	 
+	  for(ii=0;ii<20;ii++) mode.f193[ii]=outpack2.buf[i].data[ii+sizeof(struct header12)+sizeof(struct sac)];
 
-      i = outpack2.nsave;
-      h12 = (struct header12 *)outpack2.buf[i].data;
-      SetHeader12( h12 );
-      h12->npol = 1;
-      h12->nspol = 1;  
-      h12->kss = sizeof(struct form11) / 2;
-      h12->kvi = 1;
-      h12->ps = 1;
-      h12->kzo = 5;
-      f11 = (struct form11 *)(outpack2.buf[i].data + sizeof(struct header12));
-      memcpy( (char *)f11, (char *)&form11k1, sizeof(struct form11) );
-      f11->ku9z0 = 1; //ZAPROS-0
-      f11->ku9z1 = 1; //ZAPROS-1
-      f11->ku9z2 = 1; //ZAPROS-2
-      f11->ku9z3 = 1; //ZAPROS-3
-      f11->ku9z4 = 1; //ZAPROS-4
-      f11->ku9z5 = 1; //ZAPROS-5
-      f11->ku9z6 = 1; //ZAPROS-6
-      f11->ku9z7 = 1; //ZAPROS-7
-      f11->ku9z8 = 1; //ZAPROS-8
-      f11->ku9z9 = 1; //ZAPROS-9
-      f11->ku9z10 = 1; //ZAPROS-10
-		f11->ku3=0; //!!!!!!!!!!
-      f11->ku2 = 1; //perevod bloka v priem
-
-      memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
-      outpack2.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
-      outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
-      outpack2.nsave++;
-
-		kzo7_2();
 		BLKT(2);
-
    //SVC-2 -> Step 2
-
-		kzo13_2();
-
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
       SetHeader12( h12 );
@@ -6930,14 +6203,8 @@ int HandlerCmd101mo3a( int param0, int param1 )
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
       outpack2.nsave++;
 
-		kzo7_2();
-		BLKT(2);
-		//BLKT(2);
-
+		BLKT(2);		//BLKT(2);
    //SVC-2 -> Step 3
-
-		kzo13_2();
-
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
       SetHeader12( h12 );
@@ -6967,22 +6234,17 @@ int HandlerCmd101mo3a( int param0, int param1 )
       f11->ku9z8 = 1; //ZAPROS-8
       f11->ku9z9 = 1; //ZAPROS-9
       f11->ku9z10 = 1; //ZAPROS-10
-//			f11->ku10=10; //!!!!!!!!!!! ͥ  «ˮ  ࠡ ¥ᡨȍ
+//			f11->ku10=10; //!!!!!!!!!!! ?  <? я? ???
 
       memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
       outpack2.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
       outpack2.nsave++;
 
-		kzo7_2();
 		BLKT(2);
-
    //SVC-2 -> Step 4
 
       for( j = 0; j < 14; j++ ) {
- 
-			kzo13_2();
-
          i = outpack2.nsave;
          h12 = (struct header12 *)outpack2.buf[i].data;
          SetHeader12( h12 );
@@ -7012,9 +6274,7 @@ int HandlerCmd101mo3a( int param0, int param1 )
          outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
          outpack2.nsave++;
 
-			kzo7_2();
 			BLKT(2);
-
       } //for(j)
 
 		i=outpack2.nsave;
@@ -7024,7 +6284,7 @@ int HandlerCmd101mo3a( int param0, int param1 )
 			
 
       stat.out |= FLAG_BUF2;
- //     stat.link |= FLAG_BUF1;
+     // stat.link |= FLAG_BUF2;
       stat.rli |= FLAG_BUF2;
       ControlLed1( 2 );
    }
@@ -7146,11 +6406,8 @@ int HandlerCmd101mo3a( int param0, int param1 )
       memset( (char *)f193, 0, sizeof(struct form193) );
       memcpy( (char *)f193, (char *)&form26k3, sizeof(struct sac) );
       f193->s.ps = 1;
-      if( param1 ) {
-         f193->s.vr = 1;
-      } else {
-         f193->s.vr = 0;
-      }
+      if( param1 )    f193->s.vr = 1;
+      else            f193->s.vr = 0;
       f193->s.kvi = 2;
       f193->s.nf = 193;
       f193->s.r0 = ( ( ( count.out6 / 10000 ) % 1000 ) % 100 ) % 10;
@@ -7210,7 +6467,6 @@ int HandlerCmd101mo3a( int param0, int param1 )
       outpack0.kzv = 1;
       stat.out = stat.in = stat.link = 0;
    }
-
    return( 0 );
 }
 
@@ -7218,50 +6474,40 @@ int HandlerCmd101mo3a( int param0, int param1 )
 
 int HandlerCmd102mo3a( int param0, int param1, int param2 )
 {
-   int i;
+   int i,ii,j;
    struct header12 *h12;
    struct form11 *f11;
    struct form193 *f193;
    struct packet56 *p56;
    struct packet34 *p34;
-   int j;
 
-   if( verbose > 0 ) {
-      printf( "HandlerCmd102mo3a: p0=%x p1=%x p2=%x\n", 
-         param0, param1, param2);
-   }
+   if( verbose > 0 )    printf( "HandlerCmd102mo3a: p0=%x p1=%x p2=%x\n",     param0, param1, param2);
 
 //---------- Outpack1 (cmd102mo3a) ----------
 
-    if( param0 == 0 ) { //SVC-1
+   if( param0 == 0 ) { //SVC-1
 
    //SVC-1 -> Step 1
-
-		kzo13_1();
-
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
       SetHeader12( h12 );
       h12->npol = 1;
       h12->nspol = 1;  
       h12->kss = sizeof(struct form193) / 2;
-//      h12->kss = ( sizeof(struct form193) / 2 ) & 0xf; //Temp!!!
- //     h12->kss2 = ( sizeof(struct form193) / 2 ) >> 4; //Temp!!!
       h12->kvi = 2;
-      h12->ps = 0;
+      h12->ps = 0; //1
       h12->kzo = 5;
       f193 = (struct form193 *)(outpack1.buf[i].data + 
          sizeof(struct header12));
       memset( (char *)f193, 0, sizeof(struct form193) );
       memcpy( (char *)f193, (char *)&form26k1, sizeof(struct sac) );
       f193->s.ps = 1;
-      if( param1 ) {
-         f193->s.vr = 1;
-      } else {
-         f193->s.vr = 0;
-      }
+      if( param1 ) f193->s.vr = 1;
+      else         f193->s.vr = 0;
+      
       f193->s.kvi = 2;
       f193->s.nf = 193;
+	  f193->v1_3=param2+1; //ўаҐ¬Ґ­­® ¬ бив Ў=1
       count.out1++;
 
       f193->s.r0 = ( ( ( count.out1 % 10000 ) % 1000 ) % 100 ) % 10;
@@ -7273,22 +6519,24 @@ int HandlerCmd102mo3a( int param0, int param1, int param2 )
          f193->s.v1 = ( ( param1 % 3600 ) / 60 ) / 10;;
          f193->s.v2 = ( param1 / 3600 ) % 10 ;
          f193->s.v3 = ( param1 / 3600 ) / 10;
-      } else {
-         f193->s.v0 = f193->s.v1 = f193->s.v2 = f193->s.v3 = 0;
-      }
+      } else  f193->s.v0 = f193->s.v1 = f193->s.v2 = f193->s.v3 = 0;
+	  
+	  f193->v1_0 = ( ( ( param2 % 10000 ) % 1000 ) % 100 ) % 10;
+      f193->v1_1 = ( ( ( param2 % 10000 ) % 1000 ) % 100 ) / 10;
+      f193->v1_2 = ( ( param2 % 10000 ) % 1000 ) / 100;
+      f193->v1_3 = ( param2 % 10000 ) / 1000;
+	  
       f193->t1 = 0x00;
       f193->t2 = 0x1d;
-
-      f193->v1_3 = ( ( ( param2 % 10000 ) % 1000 ) % 100 ) % 10;
-      f193->v1_2 = ( ( ( param2 % 10000 ) % 1000 ) % 100 ) / 10;
-      f193->v1_1 = ( ( param2 % 10000 ) % 1000 ) / 100;
-      f193->v1_0 = ( param2 % 10000 ) / 1000;
-
-		printf("\nparam2 %x %x %x %x\n", f193->v1_0, f193->v1_1, f193->v1_2, f193->v1_3);
       f193->kfs = 37;
       outpack1.buf[i].size = sizeof(struct header12) + sizeof(struct form193);
       outpack1.buf[i].cmd = BUF3KIT_CMD_OUT1;
       outpack1.nsave++;
+	  
+	  printf("-----------------193.37--SVC1----------------\n");
+	  for(ii=0;ii<sizeof(struct form193);ii++)  printf("%x ",outpack1.buf[i].data[ii+sizeof(struct header12)]);printf("\n");
+	  //б®еа ­Ёвм в®, зв® ®вЇа ўЁ«Ё ¤«п Їа®ўҐаЄЁ ЇаЁҐ¬ 	 
+	  for(ii=0;ii<20;ii++) mode.f193[ii]=outpack1.buf[i].data[ii+sizeof(struct header12)+sizeof(struct sac)];
 
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
@@ -7312,20 +6560,18 @@ int HandlerCmd102mo3a( int param0, int param1, int param2 )
       f11->ku9z8 = 1; //ZAPROS-8
       f11->ku9z9 = 1; //ZAPROS-9
       f11->ku9z10 = 1; //ZAPROS-10
+      f11->ku5=mode.prd1;
+      f11->ku6=mode.prm1;
       f11->ku2 = 1; //perevod bloka v priem
-
+	  f11->ku3=0; //!!!!!!!!!!
       memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
       outpack1.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
       outpack1.nsave++;
 
-		kzo7_1();
 		BLKT(1);
 
    //SVC-1 -> Step 2
-
-		kzo13_1();
-
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
       SetHeader12( h12 );
@@ -7344,9 +6590,8 @@ int HandlerCmd102mo3a( int param0, int param1, int param2 )
       f11->ku4 = 1; //FM1
 //      f11->ku5 = 1; //PRD-M1
 //      f11->ku6 = 7; //PRM-M7
-      f11->ku5 = mode.prd1; //PRD-M1
-      f11->ku6 = mode.prm1; //PRM-M7
-
+      f11->ku5=mode.prd1;
+      f11->ku6=mode.prm1;
       f11->ku7 = 0; //PRD-0dB
       f11->ku8 = 0; //FK-0
       f11->ku9z0 = 1; //ZAPROS-0
@@ -7365,14 +6610,10 @@ int HandlerCmd102mo3a( int param0, int param1, int param2 )
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
       outpack1.nsave++;
 
-		kzo7_1();
 		BLKT(1);
 		//BLKT(1);
-
+	
    //SVC-1 -> Step 3
-
-		kzo13_1();
-
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
       SetHeader12( h12 );
@@ -7389,6 +6630,9 @@ int HandlerCmd102mo3a( int param0, int param1, int param2 )
       f11->ku2 = 1; //PRM-ON
       f11->ku3 = 0; //TKI
       f11->ku4 = 1; //FM1
+      f11->ku5=mode.prd1;
+      f11->ku6=mode.prm1;
+
       f11->ku7 = 0; //PRD-0dB
       f11->ku8 = 0; //FK-0
       f11->ku9z0 = 1; //ZAPROS-0
@@ -7402,20 +6646,17 @@ int HandlerCmd102mo3a( int param0, int param1, int param2 )
       f11->ku9z8 = 1; //ZAPROS-8
       f11->ku9z9 = 1; //ZAPROS-9
       f11->ku9z10 = 1; //ZAPROS-10
+//			f11->ku10=10; //!!!!!!!!!!! ?  <? я? ???
+
       memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
       outpack1.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
       outpack1.nsave++;
 
-		kzo7_1();
 		BLKT(1);
 
    //SVC-1 -> Step 4
-
       for( j = 0; j < 14; j++ ) {
- 
-			kzo13_1();
-
          i = outpack1.nsave;
          h12 = (struct header12 *)outpack1.buf[i].data;
          SetHeader12( h12 );
@@ -7440,79 +6681,77 @@ int HandlerCmd102mo3a( int param0, int param1, int param2 )
          f11->ku9z10 = 1; //ZAPROS-10
          f11->ku10 = 1; //ZAPROS-10 !!!
 
+    	  f11->ku5=mode.prd1;
+	      f11->ku6=mode.prm1;
+
          memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
          outpack1.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
          outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
          outpack1.nsave++;
 
-			kzo7_1();
-			BLKT(1);	
-
+			BLKT(1);
       } //for(j)
 
-      stat.out |= FLAG_BUF1;
-    //  stat.link |= FLAG_BUF1;
-      stat.rli |= FLAG_BUF1;
+		i=outpack1.nsave;
+		outpack1.buf[i].size=0;
+		outpack1.buf[i].cmd=BUF3KIT_CMD_END;
+		outpack1.nsave++;
+			
 
+      stat.out |= FLAG_BUF1;
+      //stat.link |= FLAG_BUF1;
+      stat.rli |= FLAG_BUF1;
       ControlLed1( 1 );
    }
 
 //---------- Outpack2 (cmd102mo3a) ----------
-
-   if( param0 == 1 ) { //SVC-2
+ if( param0 == 1 ) { //SVC-2
 
    //SVC-2 -> Step 1
-
-		kzo13_2();
-
-      i = outpack2.nsave;
+	  i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
       SetHeader12( h12 );
       h12->npol = 1;
       h12->nspol = 1;  
       h12->kss = sizeof(struct form193) / 2;
-//      h12->kss = ( sizeof(struct form193) / 2 ) & 0xf; //Temp!!!
-//      h12->kss2 = ( sizeof(struct form193) / 2 ) >> 4; //Temp!!!
       h12->kvi = 2;
-      h12->ps = 0;
+      h12->ps = 0; //1
       h12->kzo = 5;
       f193 = (struct form193 *)(outpack2.buf[i].data + 
          sizeof(struct header12));
       memset( (char *)f193, 0, sizeof(struct form193) );
       memcpy( (char *)f193, (char *)&form26k1, sizeof(struct sac) );
       f193->s.ps = 1;
-      if( param1 ) {
-         f193->s.vr = 1;
-      } else {
-         f193->s.vr = 0;
-      }
+      if( param1 ) f193->s.vr = 1;
+      else         f193->s.vr = 0;
+      
       f193->s.kvi = 2;
       f193->s.nf = 193;
-      count.out1++;
-      f193->s.r0 = ( ( ( count.out1 % 10000 ) % 1000 ) % 100 ) % 10;
-      f193->s.r1 = ( ( ( count.out1 % 10000 ) % 1000 ) % 100 ) / 10;
-      f193->s.r2 = ( ( count.out1 % 10000 ) % 1000 ) / 100;
-      f193->s.r3 = ( count.out1 % 10000 ) / 1000;
+	  f193->v1_3=param2+1;
+      count.out2++;
+
+      f193->s.r0 = ( ( ( count.out2 % 10000 ) % 1000 ) % 100 ) % 10;
+      f193->s.r1 = ( ( ( count.out2 % 10000 ) % 1000 ) % 100 ) / 10;
+      f193->s.r2 = ( ( count.out2 % 10000 ) % 1000 ) / 100;
+      f193->s.r3 = ( count.out2 % 10000 ) / 1000;
       if( param1 ) {
          f193->s.v0 = ( ( param1 % 3600 ) / 60 ) % 10;
          f193->s.v1 = ( ( param1 % 3600 ) / 60 ) / 10;;
          f193->s.v2 = ( param1 / 3600 ) % 10 ;
          f193->s.v3 = ( param1 / 3600 ) / 10;
-      } else {
-         f193->s.v0 = f193->s.v1 = f193->s.v2 = f193->s.v3 = 0;
-      }
+      } else f193->s.v0 = f193->s.v1 = f193->s.v2 = f193->s.v3 = 0;
+    
       f193->t1 = 0x00;
       f193->t2 = 0x1d;
       f193->kfs = 37;
-
-      f193->v1_3 = ( ( ( param2 % 10000 ) % 1000 ) % 100 ) % 10;
-      f193->v1_2 = ( ( ( param2 % 10000 ) % 1000 ) % 100 ) / 10;
-      f193->v1_1 = ( ( param2 % 10000 ) % 1000 ) / 100;
-      f193->v1_0 = ( param2 % 10000 ) / 1000;
-
       outpack2.buf[i].size = sizeof(struct header12) + sizeof(struct form193);
       outpack2.buf[i].cmd = BUF3KIT_CMD_OUT2;
       outpack2.nsave++;
+	  
+	  printf("-----------------193.37---SVC2---------------\n");
+	  for(ii=0;ii<sizeof(struct form193);ii++)  printf("%x ",outpack2.buf[i].data[ii+sizeof(struct header12)]);printf("\n");
+	  //б®еа ­Ёвм в®, зв® ®вЇа ўЁ«Ё ¤«п Їа®ўҐаЄЁ ЇаЁҐ¬ 	 
+	  for(ii=0;ii<20;ii++) mode.f193[ii]=outpack2.buf[i].data[ii+sizeof(struct header12)+sizeof(struct sac)];
 
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
@@ -7536,6 +6775,7 @@ int HandlerCmd102mo3a( int param0, int param1, int param2 )
       f11->ku9z8 = 1; //ZAPROS-8
       f11->ku9z9 = 1; //ZAPROS-9
       f11->ku9z10 = 1; //ZAPROS-10
+		f11->ku3=0; //!!!!!!!!!!
       f11->ku2 = 1; //perevod bloka v priem
 
       memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
@@ -7543,13 +6783,9 @@ int HandlerCmd102mo3a( int param0, int param1, int param2 )
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
       outpack2.nsave++;
 
-		kzo7_2();
 		BLKT(2);
 
    //SVC-2 -> Step 2
-
-		kzo13_2();
-
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
       SetHeader12( h12 );
@@ -7589,14 +6825,9 @@ int HandlerCmd102mo3a( int param0, int param1, int param2 )
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
       outpack2.nsave++;
 
-		kzo7_2();
-		BLKT(2);
-		//BLKT(2);
+		BLKT(2);	//BLKT(2);
 
    //SVC-2 -> Step 3
-
-		kzo13_2();
-
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
       SetHeader12( h12 );
@@ -7626,20 +6857,17 @@ int HandlerCmd102mo3a( int param0, int param1, int param2 )
       f11->ku9z8 = 1; //ZAPROS-8
       f11->ku9z9 = 1; //ZAPROS-9
       f11->ku9z10 = 1; //ZAPROS-10
+//			f11->ku10=10; //!!!!!!!!!!! ?  <? я? ???
+
       memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
       outpack2.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
       outpack2.nsave++;
 
-		kzo7_2();
 		BLKT(2);
 
    //SVC-2 -> Step 4
-
       for( j = 0; j < 14; j++ ) {
- 
-			kzo13_2();
-
          i = outpack2.nsave;
          h12 = (struct header12 *)outpack2.buf[i].data;
          SetHeader12( h12 );
@@ -7662,24 +6890,25 @@ int HandlerCmd102mo3a( int param0, int param1, int param2 )
          f11->ku9z8 = 1; //ZAPROS-8
          f11->ku9z9 = 1; //ZAPROS-9
          f11->ku9z10 = 1; //ZAPROS-10
-         f11->ku10 = 1; //ZAPROS-10 !!!
+         f11->ku10 = 1; //ZAPROS DANNIH
 
          memcpy( (char *)&form11k1, (char *)f11, sizeof(struct form11) );
          outpack2.buf[i].size = sizeof(struct header12) + sizeof(struct form11);
          outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
          outpack2.nsave++;
 
-		kzo7_2();
-		BLKT(2);
-		//BLKT(2);
-
+			BLKT(2);
       } //for(j)
 
+		i=outpack2.nsave;
+		outpack2.buf[i].size=0;
+		outpack2.buf[i].cmd=BUF3KIT_CMD_END;
+		outpack2.nsave++;
+			
       stat.out |= FLAG_BUF2;
-   //   stat.link |= FLAG_BUF2;
+     // stat.link |= FLAG_BUF2;
       stat.rli |= FLAG_BUF2;
-
-      ControlLed2( 1 );
+      ControlLed1( 2 );
    }
 
 //---------- Outpack3 (cmd102mo3a) ----------
@@ -7798,11 +7027,8 @@ int HandlerCmd102mo3a( int param0, int param1, int param2 )
       memset( (char *)f193, 0, sizeof(struct form193) );
       memcpy( (char *)f193, (char *)&form26k3, sizeof(struct sac) );
       f193->s.ps = 1;
-      if( param1 ) {
-         f193->s.vr = 1;
-      } else {
-         f193->s.vr = 0;
-      }
+      if( param1 )      f193->s.vr = 1;
+      else              f193->s.vr = 0;
       f193->s.kvi = 2;
       f193->s.nf = 193;
       f193->s.r0 = ( ( ( count.out6 / 10000 ) % 1000 ) % 100 ) % 10;
@@ -7860,7 +7086,6 @@ int HandlerCmd102mo3a( int param0, int param1, int param2 )
       outpack0.kzv = 1;
       stat.out = stat.in = stat.link = 0;
    }
-
    return( 0 );
 }
 
@@ -7868,36 +7093,27 @@ int HandlerCmd102mo3a( int param0, int param1, int param2 )
 
 int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
 {
-   int i;
+   int i,j;
    struct header12 *h12;
    struct form11 *f11;
    struct form193 *f193;
    struct packet56 *p56;
    struct packet34 *p34;
-   int j;
-	float min=0;
+   float min=0;
 
-   if( verbose > 0 ) {
-      printf( "HandlerCmd103mo3a: p0=%x p1=%x p2=%x p3=%x\n", 
-         param0, param1, param2, param3 );
-   }
+   if( verbose > 0 ) printf( "HandlerCmd103mo3a: p0=%x p1=%x p2=%x p3=%x\n", param0, param1, param2, param3 );
 
 //---------- Outpack1 (cmd103mo3a) ----------
 
    if( param0 == 0 ) { //SVC-1
 
    //SVC-1 -> Step 1
-
-		kzo13_1();
-
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
       SetHeader12( h12 );
       h12->npol = 1;
       h12->nspol = 1;  
       h12->kss = sizeof(struct form193) / 2;
-//      h12->kss = ( sizeof(struct form193) / 2 ) & 0xf; //Temp!!!
- //     h12->kss2 = ( sizeof(struct form193) / 2 ) >> 4; //Temp!!!
       h12->kvi = 2;
       h12->ps = 0;
       h12->kzo = 5;
@@ -7906,11 +7122,8 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
       memset( (char *)f193, 0, sizeof(struct form193) );
       memcpy( (char *)f193, (char *)&form26k1, sizeof(struct sac) );
       f193->s.ps = 1;
-      if( param1 ) {
-         f193->s.vr = 1;
-      } else {
-         f193->s.vr = 0;
-      }
+      if( param1 )    f193->s.vr = 1;
+      else            f193->s.vr = 0;
       f193->s.kvi = 2;
       f193->s.nf = 193;
       count.out1++;
@@ -7924,9 +7137,7 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
          f193->s.v1 = ( ( param1 % 3600 ) / 60 ) / 10;;
          f193->s.v2 = ( param1 / 3600 ) % 10 ;
          f193->s.v3 = ( param1 / 3600 ) / 10;
-      } else {
-         f193->s.v0 = f193->s.v1 = f193->s.v2 = f193->s.v3 = 0;
-      }
+      } else    f193->s.v0 = f193->s.v1 = f193->s.v2 = f193->s.v3 = 0;
       f193->t1 = 0x00;
       f193->t2 = 0x1d;
       f193->kfs = 38;
@@ -7995,13 +7206,9 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
       outpack1.nsave++;
 
-		kzo7_1();
 		BLKT(1);
 
    //SVC-1 -> Step 2
-
-		kzo13_1();
-
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
       SetHeader12( h12 );
@@ -8041,14 +7248,9 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
       outpack1.nsave++;
 
-		kzo7_1();
-		BLKT(1);
-		//BLKT(1);
+		BLKT(1);	//BLKT(1);
 
    //SVC-1 -> Step 3
-
-		kzo13_1();
-
       i = outpack1.nsave;
       h12 = (struct header12 *)outpack1.buf[i].data;
       SetHeader12( h12 );
@@ -8083,15 +7285,11 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
       outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
       outpack1.nsave++;
 
-		kzo7_1();
 		BLKT(1);
 
    //SVC-1 -> Step 4
 
       for( j = 0; j < 14; j++ ) {
- 
-			kzo13_1();
-
          i = outpack1.nsave;
          h12 = (struct header12 *)outpack1.buf[i].data;
          SetHeader12( h12 );
@@ -8121,33 +7319,25 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
          outpack1.buf[i].cmd = BUF3KIT_CMD_BLK1;
          outpack1.nsave++;
 
-			kzo7_1();
 			BLKT(1);
-
       } //for(j)
 
       stat.out |= FLAG_BUF1;
 //      stat.link |= FLAG_BUF1;
       stat.rli |= FLAG_BUF1;
-
       ControlLed1( 1 );
    }
 
 //---------- Outpack2 (cmd103mo3a) ----------
 
    if( param0 == 1 ) { //SVC-2
-
    //SVC-2 -> Step 1
-
-		kzo13_2();
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
       SetHeader12( h12 );
       h12->npol = 1;
       h12->nspol = 1;  
       h12->kss = sizeof(struct form193) / 2;
-//      h12->kss = ( sizeof(struct form193) / 2 ) & 0xf; //Temp!!!
- //     h12->kss2 = ( sizeof(struct form193) / 2 ) >> 4; //Temp!!!
       h12->kvi = 2;
       h12->ps = 0;
       h12->kzo = 5;
@@ -8155,13 +7345,9 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
          sizeof(struct header12));
       memset( (char *)f193, 0, sizeof(struct form193) );
       memcpy( (char *)f193, (char *)&form26k1, sizeof(struct sac) );
-
       f193->s.ps = 1;
-      if( param1 ) {
-         f193->s.vr = 1;
-      } else {
-         f193->s.vr = 0;
-      }
+      if( param1 )     f193->s.vr = 1;
+      else             f193->s.vr = 0;
       f193->s.kvi = 2;
       f193->s.nf = 193;
       count.out1++;
@@ -8188,7 +7374,6 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
       if( param3 & 0x8000 ) {
          f193->pn |= 0x02;
 			param3 = param3 & 0x7fff;
-
       }
 
       f193->v2_2 = param2 / ( 0x8000 / 90.0 ); //+  
@@ -8335,13 +7520,9 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
       outpack2.nsave++;
 
-		kzo7_2();
 		BLKT(2);
 
    //SVC-2 -> Step 2
-
-		kzo13_2();
-
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
       SetHeader12( h12 );
@@ -8355,14 +7536,10 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
       memcpy( (char *)f11, (char *)&form11k2, sizeof(struct form11) );
       f11->ku0 = 0; //RAB
       f11->ku1 = 1; //PRD-ON
-//      f11->ku2 = 0; //PRM-OFF
       f11->ku3 = 0; //TKI
       f11->ku4 = 1; //FM1
-//      f11->ku5 = 1; //PRD-M1
-//      f11->ku6 = 7; //PRM-M7
       f11->ku5 = mode.prd2; //PRD-M1
       f11->ku6 = mode.prm2; //PRM-M7
-
       f11->ku7 = 0; //PRD-0dB
       f11->ku8 = 0; //FK-0
       f11->ku9z0 = 1; //ZAPROS-0
@@ -8381,14 +7558,9 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
       outpack2.nsave++;
 
-		kzo7_2();
-		BLKT(2);
-		//BLKT(2);
+		BLKT(2);		//BLKT(2);
 
    //SVC-2 -> Step 3
-
-		kzo13_2();
-
       i = outpack2.nsave;
       h12 = (struct header12 *)outpack2.buf[i].data;
       SetHeader12( h12 );
@@ -8423,15 +7595,10 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
       outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
       outpack2.nsave++;
 
-		kzo7_2();
 		BLKT(2);
 
    //SVC-2 -> Step 4
-
       for( j = 0; j < 14; j++ ) {
- 
-			kzo13_2();
-
          i = outpack2.nsave;
          h12 = (struct header12 *)outpack2.buf[i].data;
          SetHeader12( h12 );
@@ -8461,18 +7628,14 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
          outpack2.buf[i].cmd = BUF3KIT_CMD_BLK2;
          outpack2.nsave++;
 
-			kzo7_2();
 			BLKT(2);
-
       } //for(j)
 
       stat.out |= FLAG_BUF2;
 //      stat.link |= FLAG_BUF2;
       stat.rli |= FLAG_BUF2;
-
       ControlLed2( 1 );
    }
-
 
 //---------- Outpack3 (cmd103mo3a) ----------
 
@@ -8592,11 +7755,8 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
       memset( (char *)f193, 0, sizeof(struct form193) );
       memcpy( (char *)f193, (char *)&form26k3, sizeof(struct sac) );
       f193->s.ps = 1;
-      if( param1 ) {
-         f193->s.vr = 1;
-      } else {
-         f193->s.vr = 0;
-      }
+      if( param1 )     f193->s.vr = 1;
+      else 		       f193->s.vr = 0;
       f193->s.kvi = 2;
       f193->s.nf = 193;
       f193->s.r0 = ( ( ( count.out6 / 10000 ) % 1000 ) % 100 ) % 10;
@@ -8654,7 +7814,6 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
       outpack0.kzv = 1;
       stat.out = stat.in = stat.link = 0;
    }
-
    return( 0 );
 }
 
@@ -8662,12 +7821,11 @@ int HandlerCmd103mo3a( int param0, int param1, int param2, int param3 )
 
 int HandlerCmd104mo3a( int param0, int param1, int param2 )
 {
-   int i;
+   int i,j;
    struct packet34 *p34;
    struct packet56 *p56;
    struct sac *f18;
-   int j;
-	short mod_type;
+  short mod_type;
 
    if( verbose > 0 ) {
       printf( "HandlerCmd104mo3a: p0=%x p1=%x p2=%x nform=%d (size=%d)\n", 
@@ -8680,7 +7838,6 @@ int HandlerCmd104mo3a( int param0, int param1, int param2 )
 	if( !mode.mo1a && mode.mn1 ) {
           BU1_K6(0x3b);
 		  BU1_K7(0x01);
-
 
         BLKT(3);BLKT(3);//BLKT(3);
 
@@ -8779,7 +7936,6 @@ int HandlerCmd104mo3a( int param0, int param1, int param2 )
 		
    mode.addr3 = param2;
    mode.recv3 = 1;
-
    return( 0 );
 }
 
@@ -8790,12 +7946,9 @@ int HandlerCmd104mo3a( int param0, int param1, int param2 )
 int HandlerCmd115mo3a( int param0, int param1, int param2 )
 {
    int i,j1,j;
-   //struct packet34 *p34;
    struct packet56 *p56;
    struct sac *f18, *f27;
    short b[sizeof(struct form199_dmv)];
-
-//	short mod_type;
 
    if( verbose > 0 ) {
       printf( "HandlerCmd115mo3a: p0=%x p1=%x p2=%x nform=%d (size=%d)\n", 
@@ -8808,7 +7961,6 @@ int HandlerCmd115mo3a( int param0, int param1, int param2 )
 	if( !mode.mo1a && mode.mn1 ) {
           BU1_K6(0x3b);
 		  BU1_K7(0x01);
-
 
         BLKT(3);BLKT(3);//BLKT(3);
 
@@ -8838,11 +7990,8 @@ int HandlerCmd115mo3a( int param0, int param1, int param2 )
    f18 = (struct sac *)( outpack6.buf[i].data + sizeof(struct header56) + 5 );
    memset( (char *)f18, 0, sizeof(struct sac) );
    f18->ps = 1;
-   if( param0 ) {
-      f18->vr = 1;
-   } else {
-      f18->vr = 0;
-   }
+   if( param0 )   f18->vr = 1;
+   else           f18->vr = 0;
    f18->kvi = 15;
    f18->nf = 18;
    f18->r0 = ( ( ( count.out6 / 10000 ) % 1000 ) % 100 ) % 10;
@@ -8939,7 +8088,6 @@ int HandlerCmd115mo3a( int param0, int param1, int param2 )
 
 	SpeedR999();
       
-
 		//stat.link |= FLAG_BUF6;
 		stat.out |= FLAG_BUF6;
 		ControlLed4( 1 );
@@ -8948,7 +8096,6 @@ int HandlerCmd115mo3a( int param0, int param1, int param2 )
 		
    mode.addr3 = param2;
    mode.recv3 = 1;
-
    return( 0 );
 }
 

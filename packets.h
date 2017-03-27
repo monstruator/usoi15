@@ -80,6 +80,9 @@
 
       unsigned short cf1_svch2[10];  //слова 1-5 чф1
       unsigned short cf2_svch2[5];  //слова 1-5 чф2
+
+      unsigned char f193[20];  //слова 7-16 ф193
+	  
 	  unsigned short no_num1;  //kol-vo form3 NO,REO po 1 svch
 	  unsigned short no_num2;  //kol-vo form3 NO,REO po 2 svch
 		short prm1; //chastota 1 cpp priem
@@ -190,6 +193,41 @@
       unsigned long itog;
       unsigned long bu;
    };
+//--------------------------sac-----------------------------
+ struct sac {
+      unsigned short ps: 1;
+      unsigned short vr: 1;
+      unsigned short rez1: 1;
+      unsigned short kvi: 4;
+      unsigned short rez2: 1;
+      unsigned short nf: 8;
+
+      unsigned short a0: 4;
+      unsigned short a1: 4;
+      unsigned short a2: 4;
+      unsigned short a3: 4;
+
+      unsigned short a4: 4;
+      unsigned short a5: 4;
+      unsigned short p0: 4;
+      unsigned short p1: 4;
+
+      unsigned short p2: 4;
+      unsigned short p3: 4;
+      unsigned short p4: 4;
+      unsigned short p5: 4;
+
+      unsigned short r0: 4;
+      unsigned short r1: 4;
+      unsigned short r2: 4;
+      unsigned short r3: 4;
+
+
+      unsigned short v0: 4;
+      unsigned short v1: 4;
+      unsigned short v2: 4;
+      unsigned short v3: 4;
+   };
 
 //-------------------- Socket 0 ---------------------
 
@@ -211,6 +249,7 @@
       float course;
       float speed;
       float div_course;
+	  short cksum;
    };
 
    struct packcmd {
@@ -220,6 +259,9 @@
       short pr_bearing; //short int
       float p;
       float k;
+	  float speed;
+	  float x;
+	  float y;
       short nform;
       struct formrls form[3];
 	  char sms[80];
@@ -249,7 +291,7 @@
       unsigned int word_sost_rts_1;
       unsigned int word_sost_rts_2;
 
-      union {
+     union {
          struct {
             unsigned short cr;
             short sach18[6];
@@ -266,9 +308,25 @@
          } svch1_no;
          struct {
             unsigned short cr;
+            struct sac s;
+            unsigned short nword;
+            short form1[10];
+            short form2[5];
+         } svch1_vz;
+         struct {
+            unsigned short cr;
             short sach18[6];
             unsigned short nword;
             short form1[10];
+            short form2[5];
+            short form4[1200];
+         } svch1_res;
+         struct {
+            unsigned short cr;
+            short sach18[6];
+            unsigned short nword;
+            short form1[10];
+			short form2[5]; //taktical region
             short form4[1200];
          } svch1_reo;
          struct {
@@ -277,7 +335,7 @@
             unsigned short nword;
             short form1[10];
             short form2[5];
-            short form5[6];
+            short form5[9];
             short form6[4060];
             unsigned short num;
          } svch1_rli;
@@ -298,11 +356,27 @@
             short form2[5];
             short form3[1100];
          } svch2_no;
+		struct {
+            unsigned short cr;
+            struct sac s;
+            unsigned short nword;
+            short form1[10];
+            short form2[5];
+         } svch2_vz;
          struct {
             unsigned short cr;
             short sach18[6];
             unsigned short nword;
             short form1[10];
+            short form2[5];
+            short form4[1200];
+         } svch2_res;
+         struct {
+            unsigned short cr;
+            short sach18[6];
+            unsigned short nword;
+            short form1[10];
+			short form2[5]; //taktical region
             short form4[1200];
          } svch2_reo;
          struct {
@@ -311,7 +385,7 @@
             unsigned short nword;
             short form1[10];
             short form2[5];
-            short form5[6];
+            short form5[9];
             short form6[4060];
             unsigned short num;
          } svch2_rli;
@@ -632,68 +706,30 @@
       unsigned short s8: 8;
    };
 
-   struct sac {
-      unsigned short ps: 1;
-      unsigned short vr: 1;
-      unsigned short rez1: 1;
-      unsigned short kvi: 4;
-      unsigned short rez2: 1;
-      unsigned short nf: 8;
-
-      unsigned short a0: 4;
-      unsigned short a1: 4;
-      unsigned short a2: 4;
-      unsigned short a3: 4;
-
-      unsigned short a4: 4;
-      unsigned short a5: 4;
-      unsigned short p0: 4;
-      unsigned short p1: 4;
-
-      unsigned short p2: 4;
-      unsigned short p3: 4;
-      unsigned short p4: 4;
-      unsigned short p5: 4;
-
-      unsigned short r0: 4;
-      unsigned short r1: 4;
-      unsigned short r2: 4;
-      unsigned short r3: 4;
-
-
-      unsigned short v0: 4;
-      unsigned short v1: 4;
-      unsigned short v2: 4;
-      unsigned short v3: 4;
-   };
- 
-
    struct form193 {
       struct sac s;
       unsigned short t1: 8; 
       unsigned short t2: 8; 
       unsigned short pn: 8;
       unsigned short kfs: 8;
+      		   short x;
+      		   short y;
+	  unsigned short kurs; 
+	  unsigned short speed;
       unsigned short v1_0: 4;
       unsigned short v1_1: 4;
       unsigned short v1_2: 4;
       unsigned short v1_3: 4;
+
       unsigned int v2_0: 6;
       unsigned int v2_1: 6;
       unsigned int v2_2: 7;
+
       unsigned int r11: 1;
       unsigned int v3_0: 6;
       unsigned int v3_1: 6;
       unsigned short v3_2: 8;
       unsigned short r12: 8;
-      unsigned short r13: 16;
-      unsigned short r14: 16;
-      unsigned short r15: 16;
-      unsigned short r16: 16;
-      unsigned short r17: 16;
-      unsigned short r18: 16;
-      unsigned short r19: 16;
-      unsigned short r20: 16;
    };
 
    struct form199_dmv {
@@ -731,16 +767,16 @@
 
    struct form199 {
       struct sac s;  			//6 short
-      unsigned short f193[6];  //слова 7-12 ф193
+      unsigned char f193[20];  //слова 7-16 ф193
       unsigned short cf1[10];  //слова 1-10 чф1
       unsigned short cf2[5];  //слова 1-5 чф2
    };
-
-   struct form18 {
+  
+     struct form18 {
       struct sac s;  			//6 short
 	  short fsn; //kol-vo slov v soowenii
       unsigned short cf1[10];  //слова 1-10 чф1
-      unsigned short cf2[5];  //слова 1-5 чф2
+      //unsigned short cf2[5];  //слова 1-5 чф2
       unsigned short cf3[1100];  //слова 1-11 чф3
    };
 
@@ -757,16 +793,13 @@
       unsigned short cf3[1100];  //слова 1-10 чф3
    };
 
-
    struct form_reo {
       struct sac s;  			//6 short
 	  short fsn; //kol-vo slov v soowenii
       unsigned short cf1[10];  //слова 1-10 чф1
-      unsigned short cf2[1200];  //слова 1-11 чф3
+      unsigned short cf4[36];  //слова 1-11 чф3
    };
-
-
-
+   
    struct fomr1n {
       unsigned short r1: 4;
       unsigned short tps: 1;
