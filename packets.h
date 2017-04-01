@@ -249,7 +249,7 @@
       float course;
       float speed;
       float div_course;
-	  short cksum;
+	  unsigned short cksum;
    };
 
    struct packcmd {
