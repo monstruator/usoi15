@@ -157,13 +157,10 @@ int HandlerInPack1( struct packet12 *pack, int size )
    struct form18 *f18;
    struct form18a *f18a;
    struct form18b *f18b;
-
    struct form_reo *freo;
-
    unsigned fsa, fsp, fsr, fsv, fsn;
    short *form_num;
    int i,count=0;
-   char b[sizeof(struct form199)];
 
    if( verbose > 1 ) {
       printf( "HandlerInPack1: size=%d kzo=%d kss=%d kvi=%d ps=%d\n",

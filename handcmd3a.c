@@ -1,11 +1,22 @@
-//вопрос по k15 //k65 //k70 //k74 //k75 //90 //92
 #include <time.h>
 #include "globals.h"
-//#include "aes.h"
 extern unsigned char in_aes[16], out_aes[16], state[4][4];
-
-
 extern int verbose;
+
+unsigned short crc16(const unsigned char* data, unsigned char lenght)
+{
+	unsigned char x;
+	unsigned short crc = 0xFFFF;
+	
+	while (lenght--)
+	{
+		x = crc >> 8 ^ *data++;
+		x ^= x>>4;
+		crc = (crc <<8) ^ ((unsigned short)(x << 12)) ^ (( unsigned short)(x << 5)) ^ ((unsigned short)x);
+	}
+	printf("crc = %04x  \n", crc);   // для отладки
+	return crc;
+}
 
 BLKT(int N_Chan)
 {
@@ -7824,8 +7835,9 @@ int HandlerCmd104mo3a( int param0, int param1, int param2 )
    int i,j;
    struct packet34 *p34;
    struct packet56 *p56;
-   struct sac *f18;
-  short mod_type;
+   struct f18_dmv *f18;
+	short mod_type;
+	unsigned char *buff;
 
    if( verbose > 0 ) {
       printf( "HandlerCmd104mo3a: p0=%x p1=%x p2=%x nform=%d (size=%d)\n", 
@@ -7866,43 +7878,48 @@ int HandlerCmd104mo3a( int param0, int param1, int param2 )
    p56->data[3] = 0x30;
    p56->data[4] = sizeof(struct sac) + sizeof(short) + 
       sizeof(struct formrls) * inpack0.nform;
-   f18 = (struct sac *)( outpack6.buf[i].data + sizeof(struct header56) + 5 );
-   memset( (char *)f18, 0, sizeof(struct sac) );
-   f18->ps = 1;
-   if( param0 )	f18->vr = 1;
-   else 		f18->vr = 0;
-   f18->kvi = 10;
-   f18->nf = 18;
-   f18->r0 = ( ( ( count.out6 / 10000 ) % 1000 ) % 100 ) % 10;
-   f18->r1 = ( ( ( count.out6 / 10000 ) % 1000 ) % 100 ) / 10;
-   f18->r2 = ( ( count.out6 / 10000 ) % 1000 ) / 100;
-   f18->r3 = ( count.out6 / 10000 ) / 1000;
+   f18 = (struct f18_dmv *)( outpack6.buf[i].data + sizeof(struct header56) + 5 );
+   memset( (char *)f18, 0, sizeof(struct f18_dmv) );
+   f18->s.ps = 1;
+   if( param0 )	f18->s.vr = 1;
+   else 		f18->s.vr = 0;
+   f18->s.kvi = 10;
+   f18->s.nf = 18;
+   f18->s.r0 = ( ( ( count.out6 / 10000 ) % 1000 ) % 100 ) % 10;
+   f18->s.r1 = ( ( ( count.out6 / 10000 ) % 1000 ) % 100 ) / 10;
+   f18->s.r2 = ( ( count.out6 / 10000 ) % 1000 ) / 100;
+   f18->s.r3 = ( count.out6 / 10000 ) / 1000;
    if( param0 ) {
-      f18->v0 = ( ( param0 % 3600 ) / 60 ) % 10;
-      f18->v1 = ( ( param0 % 3600 ) / 60 ) / 10;
-      f18->v2 = ( param0 / 3600 ) % 10;
-      f18->v3 = ( param0 / 3600 ) / 10;
-   } else      f18->v0 = f18->v1 = f18->v2 = f18->v3 = 0;
-   f18->a0 = ( ( ( ( param1 % 100000 ) % 10000 ) % 1000 ) % 100 ) % 10;
-   f18->a1 = ( ( ( ( param1 % 100000 ) % 10000 ) % 1000 ) % 100 ) / 10;
-   f18->a2 = ( ( ( param1 % 100000 ) % 10000 ) % 1000 ) / 100;
-   f18->a3 = ( ( param1 % 100000 ) % 10000 ) / 1000;
-   f18->a4 = ( param1 % 100000 ) / 10000;
-   f18->a5 = param1 / 100000;
-   f18->p0 = ( ( ( ( param2 % 100000 ) % 10000 ) % 1000 ) % 100 ) % 10;
-   f18->p1 = ( ( ( ( param2 % 100000 ) % 10000 ) % 1000 ) % 100 ) / 10;
-   f18->p2 = ( ( ( param2 % 100000 ) % 10000 ) % 1000 ) / 100;
-   f18->p3 = ( ( param2 % 100000 ) % 10000 ) / 1000;
-   f18->p4 = ( param2 % 100000 ) / 10000;
-   f18->p5 = param2 / 100000;
-   memcpy( (char *)( outpack6.buf[i].data + sizeof(struct header56) + 5 + 
-      sizeof(struct sac) ), 
-      (char *)&inpack0.nform, sizeof(short) );
-   for( j = 0; j < inpack0.nform; j++ ) {
-      memcpy( (char *)( outpack6.buf[i].data + sizeof(struct header56) + 5 + 
-         sizeof(struct sac) + sizeof(short) + sizeof(struct formrls) * j ), 
-         (char *)&inpack0.form[j], sizeof(struct formrls) );
-   }
+      f18->s.v0 = ( ( param0 % 3600 ) / 60 ) % 10;
+      f18->s.v1 = ( ( param0 % 3600 ) / 60 ) / 10;
+      f18->s.v2 = ( param0 / 3600 ) % 10;
+      f18->s.v3 = ( param0 / 3600 ) / 10;
+   } else      f18->s.v0 = f18->s.v1 = f18->s.v2 = f18->s.v3 = 0;
+   f18->s.a0 = ( ( ( ( param1 % 100000 ) % 10000 ) % 1000 ) % 100 ) % 10;
+   f18->s.a1 = ( ( ( ( param1 % 100000 ) % 10000 ) % 1000 ) % 100 ) / 10;
+   f18->s.a2 = ( ( ( param1 % 100000 ) % 10000 ) % 1000 ) / 100;
+   f18->s.a3 = ( ( param1 % 100000 ) % 10000 ) / 1000;
+   f18->s.a4 = ( param1 % 100000 ) / 10000;
+   f18->s.a5 = param1 / 100000;
+   f18->s.p0 = ( ( ( ( param2 % 100000 ) % 10000 ) % 1000 ) % 100 ) % 10;
+   f18->s.p1 = ( ( ( ( param2 % 100000 ) % 10000 ) % 1000 ) % 100 ) / 10;
+   f18->s.p2 = ( ( ( param2 % 100000 ) % 10000 ) % 1000 ) / 100;
+   f18->s.p3 = ( ( param2 % 100000 ) % 10000 ) / 1000;
+   f18->s.p4 = ( param2 % 100000 ) / 10000;
+   f18->s.p5 = param2 / 100000;
+   //memcpy( (char *)( outpack6.buf[i].data + sizeof(struct header56) + 5 + sizeof(struct sac) ), (char *)&inpack0.nform, sizeof(short) ); 
+   f18->nform=inpack0.nform;      //кол-во формуляров
+	for( j = 0; j < inpack0.nform; j++ ) //считаем контрольную сумму и копируем формуляры на отправку
+	{
+		buff = (unsigned char *) &inpack0.form[j];
+		for (i=0; i<sizeof(struct formrls); i++) printf(" %02x", buff[i]);  printf("\n"); 
+		inpack0.form[j].cksum = crc16(buff, sizeof(struct formrls)-2);  //считаем контрольную сумму
+		for (i=0; i<sizeof(struct formrls); i++) printf(" %02x", buff[i]);  printf("\n"); 
+		
+		//memcpy( (char *)( outpack6.buf[i].data + sizeof(struct header56) + 5 + sizeof(struct sac) + sizeof(short) + sizeof(struct formrls) * j ), 
+		//	(char *)&inpack0.form[j], sizeof(struct formrls) );
+		f18->form[j]=inpack0.form[j];
+	}
 
 	//printf("form=%d\n",inpack0.nform);	for(j=0;j<194;j++) printf("%x ",outpack6.buf[i].data[j]);printf("\n");
 
@@ -7931,15 +7948,11 @@ int HandlerCmd104mo3a( int param0, int param1, int param2 )
 		//stat.link |= FLAG_BUF6;
 		stat.out |= FLAG_BUF6;
 		ControlLed4( 1 );
-
 //---------- Other (cmd104mo3a) ----------
-		
    mode.addr3 = param2;
    mode.recv3 = 1;
    return( 0 );
 }
-
-
 
 //*************** Handler Command 115 ***************
 
@@ -7949,6 +7962,7 @@ int HandlerCmd115mo3a( int param0, int param1, int param2 )
    struct packet56 *p56;
    struct sac *f18, *f27;
    short b[sizeof(struct form199_dmv)];
+   unsigned short cksum;
 
    if( verbose > 0 ) {
       printf( "HandlerCmd115mo3a: p0=%x p1=%x p2=%x nform=%d (size=%d)\n", 
@@ -7982,11 +7996,11 @@ int HandlerCmd115mo3a( int param0, int param1, int param2 )
    i = outpack6.nsave;
    p56 = (struct packet56 *)outpack6.buf[i].data;
    p56->head.code = 0x80;
-   p56->data[0] = 4 + sizeof(struct sac) + sizeof(short) + 80;
+   p56->data[0] = 4 + sizeof(struct sac) + sizeof(short) + 80 + 2; //CKSUM
    p56->data[1] = 0xd5;
    p56->data[2] = 0x00;
    p56->data[3] = 0x30;
-   p56->data[4] = sizeof(struct sac) + sizeof(short) + 80;
+   p56->data[4] = sizeof(struct sac) + sizeof(short) + 80 + 2; //CKSUM
    f18 = (struct sac *)( outpack6.buf[i].data + sizeof(struct header56) + 5 );
    memset( (char *)f18, 0, sizeof(struct sac) );
    f18->ps = 1;
@@ -8025,9 +8039,17 @@ int HandlerCmd115mo3a( int param0, int param1, int param2 )
 		Cipher();
 		for(j1=0;j1<16;j1++) inpack0.sms[j1+j*16]=out_aes[j1];		
 	}
-
-   memcpy( (char *)( outpack6.buf[i].data + sizeof(struct header56) + 5 + 
+	
+	memcpy( (char *)( outpack6.buf[i].data + sizeof(struct header56) + 5 + 
       sizeof(struct sac) + sizeof(short)), (char *)&inpack0.sms[0], 80 );
+	  
+	//Контрольная сумма СМС
+	buff = (unsigned char *) &inpack0.sms[0];
+	prinf("SMS: ");	for (i=0; i<80; i++) printf(" %02x", buff[i]);  printf("\n"); 
+	cksum = crc16(buff, 80);  //считаем контрольную сумму
+	prinf("SMS: ");for (i=0; i<80; i++) printf(" %02x", buff[i]);  printf("\n");
+	memcpy( (char *)( outpack6.buf[i].data + sizeof(struct header56) + 5 + 
+      sizeof(struct sac) + sizeof(short) + 80), cksum, 2 );
 
 //	printf("SMS out:");	for(j=0;j<100;j++) printf("%02x ",outpack6.buf[i].data[j+20]);printf("\n");
 //	printf("SMS out:");	for(j=0;j<80;j++) printf("%c ",inpack0.sms[j]);printf("\n");

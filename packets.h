@@ -95,8 +95,6 @@
 
 		short n_scan1; //
 		short n_scan2; //
-
-
    };
 
 //------------------- Constants ------------------
@@ -112,6 +110,7 @@
 	#define KRK_LINK_OK 8
 	#define KRK_SWITCH_TRANS 9
 	#define KRK_DATA_AND_TRANS 10
+	#define KRK_CKSUM_ERR 11
 	#define KRK_SMS_OK 15
 
 //-------------------- Buffers -------------------
@@ -221,7 +220,6 @@
       unsigned short r1: 4;
       unsigned short r2: 4;
       unsigned short r3: 4;
-
 
       unsigned short v0: 4;
       unsigned short v1: 4;
@@ -415,8 +413,8 @@
          } r999_reo;
          struct {
             unsigned short cr;
-            unsigned short sach18[6];
-            short nform;
+            struct sac s;
+            short  nform;
             struct formrls form[3];
          } r999_cu2;
 		 struct {
@@ -763,6 +761,12 @@
       unsigned short r19: 16;
       unsigned short r20: 16;
       unsigned short f1[8];
+   };
+   
+   struct f18_dmv {
+	   struct sac s;
+       short  nform;
+       struct formrls form[3];
    };
 
    struct form199 {

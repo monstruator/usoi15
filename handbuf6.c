@@ -128,20 +128,16 @@ int DataInBuf6( unsigned short *nd )
 
 int HandlerInPack6( const void *buf, unsigned len )
 {
-   int i,j,j1;
    struct packet56 *pack;
    struct sostrts *srts;
    struct errusoi *ko;
-   unsigned n;
-   struct sac *s;
-   struct sac *f27;
+   struct sac *s, *f27;
+   struct f18_dmv *f18;
    struct form199_dmv *f199;
-   unsigned sa;
-   unsigned sp;
-   unsigned sr;
-   unsigned sv;
-   unsigned sn;
+   unsigned sa, sp , sr , sv , sn , n , i , j , j1;
    char b[sizeof(struct form199_dmv)];
+	unsigned char *buff;
+	unsigned short cksum;
 
    if( verbose > 1 ) {
       printf( "HandlerInPack6(%d):", len );
@@ -161,7 +157,7 @@ int HandlerInPack6( const void *buf, unsigned len )
       outpack0.link = KRK_DATA_OK;
       n = pack->data[0];
       if( n == 0 ) n = 256;
-      s = (struct sac *)&pack->data[1];
+      s =   (struct sac *)&pack->data[1];  
       sa = s->a0 + s->a1 * 10 + s->a2 * 100 + s->a3 * 1000 + s->a4 * 10000 + 
          s->a5 * 100000;
       sp = s->p0 + s->p1 * 10 + s->p2 * 100 + s->p3 * 1000 + s->p4 * 10000 + 
@@ -170,7 +166,6 @@ int HandlerInPack6( const void *buf, unsigned len )
       sv = s->v0 + s->v1 * 10 + s->v2 * 100 + s->v3 * 1000;
       sn = *(short *)( (char *)s + sizeof(struct sac) );
       if( verbose > 0 ) {
-		// printf("sa=%d\n",sa);
          printf( "R999(%d): SAC f=%d k=%d a=%d p=%d r=%d v=%d n=%d.\n",  n, s->nf, s->kvi, sa, sp, sr, sv, sn );
         // printf( "R999: MODE recv=%d addr=%d sa=%d .\n",  mode.recv3, mode.addr3, sa );
       }
@@ -184,16 +179,24 @@ int HandlerInPack6( const void *buf, unsigned len )
 		
       if( ( sa != mode.addr3 ) || !mode.recv3 ) { if( verbose > 0 ) printf( "R999: Ignore packet.\n" );  break;  }
       if( s->nf == 18 ) {
-         if( s->kvi == 10 ) {
-            memcpy( &outpack0.r999_cu2.sach18, s, sizeof(struct sac) );
-            if( sn > 3 ) sn = 3;
-            outpack0.r999_cu2.nform = sn;
-			printf("nform=%d to Danya\n",sn);
-            for( i = 0; i < sn; i++ ) {
-               memcpy( &outpack0.r999_cu2.form[i], (char *)s + 
-                  sizeof(struct sac) + sizeof(short) + 
-                  sizeof(struct formrls) * i, sizeof(struct formrls) );
-            }
+         if( s->kvi == 10 ) { //формюл€ры ÷”2
+			f18 = (struct f18_dmv *)&pack->data[1];
+            for( i = 0; i < f18->nform; i++ ) 	
+			{
+				//--------------------------- проверка контрольной суммы -------------------
+				buff = (unsigned char *) &f18->form[j];
+				if (crc16(buff, sizeof(struct formrls)-2)!=f18->form[j].cksum) 
+				{
+					outpack0.link = KRK_CKSUM_ERR;
+					printf("KRK_CKSUM_ERR (form%d)\n",i);
+				}
+				outpack0.r999_cu2.form[i] = f18->form[i];
+			}
+			if (outpack0.link == KRK_CKSUM_ERR) break;
+			outpack0.r999_cu2.s = f18->s; //копируем —ј„
+            if( f18->nform > 3 ) f18->nform = 3;
+            outpack0.r999_cu2.nform = f18->nform; //кол-во формул€ров
+			printf("nform=%d to Danya\n",outpack0.r999_cu2.nform);
             outpack0.r999.cr++;
 			if( !mode.mo1a && mode.mn1 ) outpack0.link = KRK_DATA_AND_TRANS;
 			else
@@ -227,11 +230,20 @@ int HandlerInPack6( const void *buf, unsigned len )
          }
 		 if( s->kvi == 15 ) {
 		    printf("SMS in\n");
+			
             memcpy( &outpack0.r999_sms.sach18[0], s, sizeof (struct sac) );
 			outpack0.r999_sms.nword=40;
-            memcpy( &outpack0.r999_sms.sms[0], (char *)s + 
-                  sizeof(struct sac) + sizeof(short) , 80 );
-         
+            memcpy( &outpack0.r999_sms.sms[0], (char *)s + sizeof(struct sac) + sizeof(short) , 80 );
+			
+			buff = (unsigned char *) outpack0.r999_sms.sms[0]; //проверка контрольной суммы
+			 memcpy( cksum, (char *)s + sizeof(struct sac) + sizeof(short) + 80, 2 );
+			if (crc16(buff, 80)!=cksum) 
+			{
+				outpack0.link = KRK_CKSUM_ERR;
+				printf("KRK_CKSUM_ERR (sms)\n");
+				break;
+			}
+			
 			for(j=0;j<5;j++) 
 			{
 				for(j1=0;j1<16;j1++) in_aes[j1]=outpack0.r999_sms.sms[j1+j*16];
