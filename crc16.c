@@ -1,24 +1,24 @@
 #include <stdio.h>
 #include "packets.h"
 
-struct formrls *form1;
-unsigned char buff[sizeof(struct formrls)];
+struct formrls form1;
+unsigned char *buff;//[sizeof(struct formrls)];
 unsigned short crc16(const unsigned char*, unsigned char);
 int i;
 
 main (void)
 {
 	//-----------------------------------заполнение структуры------------------------------
-	form1 = (struct formrls *) buff;
-	form1->num_out=2;
-    form1->num_in=0x1000;
-    form1->div_course=1000000;
+	buff = (unsigned char *) &form1.num_out;
+	form1.num_out=2;
+    form1.num_in=0x1000;
+    form1.div_course=1000000;
 	//--------------------------------------------------------------------------------------------------------
    
-	memcpy((char *)buff, (char *)form1, sizeof(struct formrls));  //копирование структуры в массив
+	//memcpy((char *)buff, (char *)form1, sizeof(struct formrls));  //копирование структуры в массив
 	for (i=0; i<sizeof(struct formrls); i++) printf(" %02x", buff[i]);  printf("\n");                  // проверка заполнения массива
 	
-	form1->cksum = crc16(buff, sizeof(struct formrls)-2);  //считаем контрольную сумму
+	form1.cksum = crc16(buff, sizeof(struct formrls)-2);  //считаем контрольную сумму
 
 	for (i=0; i<sizeof(struct formrls); i++) printf(" %02x", buff[i]);  printf("\n");                 // проверка заполнения массива	
 }
