@@ -137,7 +137,7 @@ int HandlerInPack6( const void *buf, unsigned len )
    unsigned sa, sp , sr , sv , sn , n , i , j , j1;
    char b[sizeof(struct form199_dmv)];
 	unsigned char *buff;
-	unsigned short cksum;
+	unsigned short cksum_in=0,cksum_calc=0;
 
    if( verbose > 1 ) {
       printf( "HandlerInPack6(%d):", len );
@@ -185,10 +185,11 @@ int HandlerInPack6( const void *buf, unsigned len )
 			{
 				//--------------------------- проверка контрольной суммы -------------------
 				buff = (unsigned char *) &f18->form[j];
-				if (crc16(buff, sizeof(struct formrls)-2)!=f18->form[j].cksum) 
+				cksum_calc=crc16(buff, sizeof(struct formrls)-2);
+				if (cksum_in!=f18->form[j].cksum) 
 				{
 					outpack0.link = KRK_CKSUM_ERR;
-					printf("KRK_CKSUM_ERR (form%d)\n",i);
+					printf("KRK_CKSUM_ERR (form%d) in=%04x calc=%04x\n",i,cksum_calc,f18->form[j].cksum);
 				}
 				outpack0.r999_cu2.form[i] = f18->form[i];
 			}
@@ -235,14 +236,17 @@ int HandlerInPack6( const void *buf, unsigned len )
 			outpack0.r999_sms.nword=40;
             memcpy( &outpack0.r999_sms.sms[0], (char *)s + sizeof(struct sac) + sizeof(short) , 80 );
 			
-			buff = (unsigned char *) outpack0.r999_sms.sms[0]; //проверка контрольной суммы
-			 memcpy( cksum, (char *)s + sizeof(struct sac) + sizeof(short) + 80, 2 );
-			if (crc16(buff, 80)!=cksum) 
+			buff = (unsigned char *) &outpack0.r999_sms.sms[0]; //проверка контрольной суммы
+			 memcpy( &cksum_in, (char *)s + sizeof(struct sac) + sizeof(short) + 80, 2 );
+			 cksum_calc=crc16(buff, 80);
+			if (cksum_in!=cksum_calc) 
 			{
 				outpack0.link = KRK_CKSUM_ERR;
-				printf("KRK_CKSUM_ERR (sms)\n");
+				printf("KRK_CKSUM_ERR (sms) in=%04x calc=%04x\n",cksum_in,cksum_calc);
 				break;
 			}
+			
+			//printf("SMS:  "); for(j=0;j<102;j++) printf("%02x ",pack->data[j]);printf("\n");
 			
 			for(j=0;j<5;j++) 
 			{
@@ -250,9 +254,6 @@ int HandlerInPack6( const void *buf, unsigned len )
 				InvCipher();
 				for(j1=0;j1<16;j1++) outpack0.r999_sms.sms[j1+j*16]=out_aes[j1];		
 			}
-
-			//for(j=0;j<80;j++) printf("%02x ",outpack0.r999_sms.sms[j]);printf("\n");
-			//for(j=0;j<6;j++) printf("%04x ",outpack0.r999_sms.sach18[j]);printf("\n");
 
             outpack0.r999.cr++;
 			if( !mode.mo1a && mode.mn1 ) outpack0.link = KRK_DATA_AND_TRANS;

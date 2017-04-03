@@ -6,7 +6,9 @@ extern int verbose;
 unsigned short crc16(const unsigned char* data, unsigned char lenght)
 {
 	unsigned char x;
+	int i;
 	unsigned short crc = 0xFFFF;
+	//printf("CRC:  ");for(i=0;i<80;i++) printf("%02x ",*(data+i)); printf("\n");
 	
 	while (lenght--)
 	{
@@ -14,7 +16,8 @@ unsigned short crc16(const unsigned char* data, unsigned char lenght)
 		x ^= x>>4;
 		crc = (crc <<8) ^ ((unsigned short)(x << 12)) ^ (( unsigned short)(x << 5)) ^ ((unsigned short)x);
 	}
-	printf("crc = %04x  \n", crc);   // для отладки
+	//printf("crc = %04x  data[0]=%02x\n", crc,data[0]);   // для отладки
+	
 	return crc;
 }
 
@@ -7872,12 +7875,12 @@ int HandlerCmd104mo3a( int param0, int param1, int param2 )
    p56 = (struct packet56 *)outpack6.buf[i].data;
    p56->head.code = 0x80;
    p56->data[0] = 4 + sizeof(struct sac) + sizeof(short) + 
-      sizeof(struct formrls) * inpack0.nform;
+      sizeof(struct formrls) * inpack0.nform + 2;
    p56->data[1] = 0xd5;
    p56->data[2] = 0x00;
    p56->data[3] = 0x30;
    p56->data[4] = sizeof(struct sac) + sizeof(short) + 
-      sizeof(struct formrls) * inpack0.nform;
+      sizeof(struct formrls) * inpack0.nform + 2;
    f18 = (struct f18_dmv *)( outpack6.buf[i].data + sizeof(struct header56) + 5 );
    memset( (char *)f18, 0, sizeof(struct f18_dmv) );
    f18->s.ps = 1;
@@ -7909,22 +7912,23 @@ int HandlerCmd104mo3a( int param0, int param1, int param2 )
    f18->s.p5 = param2 / 100000;
    //memcpy( (char *)( outpack6.buf[i].data + sizeof(struct header56) + 5 + sizeof(struct sac) ), (char *)&inpack0.nform, sizeof(short) ); 
    f18->nform=inpack0.nform;      //кол-во формуляров
+   printf("CKSUM:  ");
 	for( j = 0; j < inpack0.nform; j++ ) //считаем контрольную сумму и копируем формуляры на отправку
 	{
 		buff = (unsigned char *) &inpack0.form[j];
-		for (i=0; i<sizeof(struct formrls); i++) printf(" %02x", buff[i]);  printf("\n"); 
+		//for (i=0; i<sizeof(struct formrls); i++) printf(" %02x", buff[i]);  printf("\n"); 
 		inpack0.form[j].cksum = crc16(buff, sizeof(struct formrls)-2);  //считаем контрольную сумму
-		for (i=0; i<sizeof(struct formrls); i++) printf(" %02x", buff[i]);  printf("\n"); 
-		
+		//for (i=0; i<sizeof(struct formrls); i++) printf(" %02x", buff[i]);  printf("\n"); 
+		printf("form%d %04x ",j,inpack0.form[j].cksum);
 		//memcpy( (char *)( outpack6.buf[i].data + sizeof(struct header56) + 5 + sizeof(struct sac) + sizeof(short) + sizeof(struct formrls) * j ), 
 		//	(char *)&inpack0.form[j], sizeof(struct formrls) );
 		f18->form[j]=inpack0.form[j];
 	}
-
+	printf("\n");
 	//printf("form=%d\n",inpack0.nform);	for(j=0;j<194;j++) printf("%x ",outpack6.buf[i].data[j]);printf("\n");
 
    outpack6.buf[i].size = sizeof(struct header56) + 5 + sizeof(struct sac) +
-      sizeof(short) + sizeof(struct formrls) * inpack0.nform;
+      sizeof(short) + sizeof(struct formrls) * inpack0.nform + 2;
    outpack6.buf[i].cmd = BUF3KIT_CMD_BLK6;
    outpack6.nsave++;
    count.out6++;
@@ -7961,12 +7965,12 @@ int HandlerCmd115mo3a( int param0, int param1, int param2 )
    int i,j1,j;
    struct packet56 *p56;
    struct sac *f18, *f27;
-   short b[sizeof(struct form199_dmv)];
    unsigned short cksum;
+   	unsigned char *buff;
 
    if( verbose > 0 ) {
-      printf( "HandlerCmd115mo3a: p0=%x p1=%x p2=%x nform=%d (size=%d)\n", 
-         param0, param1, param2, inpack0.nform, 
+      printf( "HandlerCmd115mo3a: p0=%x p1=%x p2=%x (size=%d)\n", 
+         param0, param1, param2, 
          sizeof(struct header56) + 5 + sizeof(struct sac) +
          sizeof(short) + 80 );
    }
@@ -7996,11 +8000,11 @@ int HandlerCmd115mo3a( int param0, int param1, int param2 )
    i = outpack6.nsave;
    p56 = (struct packet56 *)outpack6.buf[i].data;
    p56->head.code = 0x80;
-   p56->data[0] = 4 + sizeof(struct sac) + sizeof(short) + 80 + 2; //CKSUM
+   p56->data[0] = 4 + sizeof(struct sac) + sizeof(short) + 80 + 4; //CKSUM
    p56->data[1] = 0xd5;
    p56->data[2] = 0x00;
    p56->data[3] = 0x30;
-   p56->data[4] = sizeof(struct sac) + sizeof(short) + 80 + 2; //CKSUM
+   p56->data[4] = sizeof(struct sac) + sizeof(short) + 80 + 4; //CKSUM
    f18 = (struct sac *)( outpack6.buf[i].data + sizeof(struct header56) + 5 );
    memset( (char *)f18, 0, sizeof(struct sac) );
    f18->ps = 1;
@@ -8045,48 +8049,17 @@ int HandlerCmd115mo3a( int param0, int param1, int param2 )
 	  
 	//Контрольная сумма СМС
 	buff = (unsigned char *) &inpack0.sms[0];
-	prinf("SMS: ");	for (i=0; i<80; i++) printf(" %02x", buff[i]);  printf("\n"); 
+	//printf("SMS: ");	for (i=0; i<80; i++) printf(" %02x", buff[i]);  printf("\n"); 
 	cksum = crc16(buff, 80);  //считаем контрольную сумму
-	prinf("SMS: ");for (i=0; i<80; i++) printf(" %02x", buff[i]);  printf("\n");
-	memcpy( (char *)( outpack6.buf[i].data + sizeof(struct header56) + 5 + 
-      sizeof(struct sac) + sizeof(short) + 80), cksum, 2 );
+	//printf("SMS: ");for (i=0; i<80; i++) printf(" %02x", buff[i]);  printf("\n");
+	memcpy( (unsigned char *)( outpack6.buf[i].data + sizeof(struct header56) + 5 + 
+      sizeof(struct sac) + sizeof(short) + 80), &cksum, 2 );
 
 //	printf("SMS out:");	for(j=0;j<100;j++) printf("%02x ",outpack6.buf[i].data[j+20]);printf("\n");
 //	printf("SMS out:");	for(j=0;j<80;j++) printf("%c ",inpack0.sms[j]);printf("\n");
 //------------------
-/*  
-    memcpy(&outpack0.r999_sms.sms[0],(char *)&inpack0.sms[0], 80 );
-				
-				f27 = (struct sac *)b;
-				memset( f27, 0, sizeof(struct sac) );
-				f27->ps = 1;
-				f27->vr = 0;
-				f27->kvi = 15;
-				f27->nf = 27;
-				f27->r0 = ( ( ( count.out6 / 10000 ) % 1000 ) % 100 ) % 10;
-				f27->r1 = ( ( ( count.out6 / 10000 ) % 1000 ) % 100 ) / 10;
-				f27->r2 = ( ( count.out6 / 10000 ) % 1000 ) / 100;
-				f27->r3 = ( count.out6 / 10000 ) / 1000;
-				f27->v0 = f27->v1 = f27->v2 = f27->v3 = 0;
-				f27->a0 = f18->p0;
-				f27->a1 = f18->p1;
-				f27->a2 = f18->p2;
-				f27->a3 = f18->p3;
-				f27->a4 = f18->p4;
-				f27->a5 = f18->p5;
-				f27->p0 = f18->a0;
-				f27->p1 = f18->a1;
-				f27->p2 = f18->a2;
-				f27->p3 = f18->a3;
-				f27->p4 = f18->a4;
-				f27->p5 = f18->a5;
-		printf("\nSACH:");
-	  for(j=0;j<6;j++)  {outpack0.r999_sms.sach18[j]=b[j];printf("%04x ",b[j]);}printf("\n");
-      outpack0.r999.cr++;
-*/
-//------------------
    outpack6.buf[i].size = sizeof(struct header56) + 5 + sizeof(struct sac) +
-      sizeof(short) + 80;
+      sizeof(short) + 80 + 4;
    outpack6.buf[i].cmd = BUF3KIT_CMD_BLK6;
    outpack6.nsave++;
    count.out6++;
