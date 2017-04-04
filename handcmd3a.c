@@ -7916,9 +7916,7 @@ int HandlerCmd104mo3a( int param0, int param1, int param2 )
 	for( j = 0; j < inpack0.nform; j++ ) //считаем контрольную сумму и копируем формуляры на отправку
 	{
 		buff = (unsigned char *) &inpack0.form[j];
-		//for (i=0; i<sizeof(struct formrls); i++) printf(" %02x", buff[i]);  printf("\n"); 
 		inpack0.form[j].cksum = crc16(buff, sizeof(struct formrls)-2);  //считаем контрольную сумму
-		//for (i=0; i<sizeof(struct formrls); i++) printf(" %02x", buff[i]);  printf("\n"); 
 		printf("form%d %04x ",j,inpack0.form[j].cksum);
 		//memcpy( (char *)( outpack6.buf[i].data + sizeof(struct header56) + 5 + sizeof(struct sac) + sizeof(short) + sizeof(struct formrls) * j ), 
 		//	(char *)&inpack0.form[j], sizeof(struct formrls) );
@@ -8049,9 +8047,7 @@ int HandlerCmd115mo3a( int param0, int param1, int param2 )
 	  
 	//Контрольная сумма СМС
 	buff = (unsigned char *) &inpack0.sms[0];
-	//printf("SMS: ");	for (i=0; i<80; i++) printf(" %02x", buff[i]);  printf("\n"); 
 	cksum = crc16(buff, 80);  //считаем контрольную сумму
-	//printf("SMS: ");for (i=0; i<80; i++) printf(" %02x", buff[i]);  printf("\n");
 	memcpy( (unsigned char *)( outpack6.buf[i].data + sizeof(struct header56) + 5 + 
       sizeof(struct sac) + sizeof(short) + 80), &cksum, 2 );
 

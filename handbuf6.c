@@ -134,7 +134,7 @@ int HandlerInPack6( const void *buf, unsigned len )
    struct sac *s, *f27;
    struct f18_dmv *f18;
    struct form199_dmv *f199;
-   unsigned sa, sp , sr , sv , sn , n , i , j , j1;
+   unsigned sa, sp , sr , sv , sn , n , i , j , j1 , ii;
    char b[sizeof(struct form199_dmv)];
 	unsigned char *buff;
 	unsigned short cksum_in=0,cksum_calc=0;
@@ -181,17 +181,17 @@ int HandlerInPack6( const void *buf, unsigned len )
       if( s->nf == 18 ) {
          if( s->kvi == 10 ) { //формюляры ЦУ2
 			f18 = (struct f18_dmv *)&pack->data[1];
-            for( i = 0; i < f18->nform; i++ ) 	
+            for( ii = 0; ii < f18->nform; ii++ ) 	
 			{
 				//--------------------------- проверка контрольной суммы -------------------
-				buff = (unsigned char *) &f18->form[j];
+				buff = (unsigned char *) &f18->form[ii];
 				cksum_calc=crc16(buff, sizeof(struct formrls)-2);
-				if (cksum_in!=f18->form[j].cksum) 
+				if (cksum_calc!=f18->form[ii].cksum) 
 				{
 					outpack0.link = KRK_CKSUM_ERR;
-					printf("KRK_CKSUM_ERR (form%d) in=%04x calc=%04x\n",i,cksum_calc,f18->form[j].cksum);
+					printf("KRK_CKSUM_ERR (form%d) in=%04x calc=%04x\n",ii,f18->form[ii].cksum,cksum_calc);
 				}
-				outpack0.r999_cu2.form[i] = f18->form[i];
+				outpack0.r999_cu2.form[ii] = f18->form[ii];
 			}
 			if (outpack0.link == KRK_CKSUM_ERR) break;
 			outpack0.r999_cu2.s = f18->s; //копируем САЧ
