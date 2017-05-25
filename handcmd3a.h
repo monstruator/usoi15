@@ -11,8 +11,8 @@
    extern int HandlerCmd7mo3a( int );
    extern int HandlerCmd8mo3a( int );
    extern int HandlerCmd9mo3a( int, int, int );
-   extern int HandlerCmd10mo3a( int, int );
-   extern int HandlerCmd11mo3a( int, int );
+   extern int HandlerCmd10mo3a( int, int, int );
+   extern int HandlerCmd11mo3a( int, int, int );
    extern int HandlerCmd12mo3a( int );
    extern int HandlerCmd13mo3a( int );
    extern int HandlerCmd14mo3a( int );

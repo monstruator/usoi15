@@ -572,14 +572,14 @@ int HandlerCmd8mo3a( int param )
 
 //******************** Handler Command 10 ********************
 
-int HandlerCmd10mo3a( int param0, int param1 )
+int HandlerCmd10mo3a( int param0, int param1, int param2 )
 {
    int i;
    struct packet56 *p56;
    int n;
 
    if( verbose > 0 ) {
-      printf( "HandlerCmd10mo3a: p0=%08x p1=%08x\n", param0, param1 );
+      printf( "HandlerCmd10mo3a: p0=%04x p1=%04x p2=%04x\n", param0, param1, param2 );
    }
 
 //---------- Outpack5 (cmd10) ----------
@@ -588,10 +588,19 @@ int HandlerCmd10mo3a( int param0, int param1 )
    p56 = (struct packet56 *)outpack5.buf[i].data;
    p56->head.code = 0x40;
    p56->data[0] = 0x1f;
-   p56->data[1] = ( param0 % 10 ) & 0x0f;
+   p56->data[1] = ( param0 % 10 ) & 0x0f; //канал
    p56->data[1] |= ( param0 / 10 ) << 4;;
-   p56->data[2] = ( param1 - 1 ) & 0x03;
-   p56->data[2] |= 0x30;
+   p56->data[2] = ( param1 - 1 ) & 0x03;  //скорость
+   //param2=4;
+   switch(param2) //установка мощности
+   {
+	   case 0:  p56->data[2] |= 0x30; break;
+	   case 1:  p56->data[2] |= 0x20; break;
+	   case 2:  p56->data[2] |= 0x10; break;
+	   //case 3:  p56->data[2] |= 0x30; break;
+   }
+   //printf("param2=%d\n",param2);
+   
    p56->data[3] = 0x00;
    n = SumBit8( p56->data[0] ) + SumBit8( p56->data[1] ) + SumBit8( p56->data[2] ) + 
       SumBit8( p56->data[3] );
@@ -629,14 +638,14 @@ int HandlerCmd10mo3a( int param0, int param1 )
 
 //******************** Handler Command 11 ********************
 
-int HandlerCmd11mo3a( int param0, int param1 )
+int HandlerCmd11mo3a( int param0, int param1, int param2 )
 {
    int i;
    struct packet56 *p56;
    int n;
 
    if( verbose > 0 ) {
-      printf( "HandlerCmd11mo3a: p0=%08x p1=%08x\n", param0, param1 );
+      printf( "HandlerCmd11mo3a: p0=%04x p1=%04x p2=%04x\n", param0, param1, param2 );
    }
 
 //---------- Outpack5 (cmd11) ----------
@@ -655,7 +664,15 @@ int HandlerCmd11mo3a( int param0, int param1 )
    p56->data[1] = ( param0 % 10 ) & 0x0f;
    p56->data[1] |= ( param0 / 10 ) << 4;;
    p56->data[2] = ( param1 - 1 ) & 0x03;
-   p56->data[2] |= 0x30;
+   //p56->data[2] |= 0x30;
+   //param2=4;
+   switch(param2)
+   {
+	   case 0:  p56->data[2] |= 0x30; break;
+	   case 1:  p56->data[2] |= 0x20; break;
+	   case 2:  p56->data[2] |= 0x10; break;
+	   //case 3:  p56->data[2] |= 0x30; break;
+   }
    p56->data[3] = 0x22;
    n = SumBit8( p56->data[0] ) + SumBit8( p56->data[1] ) + SumBit8( p56->data[2] ) + 
       SumBit8( p56->data[3] );
