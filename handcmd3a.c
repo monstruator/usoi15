@@ -262,12 +262,8 @@ if (!mode.mn1)
    ControlLed4( 1 );
 }
 //---------- Other (cmd1) ----------
-
-   if( param ) {
-      mode.mo1a = 1;
-   } else {
-      mode.mo1a = 0;
-   }
+   if( param )  mode.mo1a = 1;
+   else         mode.mo1a = 0;
 
    return( 0 );
 }

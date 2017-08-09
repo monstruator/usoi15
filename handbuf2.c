@@ -504,10 +504,10 @@ int SendOutPack2( void )
    } else if( ! outpack2.blk ) {
       i = outpack2.nload;
       j = outbuf2.save;
-      if( sizeof(outbuf1.data) - j < outpack2.buf[i].size ) {
+      if( sizeof(outbuf2.data) - j < outpack2.buf[i].size ) {
          return( -1 );
       }
-      memcpy( &outbuf1.data[j], outpack2.buf[i].data, outpack2.buf[i].size );
+      memcpy( &outbuf2.data[j], outpack2.buf[i].data, outpack2.buf[i].size );
       outbuf2.save += outpack2.buf[i].size;
       outpack2.nload++;
       if( verbose > 1 ) {
