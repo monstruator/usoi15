@@ -60,7 +60,7 @@ int HandlerInBuf2( void )
             outpack2.nsave = outpack2.nload = 0;
             stat.in |= FLAG_BUF2;
             CheckStatus();
-            ControlLed1( 0 );
+            ControlLed2( 0 );
          }
          SendOutPack2();
          inbuf2step = STEP_MARK;
@@ -168,7 +168,7 @@ int HandlerInPack2( struct packet12 *pack, int size )
          pack->wf[5], pack->wf[6] ); 
    }
 
-   sk = (struct statkasrt *)&outpack0.word_sost_kasrt1_1;
+   sk = (struct statkasrt *)&outpack0.word_sost_kasrt2_1;
    sr = (struct sostrts *)&outpack0.word_sost_rts_1;
    ko = (struct errusoi *)&outpack0.k_o;
 
@@ -200,17 +200,17 @@ int HandlerInPack2( struct packet12 *pack, int size )
          sk->s8erib = ( f12->s8 ) & 0xff;
          sk->s9pream = ( f12->s9pr ) & 0xffff;
          sk->rez2 = 0;
-         sr->svc1_rej = f12->s1tr;
-         sr->svc1_m = f12->s1m > 1 ? 1 : 0;
-         sr->svc1_rejprm = f12->s1rp;
-         sr->svc1_rab = f12->s1vr;
-         sr->svc1_prd = ( f12->s2prd ) & 0xf;
-         sr->svc1_prm = ( f12->s2prm ) & 0xf;
-         sr->svc1_oslprd = ( f12->s3 ) & 0xf;
-         sr->svc1_fk = ( f12->s4 ) & 0xf;
+         sr->svc2_rej = f12->s1tr;
+         sr->svc2_m = f12->s1m > 1 ? 1 : 0;
+         sr->svc2_rejprm = f12->s1rp;
+         sr->svc2_rab = f12->s1vr;
+         sr->svc2_prd = ( f12->s2prd ) & 0xf;
+         sr->svc2_prm = ( f12->s2prm ) & 0xf;
+         sr->svc2_oslprd = ( f12->s3 ) & 0xf;
+         sr->svc2_fk = ( f12->s4 ) & 0xf;
          if( sk->s0cpp == 1 ) {
             outpack0.kzv = 1;
-            ko->cpp1 = 1;
+            ko->cpp2 = 1;
          }
 		if (verbose >1)
 		{
@@ -223,7 +223,7 @@ int HandlerInPack2( struct packet12 *pack, int size )
 		}
 			if ((mode.rli2) || (mode.scan2))
 			{
-				//stat.out|=FLAG_BUF1; //не надо т.к. вне команды
+				//stat.out|=FLAG_BUF2; //не надо т.к. вне команды
 			}
          break;
       default:
@@ -574,9 +574,9 @@ int SendOutPack2( void )
       }
       if( outpack2.buf[i].cmd & BUF3KIT_CMD_END ) {
          outpack2.nsave = outpack2.nload = 0;
-         stat.in |= FLAG_BUF1;
+         stat.in |= FLAG_BUF2;
          CheckStatus();
-         ControlLed1( 0 );
+         ControlLed2( 0 );
       }
       return( outpack2.buf[i].size ); 
    }
